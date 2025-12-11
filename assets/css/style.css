@@ -3,6 +3,10 @@ body {
   background-color: #f8f8f8;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 @keyframes float {
   0%,
   100% {
