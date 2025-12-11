@@ -6,24 +6,33 @@
     <title>Mental Health Care</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
     <!-- Google Fonts: Poppins -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!-- Cloud Animation -->
     <script src="assets/js/hero_section.js" defer></script>
+
+    <!-- AOS JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
   </head>
+
   <body>
     <nav
-      class="fixed top-0 left-0 w-full flex space-x-4 p-2 bg-gray-800 text-white z-50"
+      class="fixed top-0 left-0 w-full flex space-x-4 bg-transparent text-white z-50"
     >
       <ul
-        class="flex space-x-4 p-4 bg-gray-800 text-white center justify-center w-full"
+        class="flex space-x-4 backdrop-blur-md bg-white/10 p-4 text-black center justify-center w-full"
       >
         <li><a href="#hero" class="hover:underline">Home</a></li>
         <li><a href="#about" class="hover:underline">About</a></li>
@@ -31,27 +40,52 @@
         <li><a href="#contact" class="hover:underline">Contact</a></li>
       </ul>
     </nav>
+
     <section
       id="hero"
       class="relative h-screen flex flex-col justify-center items-center text-center pb-20 overflow-hidden pt-32"
     >
-      <!-- Floating Clouds Background -->
       <div
         id="clouds-container"
         class="absolute inset-0 pointer-events-none"
       ></div>
 
       <div
-        class="relative z-10 backdrop-blur-md bg-white/10 p-8 rounded-2xl border border-white/20"
+        class="relative z-10 backdrop-blur-md bg-white/10 p-8 rounded-xl border border-white/20"
+        data-aos="zoom-in"
       >
-        <h1 class="text-6xl font-bold italic font-[Poppins]">
+        <h1 class="text-6xl font-bold italic font-[Poppins] text-slate-900">
           Mental Health Care
         </h1>
-        <p class="text-lg mt-2">
+        <p class="text-lg mt-2 text-slate-900">
           Karena merawat pikiran sama pentingnya dengan merawat tubuh
         </p>
-        <p class="text-lg -mt-[1px]">Mari belajar dan bertumbuh bersama</p>
+        <p class="text-lg -mt-[1px] text-slate-900">
+          Mari belajar dan bertumbuh bersama
+        </p>
       </div>
     </section>
+
+    <div class="w-full flex justify-center mt-10">
+      <div class="w-full h-full border-b border-gray-300"></div>
+    </div>
+
+    <section>
+      <div
+        id="content"
+        class="relative h-screen flex flex-col pl-20 overflow-hidden pt-[300px]"
+      >
+        <div data-aos="fade-right" class="w-[150px] bg-blue-500 p-0 rounded-lg">
+          <h1 class="text-4xl">Content</h1>
+        </div>
+      </div>
+    </section>
+
+    <!-- AOS Init (harus setelah script AOS dimuat) -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        AOS.init();
+      });
+    </script>
   </body>
 </html>
