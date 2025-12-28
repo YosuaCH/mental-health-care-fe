@@ -1,89 +1,83 @@
-const cloudImages = [
-  "assets/image/cloud (1).png",
-  "assets/image/cloud (2).png",
-  "assets/image/cloud (3).png",
-  "assets/image/cloud (4).png",
-  "assets/image/cloud (5).png",
-  "assets/image/cloud (6).png",
-  "assets/image/cloud (7).png",
-  "assets/image/cloud (8).png",
-  "assets/image/cloud (9).png",
-  "assets/image/cloud (10).png",
-  "assets/image/cloud (11).png",
-  "assets/image/cloud (12).png",
-  "assets/image/cloud (13).png",
-  "assets/image/cloud (14).png",
-  "assets/image/cloud (15).png",
-  "assets/image/cloud (16).png",
-  "assets/image/cloud.png",
-];
+function initHeroSection() {
+  const cloudImages = [
+    "assets/image/cloud (1).png",
+    "assets/image/cloud (2).png",
+    "assets/image/cloud (3).png",
+    "assets/image/cloud (4).png",
+    "assets/image/cloud (5).png",
+    "assets/image/cloud (6).png",
+    "assets/image/cloud (7).png",
+    "assets/image/cloud (8).png",
+    "assets/image/cloud (9).png",
+    "assets/image/cloud (10).png",
+    "assets/image/cloud (11).png",
+    "assets/image/cloud (12).png",
+    "assets/image/cloud (13).png",
+    "assets/image/cloud (14).png",
+    "assets/image/cloud (15).png",
+    "assets/image/cloud (16).png",
+    "assets/image/cloud.png",
+  ];
 
-const container = document.getElementById("clouds-container");
-const numClouds = 10;
-const clouds = [];
-const MIN_DISTANCE = 140;
-
-function shuffleArray(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+  const container = document.getElementById("clouds-container");
+  if (!container) {
+    console.warn("clouds-container belum ada");
+    return;
   }
-  return a;
-}
 
-const shuffledImages = shuffleArray(cloudImages);
+  const numClouds = 10;
+  const clouds = [];
+  const MIN_DISTANCE = 140;
 
-function isOverlapping(x, y, size, existingClouds) {
-  for (let cloud of existingClouds) {
-    const dx = x - cloud.x;
-    const dy = y - cloud.y;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    if (distance < (size + cloud.size) / 2 + MIN_DISTANCE) {
-      return true;
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
     }
+    return a;
   }
-  return false;
-}
 
-function generateNonOverlappingPosition(size) {
-  const maxAttempts = 500;
+  const shuffledImages = shuffleArray(cloudImages);
 
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    const x = Math.random() * (window.innerWidth - size - 50) + 20;
-    const y = Math.random() * (window.innerHeight - size - 50) + 20;
-
-    if (!isOverlapping(x, y, size, clouds)) {
-      return { x, y };
+  function isOverlapping(x, y, size) {
+    for (let cloud of clouds) {
+      const dx = x - cloud.x;
+      const dy = y - cloud.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < (size + cloud.size) / 2 + MIN_DISTANCE) {
+        return true;
+      }
     }
+    return false;
   }
-  return {
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-  };
-}
 
-for (let i = 0; i < numClouds; i++) {
-  const cloud = document.createElement("img");
-  cloud.className = "cloud-float";
+  function generateNonOverlappingPosition(size) {
+    for (let i = 0; i < 500; i++) {
+      const x = Math.random() * (window.innerWidth - size);
+      const y = Math.random() * (window.innerHeight - size);
+      if (!isOverlapping(x, y, size)) return { x, y };
+    }
+    return { x: 0, y: 0 };
+  }
 
-  cloud.src = shuffledImages[i % shuffledImages.length];
-  cloud.alt = "cloud";
+  for (let i = 0; i < numClouds; i++) {
+    const cloud = document.createElement("img");
+    cloud.className = "cloud-float";
+    cloud.src = shuffledImages[i % shuffledImages.length];
+    cloud.alt = "cloud";
 
-  const size = Math.floor(Math.random() * 50) + 60;
-  cloud.style.width = size + "px";
+    const size = Math.floor(Math.random() * 50) + 60;
+    cloud.style.width = size + "px";
 
-  const { x, y } = generateNonOverlappingPosition(size);
+    const { x, y } = generateNonOverlappingPosition(size);
+    cloud.style.left = x + "px";
+    cloud.style.top = y + "px";
 
-  cloud.style.position = "absolute";
-  cloud.style.left = x + "px";
-  cloud.style.top = y + "px";
+    cloud.style.animationDuration = Math.random() * 10 + 6 + "s";
+    cloud.style.animationDelay = Math.random() * 5 + "s";
 
-  clouds.push({ x, y, size });
-
-  cloud.style.animationDuration = Math.random() * 10 + 6 + "s";
-  cloud.style.animationDelay = Math.random() * 5 + "s";
-
-  container.appendChild(cloud);
+    clouds.push({ x, y, size });
+    container.appendChild(cloud);
+  }
 }
