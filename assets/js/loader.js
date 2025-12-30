@@ -21,4 +21,6 @@ const load = async (id, file) => {
   if (typeof initShapeSection === "function") initShapeSection();
 
   await load("service-section", "fragments/services.html");
+
+  await load("invitation", "fragments/invitation.html");
 })();
