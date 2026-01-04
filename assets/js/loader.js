@@ -9,6 +9,8 @@ const load = async (id, file) => {
 
 (async () => {
   await load("navbar", "fragments/navbar.html");
+  if (typeof initNavbar === "function") initNavbar();
+
   await load("hero-section", "fragments/hero.html");
   if (typeof initHeroSection === "function") initHeroSection();
 

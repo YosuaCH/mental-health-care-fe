@@ -43,11 +43,29 @@
       </li>
     </ul>
 
-    <button
-      class="px-4 py-2 bg-black text-white rounded-2xl font-medium shadow-lg transition transform hover:-translate-y-[2px] font-[Poppins] ml-6 flex items-center gap-4"
-    >
-      <img src="assets\image\user.png" class="w-5 h-5 invert" />
-      Login
-    </button>
+    <div class="flex items-center gap-4 overflow-hidden">
+      <!-- Login -->
+      <a
+        id="loginLink"
+        href="pages/login.html"
+        class="text-black font-medium transition-all duration-500 ease-out"
+      >
+        Log in
+      </a>
+
+      <!-- Animate Join -->
+      <div
+        id="joinWrapper"
+        class="overflow-hidden w-0 transition-all duration-500 ease-out"
+      >
+        <a
+          id="joinBtn"
+          href="#join"
+          class="flex items-center justify-center px-6 py-2 bg-black text-white rounded-full font-medium whitespace-nowrap"
+        >
+          Join for free
+        </a>
+      </div>
+    </div>
   </div>
 </nav>
