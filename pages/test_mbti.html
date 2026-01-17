@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test MBTI | Mental Health Care</title>
+    <!-- icon web -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="../assets/image/logo_brand-removebg-preview.png"
+    />
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- GSAP Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+
+  <body class="overflow-x-hidden bg-[#f8f8f8]">
+    <div id="stack-container" class="relative h-screen overflow-hidden">
+      <div
+        class="card-stack w-[350px] h-[500px] md:w-[600px] md:h-[400px] bg-[#CC2FAF] rounded-2xl p-8 shadow-lg flex flex-col justify-end card"
+      ></div>
+
+      <div
+        class="card-stack w-[350px] h-[500px] md:w-[600px] md:h-[400px] bg-[#6900BA] rounded-2xl p-8 shadow-lg flex flex-col justify-end card"
+      ></div>
+
+      <div
+        class="card-stack w-[350px] h-[500px] md:w-[600px] md:h-[400px] bg-[#576DD6] rounded-2xl p-8 shadow-lg flex flex-col justify-end card"
+      ></div>
+
+      <div
+        class="card-stack w-[350px] h-[500px] md:w-[600px] md:h-[400px] bg-[#1DB954] rounded-2xl p-8 shadow-lg flex flex-col justify-end card"
+      ></div>
+    </div>
+
+    <script>
+      gsap.registerPlugin(ScrollTrigger);
+      const cards = gsap.utils.toArray(".card");
+
+      const scrollDistance = (cards.length - 1) * window.innerHeight;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "#stack-container",
+          start: "top top",
+          end: "+=" + scrollDistance,
+          scrub: 1,
+          pin: true,
+        },
+      });
+
+      cards.forEach((card, index) => {
+        if (index > 0) {
+          gsap.set(card, {
+            y: window.innerHeight,
+            scale: 1,
+            filter: "brightness(1)",
+            opacity: 1,
+          });
+        } else {
+          gsap.set(card, {
+            y: 0,
+            scale: 1,
+            filter: "brightness(1)",
+            opacity: 1,
+          });
+        }
+      });
+
+      // Logic Animasi
+      cards.forEach((card, index) => {
+        // Geser atas
+        if (index < cards.length - 1) {
+          tl.to(cards[index + 1], {
+            y: 0,
+            scale: 1,
+            filter: "brightness(1)",
+            duration: 1,
+            ease: "none",
+          });
+          // kecilkan kartu sebelumnya
+          tl.to(
+            card,
+            {
+              scale: 0.9,
+              filter: "brightness(0.8)",
+              duration: 1,
+              ease: "none",
+            },
+            "<"
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

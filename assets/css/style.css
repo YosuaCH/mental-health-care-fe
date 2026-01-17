@@ -113,3 +113,11 @@ html::-webkit-scrollbar {
 .animate-breathe {
   animation: breathe 5s ease-in-out infinite;
 }
+
+/* Card Stack */
+.card-stack {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
