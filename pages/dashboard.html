@@ -62,8 +62,9 @@
           ></span>
 
           <svg
+            id="profile-arrow"
             xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4 text-slate-400"
+            class="h-4 w-4 text-slate-400 transition-transform duration-400"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -382,8 +383,12 @@
 
       function toggleProfileMenu() {
         const dropdown = document.getElementById("profile-dropdown");
+        const arrow = document.getElementById("profile-arrow");
         if (dropdown) {
           dropdown.classList.toggle("hidden");
+          if (arrow) {
+            arrow.classList.toggle("-rotate-180");
+          }
         }
       }
 
@@ -391,9 +396,13 @@
       document.addEventListener("click", function (event) {
         const dropdown = document.getElementById("profile-dropdown");
         const button = event.target.closest("button");
+        const arrow = document.getElementById("profile-arrow");
 
         if (dropdown && !dropdown.classList.contains("hidden") && !button) {
           dropdown.classList.add("hidden");
+          if (arrow) {
+            arrow.classList.remove("rotate-180");
+          }
         }
       });
     </script>
