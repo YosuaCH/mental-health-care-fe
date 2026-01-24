@@ -149,89 +149,60 @@
           </h2>
 
           <div class="flex flex-1 gap-12 items-center justify-center">
-            <!-- Statement A -->
             <div
               data-a="1"
               data-q="1"
-              class="answer answer11 flex flex-col items-center gap-3 cursor-pointer group"
+              class="answer answer11 flex flex-col items-center gap-3 cursor-pointer"
               onclick="selectAnswer(this)"
             >
               <img
                 src="../assets/image/party_cloud.png"
                 alt="Party dengan teman"
-                class="w-[400px] h-[200px] object-cover rounded-2xl transition-transform group-hover:scale-[1.02]"
+                class="w-[400px] h-[200px] object-cover rounded-2xl"
               />
 
-              <!-- Radio Button Container -->
-              <div class="relative flex items-center justify-center">
-                <!-- Circle Not Chosen -->
+              <div class="relative flex items-center justify-center w-full">
                 <div
-                  class="choice-circle-not-chosen question-choice-circle is--not-chosen w-8 h-8 rounded-full border-2 border-white"
-                ></div>
-
-                <!-- Circle Chosen -->
-                <div
-                  class="choice-circle-chosen question-choice-circle is--chosen is--1a absolute w-8 h-8 rounded-full bg-yellow-500 border-2 border-white flex items-center justify-center"
+                  class="choice-circle-not-chosen question-choice-circle is--not-chosen px-6 py-2 rounded-full border border-white text-white text-sm md:text-base font-medium transition-all"
                 >
-                  <svg
-                    class="question-check__img w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="3"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
+                  Party dengan teman
+                </div>
+
+                <div
+                  class="choice-circle-chosen question-choice-circle is--chosen is--1a absolute px-6 py-2 rounded-full bg-yellow-500 border border-yellow-500 text-[#1B1B3A] text-sm md:text-base font-medium flex items-center justify-center opacity-1 transition-all"
+                >
+                  Party dengan teman
                 </div>
               </div>
             </div>
 
-            <!-- Divider -->
             <div
               class="w-px h-52 bg-gradient-to-b from-transparent via-gray-500 to-transparent"
             ></div>
 
-            <!-- Statement B -->
             <div
               data-a="2"
               data-q="1"
-              class="answer answer12 flex flex-col items-center gap-3 pointer-event-none group"
+              class="answer answer12 flex flex-col items-center gap-3 cursor-pointer"
               onclick="selectAnswer(this)"
             >
               <img
                 src="../assets/image/lonely_cloud.png"
                 alt="Sendiri di alam"
-                class="w-[400px] h-[200px] object-cover rounded-2xl transition-transform group-hover:scale-[1.02]"
+                class="w-[400px] h-[200px] object-cover rounded-2xl"
               />
 
-              <!-- Radio Button -->
-              <div class="relative flex items-center justify-center">
-                <!-- Circle Not Chosen -->
+              <div class="relative flex items-center justify-center w-full">
                 <div
-                  class="choice-circle-not-chosen question-choice-circle is--not-chosen w-8 h-8 rounded-full border-2 border-white"
-                ></div>
-
-                <!-- Circle Chosen -->
-                <div
-                  class="choice-circle-chosen question-choice-circle is--chosen is--1b absolute w-8 h-8 rounded-full bg-yellow-500 border-2 border-white flex items-center justify-center"
+                  class="choice-circle-not-chosen question-choice-circle is--not-chosen px-6 py-2 rounded-full border border-white text-white text-sm md:text-base font-medium transition-all"
                 >
-                  <svg
-                    class="question-check__img w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="3"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
+                  Sendiri di alam
+                </div>
+
+                <div
+                  class="choice-circle-chosen question-choice-circle is--chosen is--1b absolute px-6 py-2 rounded-full bg-yellow-500 border border-yellow-500 text-white text-sm md:text-base font-medium flex items-center justify-center opacity-1 transition-all"
+                >
+                  Sendiri di alam
                 </div>
               </div>
             </div>
