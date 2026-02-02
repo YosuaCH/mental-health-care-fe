@@ -285,6 +285,7 @@ function generateCards() {
             <img
               src="${answer.image}"
               alt="${answer.alt}"
+              loading="lazy"
               class="w-full max-w-[400px] h-[200px] object-cover rounded-2xl"
             />
 
