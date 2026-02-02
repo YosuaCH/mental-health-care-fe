@@ -286,6 +286,7 @@ function generateCards() {
               data-src="${answer.image}"
               alt="${answer.alt}"
               class="lazy-load w-full max-w-[400px] h-[200px] object-cover rounded-2xl bg-gray-300"
+              style="filter: blur(10px);"
             />
 
             <div class="grid grid-cols-1 place-items-center text-center w-full px-4 md:px-12 h-[100px]">
@@ -342,8 +343,14 @@ function initLazyLoading() {
           if (entry.isIntersecting) {
             const img = entry.target;
 
-            img.src = img.dataset.src;
-            img.classList.remove("lazy-load");
+            const fullImg = new Image();
+            fullImg.src = img.dataset.src;
+
+            fullImg.onload = () => {
+              img.src = img.dataset.src;
+              img.style.filter = "blur(0px)";
+              img.classList.remove("lazy-load");
+            };
 
             imageObserver.unobserve(img);
           }
@@ -362,6 +369,7 @@ function initLazyLoading() {
   } else {
     lazyImages.forEach((img) => {
       img.src = img.dataset.src;
+      img.style.filter = "blur(0px)";
     });
   }
 }
