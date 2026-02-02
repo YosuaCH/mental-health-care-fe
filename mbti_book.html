@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Book | Mental Health Care</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../assets/image/logo_brand-removebg-preview.png"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <!-- User Profile JS -->
+    <script src="../assets/js/user_profile_dropdown.js" defer></script>
+    <!-- Cloud Background JS -->
+    <script src="../assets/js/cloud_background.js"></script>
+    <!-- MBTI Data JS -->
+    <script src="../assets/js/result_mbti.js"></script>
+  </head>
+  <body
+    class="overflow-x-hidden bg-[#f8f8f8] font-[Poppins] min-h-screen text-slate-900"
+  >
+    <!-- Navbar -->
+    <nav
+      class="fixed top-6 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-lg shadow-xl rounded-full z-50 px-4 py-2 w-auto min-w-[420px] max-w-2xl border border-white/40 flex justify-between items-center gap-4"
+    >
+      <img
+        src="../assets/image/logo_brand-removebg-preview.png"
+        class="w-10 h-10 cursor-pointer"
+        onclick="location.href = '../dashboard.html'"
+      />
+
+      <div
+        class="hidden sm:block text-sm font-medium text-slate-500 font-[Poppins]"
+      >
+        Mental Health Care
+      </div>
+
+      <div class="relative" x-data="{ open: false }">
+        <button
+          onclick="toggleProfileMenu()"
+          class="flex items-center gap-3 bg-white pl-1 pr-4 py-1 rounded-full border border-slate-200 shadow-sm hover:shadow-md transition-all group focus:outline-none"
+        >
+          <img
+            id="user-avatar"
+            src=""
+            class="w-8 h-8 rounded-full ring-2 ring-white ml-2 object-cover flex-shrink-0"
+          />
+          <span
+            id="user-name"
+            class="text-sm font-bold text-slate-700 group-hover:text-black hidden sm:block"
+          ></span>
+
+          <svg
+            id="profile-arrow"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4 text-slate-400 transition-transform duration-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+
+        <div
+          id="profile-dropdown"
+          class="hidden absolute top-14 right-0 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-50 transform origin-top-right animate-in fade-in slide-in-from-top-2 duration-200"
+        >
+          <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+            <p
+              id="user-name-dropdown"
+              class="text-sm font-bold text-slate-900 truncate"
+            >
+              User
+            </p>
+            <p class="text-xs text-slate-400 truncate">user@example.com</p>
+          </div>
+
+          <div class="p-2">
+            <a
+              href="pages/profile.html"
+              class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors"
+            >
+              Edit Profil
+            </a>
+          </div>
+
+          <div class="p-2 border-t border-slate-100">
+            <a
+              href="../index.html"
+              class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+            >
+              Keluar
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <section
+      class="min-h-screen flex flex-col items-center justify-center pt-40 pb-16 px-8"
+    >
+      <div class="text-center max-w-6xl mb-16">
+        <h1 class="text-5xl font-bold text-slate-800 mb-4">
+          Kamu <span class="text-[#f2ca4b]">Tidak Sendirian</span>, Mari Tumbuh
+          Bersama.
+        </h1>
+        <p class="text-xl text-slate-600 mb-8">
+          Temukan kekuatan dirimu dan tumbuh bersama komunitas kami.
+        </p>
+      </div>
+
+      <!--  E-Book Cards -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl w-full"
+      >
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+        <div
+          class="w-full bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group cursor-pointer"
+        >
+          <div class="aspect-square bg-gray-200 relative overflow-hidden"></div>
+
+          <div class="p-5">
+            <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
+              Membangun Kepercayaan Diri
+            </h3>
+            <p class="text-sm text-slate-600 mb-3 line-clamp-2">
+              Langkah-langkah praktis untuk meningkatkan rasa percaya diri
+            </p>
+
+            <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"
+                  />
+                </svg>
+                52 halaman
+              </span>
+              <span class="flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                ~40 menit
+              </span>
+            </div>
+
+            <button
+              class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+            >
+              Baca Sekarang
+            </button>
+          </div>
+        </div>
+      </div>
+      <a
+        href="dashboard.html"
+        class="mt-24 mb-0 inline-block bg-slate-900 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-slate-800 transition-colors"
+      >
+        <span>Kembali ke Dashboard</span>
+      </a>
+    </section>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        initUserProfile();
+      });
+    </script>
+  </body>
+</html>
