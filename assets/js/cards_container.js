@@ -285,8 +285,7 @@ function generateCards() {
             <img
               src="${answer.image}"
               alt="${answer.alt}"
-              loading="lazy"
-              class="w-full max-w-[400px] h-[200px] object-cover rounded-2xl"
+              class="lazy-load w-full max-w-[400px] h-[200px] object-cover rounded-2xl"
             />
 
             <div class="grid grid-cols-1 place-items-center text-center w-full px-4 md:px-12 h-[100px]">
@@ -426,6 +425,29 @@ function calculateMBTI() {
     (scores.J > scores.P ? "J" : "P");
 
   return { result, scores };
+}
+
+function initLazyLoading() {
+  const lazyImages = document.querySelectorAll("img.lazy-load");
+
+  if ("IntersectionObserver" in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.remove("lazy-load");
+          imageObserver.unobserve(img);
+        }
+      });
+    });
+
+    lazyImages.forEach((img) => imageObserver.observe(img));
+  } else {
+    lazyImages.forEach((img) => {
+      img.src = img.dataset.src;
+    });
+  }
 }
 
 function finishTest(event) {
