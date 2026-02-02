@@ -285,7 +285,7 @@ function generateCards() {
             <img
               data-src="${answer.image}"
               alt="${answer.alt}"
-              class="lazy-load w-full max-w-[400px] h-[200px] object-cover rounded-2xl bg-gray-200"
+              class="lazy-load w-full max-w-[400px] h-[200px] object-cover rounded-2xl bg-gray-300"
             />
 
             <div class="grid grid-cols-1 place-items-center text-center w-full px-4 md:px-12 h-[100px]">
@@ -318,15 +318,52 @@ function generateCards() {
     container.appendChild(card);
   });
 
-  setTimeout(() => {
-    initLazyLoading();
-  }, 50);
-
+  // Event listener untuk answers
   document.querySelectorAll(".answer").forEach((answer) => {
     answer.addEventListener("click", function () {
       selectAnswer(this);
     });
   });
+
+  initLazyLoading();
+}
+
+function initLazyLoading() {
+  const lazyImages = document.querySelectorAll("img.lazy-load");
+
+  if (lazyImages.length === 0) {
+    return;
+  }
+
+  if ("IntersectionObserver" in window) {
+    const imageObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+
+            img.src = img.dataset.src;
+            img.classList.remove("lazy-load");
+
+            imageObserver.unobserve(img);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "50px",
+        threshold: 0.01,
+      },
+    );
+
+    lazyImages.forEach((img) => {
+      imageObserver.observe(img);
+    });
+  } else {
+    lazyImages.forEach((img) => {
+      img.src = img.dataset.src;
+    });
+  }
 }
 
 function selectAnswer(element) {
@@ -334,6 +371,7 @@ function selectAnswer(element) {
   const answerValue = element.getAttribute("data-a");
   const dimension = element.getAttribute("data-dimension");
   const allAnswers = document.querySelectorAll(`[data-q="${question}"]`);
+
   allAnswers.forEach((answer) => {
     answer.classList.remove("selected");
   });
@@ -414,7 +452,7 @@ function initAnimation() {
   });
 }
 
-//Calculate Results
+// Calculate Results
 function calculateMBTI() {
   const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 
@@ -431,35 +469,6 @@ function calculateMBTI() {
   return { result, scores };
 }
 
-function initLazyLoading() {
-  const lazyImages = document.querySelectorAll("img.lazy-load");
-
-  if ("IntersectionObserver" in window) {
-    const imageObserver = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const img = entry.target;
-            console.log("📷 Loading image:", img.dataset.src);
-            img.src = img.dataset.src;
-            img.classList.remove("lazy-load");
-            imageObserver.unobserve(img);
-          }
-        });
-      },
-      {
-        rootMargin: "50px",
-      },
-    );
-
-    lazyImages.forEach((img) => imageObserver.observe(img));
-  } else {
-    lazyImages.forEach((img) => {
-      img.src = img.dataset.src;
-    });
-  }
-}
-
 function finishTest(event) {
   event.preventDefault();
 
@@ -470,17 +479,14 @@ function finishTest(event) {
 
   const hasil = calculateMBTI();
 
-  console.log("Hasil MBTI:", hasil.result);
-
   localStorage.setItem("mbti_result", hasil.result);
   localStorage.setItem("mbti_scores", JSON.stringify(hasil.scores));
 
   window.location.href = "result_mbti.html";
 }
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM loaded, initializing cards...");
-  generateCards();
 
+document.addEventListener("DOMContentLoaded", function () {
+  generateCards();
   setTimeout(() => {
     initAnimation();
   }, 100);
