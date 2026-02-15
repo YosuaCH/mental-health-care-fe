@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mental Health Consultation</title>
+    <!-- Icon Web -->
+    <link
+      rel="icon"
+      type="image/png"
+      href="../assets/image/logo_brand-removebg-preview.png"
+    />
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CDN Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Cloud JS -->
+    <script src="../assets/js/cloud_background.js" defer></script>
+    <!-- Chat JS -->
+    <script src="../assets/js/chat.js" defer></script>
+  </head>
+  <body
+    class="bg-[#f8f8f8] h-screen w-full flex flex-col overflow-hidden text-slate-900 selection:bg-[#f2ca4b] selection:text-slate-900 font-['Poppins']"
+  >
+    <div
+      id="clouds-container"
+      class="absolute inset-0 pointer-events-none -z-10"
+    ></div>
+    <nav
+      class="fixed top-6 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-xl rounded-full z-50 px-4 py-2 w-auto min-w-[420px] max-w-2xl border border-white/40 flex justify-between items-center gap-4"
+    >
+      <img
+        src="../assets/image/logo_brand-removebg-preview.png"
+        class="w-10 h-10 cursor-pointer"
+        onclick="location.reload()"
+      />
+
+      <div class="hidden sm:block text-sm font-medium text-slate-500">
+        Ruang Obrolan
+      </div>
+      <div class="w-10"></div>
+    </nav>
+
+    <div
+      class="flex h-[calc(100vh-9rem)] mt-32 gap-8 px-8 pb-6 w-full max-w-[1600px] mx-auto"
+    >
+      <div
+        class="w-[360px] h-full flex flex-col bg-white/70 backdrop-blur-xl shadow-sm rounded-2xl overflow-hidden border border-slate-200 flex-shrink-0"
+      >
+        <div class="p-6 pb-4 flex-shrink-0">
+          <h1 class="text-xl font-bold text-slate-800">Obrolan Kamu</h1>
+          <p class="text-xs text-slate-500">
+            Pilih AI atau dokter untuk mulai curhat
+          </p>
+        </div>
+
+        <div class="flex-1 overflow-y-auto no-scrollbar px-3 space-y-4 pb-4">
+          <!-- AI Assistant -->
+          <div
+            data-contact="AI Assistant"
+            onclick="
+              selectContact(
+                'AI Assistant',
+                '../assets/image/cloud (3).png',
+                true,
+              )
+            "
+          >
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div
+                  class="w-12 h-12 rounded-full bg-[#f8f8f8] border border-slate-200 flex items-center justify-center text-slate-900"
+                >
+                  <img
+                    src="../assets/image/cloud (3).png"
+                    alt=""
+                    class="w-9 h-9"
+                  />
+                </div>
+                <div
+                  class="absolute -bottom-1 -right-1 bg-green-500 w-3.5 h-3.5 border-2 border-white rounded-full"
+                ></div>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-center">
+                  <h3 class="font-semibold text-slate-900">AI Assistant</h3>
+                  <span
+                    class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+                    >Free</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h2
+              class="px-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
+            >
+              Available Psychiatrists
+            </h2>
+
+            <div class="space-y-1">
+              <!-- Dr. Sarah Jenkins -->
+              <div
+                data-contact="Dr. Sarah Jenkins"
+                onclick="
+                  selectContact(
+                    'Dr. Sarah Jenkins',
+                    'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100&h=100',
+                  )
+                "
+                class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group"
+              >
+                <div class="relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100&h=100"
+                    class="w-12 h-12 rounded-full object-cover"
+                  />
+                  <div
+                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                  ></div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-semibold text-slate-900 text-sm">
+                      Dr. Sarah Jenkins
+                    </h4>
+                    <span class="text-[10px] font-medium text-slate-500"
+                      >Rp250.000</span
+                    >
+                  </div>
+                  <div class="flex justify-between items-end mt-0.5">
+                    <p class="text-xs text-slate-500 truncate">
+                      Clinical Psychiatrist
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dr. Amin Ray -->
+              <div
+                data-contact="Dr. Amin Ray"
+                onclick="
+                  selectContact(
+                    'Dr. Amin Ray',
+                    'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=100&h=100',
+                  )
+                "
+                class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group"
+              >
+                <div class="relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=100&h=100"
+                    class="w-12 h-12 rounded-full object-cover grayscale-[20%] group-hover:grayscale-0"
+                  />
+                  <div
+                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                  ></div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-medium text-slate-900 text-sm">
+                      Dr. Amin Ray
+                    </h4>
+                    <span
+                      class="text-[10px] font-medium text-slate-400 group-hover:text-slate-600"
+                      >Rp200.000</span
+                    >
+                  </div>
+                  <p class="text-xs text-slate-500 truncate">
+                    Cognitive Behavioral Therapy
+                  </p>
+                </div>
+              </div>
+
+              <!-- Dr. Elena Rostova -->
+              <div
+                data-contact="Dr. Elena Rostova"
+                onclick="
+                  selectContact(
+                    'Dr. Elena Rostova',
+                    'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100&h=100',
+                  )
+                "
+                class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group"
+              >
+                <div class="relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100&h=100"
+                    class="w-12 h-12 rounded-full object-cover grayscale-[20%] group-hover:grayscale-0"
+                  />
+                  <div
+                    class="absolute bottom-0 right-0 w-3 h-3 bg-gray-300 border-2 border-white rounded-full"
+                  ></div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-baseline">
+                    <h4 class="font-medium text-slate-900 text-sm">
+                      Dr. Elena Rostova
+                    </h4>
+                    <span
+                      class="text-[10px] font-medium text-slate-400 group-hover:text-slate-600"
+                      >Rp300.000</span
+                    >
+                  </div>
+                  <p class="text-xs text-slate-500 truncate">
+                    Trauma Specialist
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 flex flex-col h-full rounded-2xl overflow-hidden shadow-sm border border-slate-200"
+      >
+        <div
+          class="h-16 px-6 flex items-center justify-between bg-white/20 backdrop-blur-sm border-b border-slate-200 shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex-shrink-0"
+        >
+          <div class="flex items-center gap-3">
+            <div class="relative">
+              <img
+                id="header-avatar"
+                class="w-9 h-9 rounded-full object-cover"
+              />
+              <div
+                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full"
+              ></div>
+            </div>
+            <div>
+              <h2
+                id="header-name"
+                class="text-sm font-semibold text-slate-900"
+              ></h2>
+            </div>
+          </div>
+
+          <button
+            id="end-session-btn"
+            class="text-xs font-medium text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-colors"
+          ></button>
+        </div>
+
+        <div
+          id="chat-container"
+          class="flex-1 overflow-y-auto p-6 space-y-6 bg-[#f8f8f8]/70 backdrop-blur-sm scroll-smooth"
+        >
+          <div class="flex justify-center">
+            <span
+              class="text-[10px] font-medium text-slate-400 bg-slate-200/50 px-2 py-1 rounded-full"
+              >Conversation started with AI Assistant</span
+            >
+          </div>
+        </div>
+
+        <div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+          <div class="flex items-center gap-2 max-w-4xl mx-auto w-full">
+            <button
+              class="p-2.5 text-slate-400 hover:text-[#f2ca4b] hover:bg-slate-50 rounded-full transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                <line x1="9" y1="9" x2="9.01" y2="9" />
+                <line x1="15" y1="9" x2="15.01" y2="9" />
+              </svg>
+            </button>
+
+            <input
+              id="message-input"
+              type="text"
+              placeholder="Type your message..."
+              class="flex-1 bg-slate-100 text-slate-900 text-sm placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] focus:bg-white transition-all"
+              onkeypress="handleEnter(event)"
+            />
+
+            <button
+              id="send-button"
+              onclick="sendMessage()"
+              class="p-3 bg-[#f2ca4b] text-slate-900 rounded-xl hover:bg-[#e8ba35] shadow-sm hover:shadow transition-all"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof initCloudBgSection === "function") {
+          initCloudBgSection();
+          selectContact("AI Assistant", "../assets/image/cloud (3).png", true);
+        }
+      });
+    </script>
+  </body>
+</html>
