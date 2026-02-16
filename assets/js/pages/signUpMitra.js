@@ -1,21 +1,22 @@
 import { registerPsikiater } from "../services/authService.js";
+import { setupPasswordValidator } from "../animations/password_validator.js";
 
 const registerForm = document.getElementById("registerForm");
+const passwordInput = document.getElementById("password");
+const confirmPassword = document.getElementById("confirmPassword");
+
+const isPasswordValid = setupPasswordValidator(passwordInput, confirmPassword);
 
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  if (!isPasswordValid()) return;
 
   const email = document.getElementById("email").value;
   const namaLengkap = document.getElementById("namaLengkap").value;
   const noStr = document.getElementById("noStr").value;
   const nomorWa = document.getElementById("noWa").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
-
-  if (password !== confirmPassword) {
-    alert("Password tidak sama!");
-    return;
-  }
+  const password = passwordInput.value;
 
   try {
     const res = await registerPsikiater({
