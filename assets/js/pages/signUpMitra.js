@@ -8,7 +8,7 @@ registerForm.addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value;
   const namaLengkap = document.getElementById("namaLengkap").value;
   const noStr = document.getElementById("noStr").value;
-  const noWa = document.getElementById("noWa").value;
+  const nomorWa = document.getElementById("noWa").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
 
@@ -22,7 +22,7 @@ registerForm.addEventListener("submit", async (e) => {
       email,
       namaLengkap,
       noStr,
-      noWa,
+      nomorWa,
       password,
     });
     const data = await res.json();
