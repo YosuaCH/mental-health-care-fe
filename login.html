@@ -40,9 +40,10 @@
         Masuk untuk melanjutkan perjalanan kesehatan mentalmu
       </p>
 
-      <form class="space-y-4" action="dashboard.html">
+      <form id="loginForm" class="space-y-4">
         <div>
           <input
+            id="email"
             type="email"
             placeholder="Email"
             required
@@ -191,6 +192,39 @@
           eyeClosed.classList.remove("hidden");
         }
       }
+    </script>
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            const res = await fetch("http://localhost:8080/auth/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+              alert(data.message);
+              console.log("User:", data.data);
+
+              window.location.href = "dashboard.html";
+            } else {
+              alert("Gagal: " + data.message);
+            }
+          } catch (err) {
+            alert("Server mati atau tidak bisa diakses");
+          }
+        });
     </script>
   </body>
 </html>
