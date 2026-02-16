@@ -27,42 +27,475 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/style.css" />
 
-    <!-- Loader Fragment -->
-    <script src="assets/js/loader.js" defer></script>
-
     <!-- AOS JS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
 
     <!-- Hero Cloud Animation -->
-    <script src="assets/js/cloud_background.js" defer></script>
+    <script src="assets/js/animations/cloud_background.js" defer></script>
 
     <!-- Scroll Section -->
-    <script src="assets/js/scroll_section.js" defer></script>
+    <script src="assets/js/animations/scroll_section.js" defer></script>
 
     <!-- Shape Section -->
-    <script src="assets/js/shape_section.js" defer></script>
+    <script src="assets/js/animations/shape_section.js" defer></script>
 
     <!-- Navbar JS -->
-    <script src="assets/js/navbar.js" defer></script>
+    <script src="assets/js/animations/navbar.js" defer></script>
   </head>
 
   <body>
     <!-- Navigation Bar -->
-    <div id="navbar"></div>
+    <nav
+      class="fixed top-6 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-lg shadow-lg rounded-2xl z-50 px-5 py-2 w-[460px]"
+    >
+      <div class="flex items-center gap-6">
+        <!-- Logo -->
+        <a href="#hero-section" class="flex-shrink-0">
+          <img
+            src="assets/image/logo_brand-removebg-preview.png"
+            class="w-10 h-10 object-contain"
+          />
+        </a>
+
+        <!-- Spacer -->
+        <div class="flex-1"></div>
+
+        <div class="flex items-center gap-6 overflow-hidden">
+          <!-- Services -->
+          <a
+            href="#service-section"
+            class="relative text-black font-medium after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px] after:h-[2px] after:w-0 after:bg-[#f2ca4b] after:transition-all after:duration-300 hover:after:w-full"
+          >
+            Layanan
+          </a>
+
+          <!-- Login -->
+          <a
+            id="loginLink"
+            href="login.html"
+            class="relative text-black font-medium after:content-[''] after:absolute after:left-1/2 after:-translate-x-1/2 after:bottom-[-2px] after:h-[2px] after:w-0 after:bg-[#f2ca4b] after:transition-all after:duration-300 hover:after:w-full"
+          >
+            Masuk
+          </a>
+
+          <!-- Animate Join -->
+          <div
+            id="joinWrapper"
+            class="overflow-hidden w-0 transition-all duration-500 ease-out"
+          >
+            <a
+              id="joinBtn"
+              href="signUp.html"
+              class="flex items-center justify-center px-6 py-2 bg-black text-white rounded-full font-medium whitespace-nowrap ml-2 font-['Poppins']"
+            >
+              Mulai gratis
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
     <main
       class="relative z-10 bg-[#f8f8f8] shadow-2xl rounded-b-[3rem] min-h-screen"
     >
       <!-- Hero Section -->
-      <div id="hero-section"></div>
+      <section
+        id="hero"
+        class="relative h-screen flex flex-col justify-center items-center text-center pb-20 overflow-hidden pt-32"
+      >
+        <div
+          id="clouds-container"
+          class="absolute inset-0 pointer-events-none"
+        ></div>
+
+        <div
+          class="relative z-10 backdrop-blur-[1.5px] bg-white/5 p-8 rounded-xl border border-white/20"
+          data-aos="fade-up"
+          data-aos-duration="1500"
+        >
+          <h1 class="text-6xl font-bold italic font-[Poppins] text-slate-900">
+            Mental Health Care
+          </h1>
+          <p class="text-lg mt-4 text-gray-500 font-[Poppins] font-normal">
+            Karena
+            <strong class="font-semibold text-gray-700">merawat pikiran</strong>
+            sama pentingnya dengan
+            <strong class="font-semibold text-gray-700">merawat tubuh</strong>
+          </p>
+
+          <p class="text-lg -mt-[1px] text-gray-500 font-[Poppins] font-normal">
+            Mari belajar dan
+            <strong class="font-semibold text-gray-700"
+              >bertumbuh bersama</strong
+            >
+          </p>
+          <div class="flex gap-4 justify-center mt-12">
+            <a
+              href="login.html"
+              class="px-6 py-3 bg-white text-black rounded-full font-medium shadow-md border border-black/10 transition transform hover:scale-105 font-[Poppins]"
+            >
+              Lihat E-Book
+            </a>
+
+            <a
+              href="login.html"
+              class="px-6 py-3 bg-black text-white rounded-full font-medium shadow-lg transition transform hover:scale-105 font-[Poppins]"
+            >
+              Mulai Test MBTI
+            </a>
+          </div>
+        </div>
+      </section>
 
       <!-- About Section -->
-      <div id="about-section"></div>
+      <section
+        id="about"
+        class="h-screen flex items-center justify-center px-20 pt-20"
+      >
+        <div class="flex gap-4 items-stretch w-full max-w-7xl h-[600px] pt-0">
+          <!-- LEFT COLUMN -->
+          <div
+            class="flex flex-col flex-1 h-full"
+            data-aos="fade-right"
+            data-aos-duration="1200"
+          >
+            <!-- WRAPPER -->
+            <div class="relative flex-1 h-full">
+              <!-- CLIPPED IMAGE -->
+              <img
+                src="assets/image/cloud (3).png"
+                class="absolute -top-16 -left-16 w-40 h-40 p-2 drop-shadow-2xl z-30 cloud-floating-upDown"
+              />
+
+              <!-- CARD CONTENT -->
+              <div
+                class="relative h-full backdrop-blur-[1.5px] bg-black/5 rounded-3xl flex flex-col gap-3 px-6 py-6 border border-white/30 overflow-hidden"
+              >
+                <!-- ACCENT DECORATIONS -->
+                <div
+                  class="absolute top-1/4 -left-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-3xl pointer-events-none"
+                ></div>
+                <div
+                  class="absolute -top-10 -right-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-3xl pointer-events-none"
+                ></div>
+                <div
+                  class="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl pointer-events-none"
+                ></div>
+                <div
+                  class="absolute top-1/2 right-0 w-40 h-40 bg-yellow-400/20 rounded-full blur-3xl pointer-events-none"
+                ></div>
+
+                <!-- CONTENT TEXT -->
+                <h1
+                  class="text-4xl font-semibold mt-16 font-[Poppins] text-slate-900 relative z-10"
+                >
+                  Kenalan sama Mental Health Care, yuk!
+                </h1>
+
+                <p
+                  class="text-slate-900 leading-relaxed font-[Poppins] relative z-10"
+                >
+                  Di Mental Health Care, kami percaya setiap orang berhak punya
+                  mental yang sehat dan tangguh. Kami menyediakan semua yang
+                  kamu butuhkan untuk bertumbuh seperti tes kepribadian yang
+                  akurat, literasi psikologi yang praktis, hingga pendampingan
+                  profesional yang privat. Langkah pertama menuju versi
+                  terbaikmu dimulai dari sini.
+                </p>
+
+                <!-- CARD BOT -->
+                <div class="mt-auto pt-6 relative z-10">
+                  <div class="flex items-center gap-4">
+                    <div
+                      class="flex-1 bg-white/50 backdrop-blur-sm rounded-3xl p-4 border border-white/40"
+                    >
+                      <p
+                        class="text-2xl font-bold text-slate-900 font-[Poppins]"
+                      >
+                        24/7
+                      </p>
+                      <p class="text-sm text-gray-600 font-[Poppins]">
+                        Dukungan Tersedia
+                      </p>
+                    </div>
+
+                    <div
+                      class="flex-1 bg-white/50 backdrop-blur-sm rounded-3xl p-4 border border-white/40"
+                    >
+                      <p
+                        class="text-2xl font-bold text-slate-900 font-[Poppins]"
+                      >
+                        100%
+                      </p>
+                      <p class="text-sm text-gray-600 font-[Poppins]">
+                        Privasi Terjaga
+                      </p>
+                    </div>
+
+                    <div
+                      class="flex-1 bg-white/50 backdrop-blur-sm rounded-3xl p-4 border border-white/40"
+                    >
+                      <p
+                        class="text-2xl font-bold text-slate-900 font-[Poppins]"
+                      >
+                        Expert
+                      </p>
+                      <p class="text-sm text-gray-600 font-[Poppins]">
+                        Psikolog Profesional
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- DECORATIVE LINE -->
+                <div
+                  class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-yellow-400/50 to-transparent"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="flex flex-col gap-4 flex-1">
+            <!-- WRAPPER  -->
+            <!-- TOP -->
+            <div
+              class="relative flex-1"
+              data-aos="fade-down-left"
+              data-aos-duration="1200"
+            >
+              <!-- CLIPPED IMAGE  -->
+              <img
+                src="assets\image\cloud.png"
+                alt="Edukasi"
+                class="absolute -top-16 -right-12 w-36 h-36 p-2 cloud-floating-upDown z-30"
+              />
+
+              <!-- CARD CONTENT -->
+              <div
+                class="relative h-full backdrop-blur-[1.5px] bg-black/5 rounded-3xl flex flex-col items-end text-right px-6 py-6 overflow-hidden"
+              >
+                <!-- ACCENTS -->
+                <div
+                  class="absolute -top-10 -left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-3xl pointer-events-none"
+                ></div>
+
+                <div
+                  class="absolute bottom-10 -left-10 w-40 h-40 bg-blue-400/20 rounded-full blur-2xl pointer-events-none"
+                ></div>
+
+                <div
+                  class="absolute top-1/2 right-0 w-20 h-16 bg-yellow-400 rounded-full blur-2xl pointer-events-none"
+                ></div>
+
+                <!-- CONTENT TEXT -->
+                <h1
+                  class="text-2xl text-slate-900 font-[Poppins] font-semibold mt-12 relative z-10"
+                >
+                  Edukasi & Tes Kepribadian
+                </h1>
+
+                <p
+                  class="text-slate-900 max-w-xl leading-relaxed font-[Poppins] relative z-10"
+                >
+                  Yuk, mulai perjalanan mengenal dirimu. Lewat tes MBTI dan
+                  e-book pilihan, kami bantu kamu temukan potensi terbaik dan
+                  cara nyaman berdamai dengan diri sendiri.
+                </p>
+              </div>
+            </div>
+
+            <!-- BOTTOM -->
+            <!-- WRAPPER -->
+            <div
+              class="relative flex-[2]"
+              data-aos="fade-up-left"
+              data-aos-duration="1200"
+            >
+              <!-- CLIPPED IMAGE -->
+              <img
+                src="assets/image/cloud (4).png"
+                alt="Edukasi"
+                class="absolute -bottom-8 -right-12 w-36 h-36 p-2 drop-shadow-xl cloud-floating-upDown z-30 pointer-events-none"
+              />
+
+              <!-- CARD -->
+              <div
+                class="relative h-full backdrop-blur-[1.5px] bg-black/5 rounded-3xl flex flex-col items-end px-6 py-6 text-right overflow-hidden"
+              >
+                <!-- ACCENTS  -->
+                <div
+                  class="absolute -top-10 -left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-3xl pointer-events-none"
+                ></div>
+
+                <div
+                  class="absolute bottom-10 -left-10 w-40 h-40 bg-yellow-400/20 rounded-full blur-2xl pointer-events-none"
+                ></div>
+
+                <div
+                  class="absolute top-1/4 right-0 w-20 h-16 bg-blue-400 rounded-full blur-2xl pointer-events-none"
+                ></div>
+
+                <!-- CONTENT -->
+                <h1
+                  class="text-2xl text-slate-900 font-[Poppins] font-semibold relative z-10"
+                >
+                  Teman Cerita yang Bisa Kamu Percaya
+                </h1>
+
+                <p
+                  class="text-slate-900 max-w-xl font-[Poppins] leading-relaxed relative z-10"
+                >
+                  Terkadang.... bercerita kepada orang terdekat justru terasa
+                  sulit. Di sini, kamu bisa ngobrol santai dengan konselor
+                  profesional yang siap membantu mengurai benang kusut di
+                  pikiranmu. Semuanya lewat chat yang rahasia dan fleksibel.
+                  Tarik napas, dan biarkan kami membantumu merasa lebih lega.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- Scroll Section -->
-      <div id="scroll-section"></div>
+      <section id="scroll-section" class="relative h-[200vh]">
+        <div
+          class="sticky top-0 h-screen flex flex-col justify-center items-center gap-6 overflow-hidden"
+        >
+          <!-- Breathing circles -->
+          <div
+            class="absolute w-[500px] h-[500px] border border-3 border-gray-400 rounded-full bg-blue-50 -z-10 animate-breathe"
+          ></div>
+
+          <div
+            class="absolute w-[400px] h-[400px] border border-3 border-gray-300 rounded-full bg-yellow-50 -z-10 animate-breathe"
+            style="animation-delay: 0.5s"
+          ></div>
+
+          <!-- Floating ambient glows -->
+          <div
+            class="absolute top-1/4 left-10 w-40 h-40 bg-yellow-400/50 rounded-full blur-3xl pointer-events-none -z-10"
+          ></div>
+          <div
+            class="absolute bottom-1/4 right-10 w-40 h-40 bg-blue-400/50 rounded-full blur-3xl pointer-events-none -z-10"
+          ></div>
+          <div
+            class="absolute bottom-1/4 left-1/3 w-30 h-50 bg-blue-400/50 rounded-full blur-3xl pointer-events-none -z-10"
+          ></div>
+
+          <p
+            class="step text-xl text-gray-500 opacity-0 translate-y-10 transition-all duration-700 font-[Poppins]"
+          >
+            Terkadang Kita Perlu Untuk Berhenti Sejenak
+          </p>
+
+          <h1
+            class="step text-5xl font-bold opacity-0 translate-y-10 transition-all duration-700 font-[Poppins]"
+          >
+            Tarik napas sebentar...
+          </h1>
+
+          <h1
+            class="step text-5xl font-bold opacity-0 translate-y-10 transition-all duration-700 font-[Poppins]"
+          >
+            Kamu tidak perlu menghadapi semuanya sendiri
+          </h1>
+
+          <h1
+            class="step text-5xl font-bold opacity-0 translate-y-10 transition-all duration-700 font-[Poppins]"
+          >
+            Kami ada untuk menemanimu
+          </h1>
+        </div>
+      </section>
 
       <!-- Shape Section -->
-      <div id="shape-section"></div>
+      <section
+        class="relative h-[120vh] overflow-hidden flex flex-col items-center justify-center gap-14"
+      >
+        <div
+          id="shape"
+          class="absolute top-0 left-1/2 z-0"
+          style="
+            transform: translateX(-50%) scale(var(--scale, 0.3));
+            transform-origin: center top;
+            transition: transform 0.1s ease-out;
+            will-change: transform;
+            width: 50vw;
+            height: 50vw;
+          "
+        >
+          <!-- Container shape-->
+          <div class="relative w-full h-full rounded-full bg-white"></div>
+        </div>
+
+        <!-- header -->
+        <div class="relative z-10 pt-0 text-center">
+          <h1
+            class="text-4xl pt-[220px] font-bold font-[Poppins] text-gray-900"
+          >
+            Ada banyak warna kepribadian, yang mana milikmu?
+          </h1>
+        </div>
+        <!-- marquee cloud -->
+        <div
+          class="relative z-10 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_20%,black_90%,transparent)]"
+        >
+          <div class="cloud-track">
+            <div class="cloud-group">
+              <img src="assets/image/cloud.png" class="cloud" />
+              <img src="assets/image/cloud (1).png" class="cloud" />
+              <img src="assets/image/cloud (2).png" class="cloud" />
+              <img src="assets/image/cloud (3).png" class="cloud" />
+              <img src="assets/image/cloud (4).png" class="cloud" />
+              <img src="assets/image/cloud (5).png" class="cloud" />
+              <img src="assets/image/cloud (6).png" class="cloud" />
+              <img src="assets/image/cloud (7).png" class="cloud" />
+            </div>
+
+            <div class="cloud-group">
+              <img src="assets/image/cloud.png" class="cloud" />
+              <img src="assets/image/cloud (1).png" class="cloud" />
+              <img src="assets/image/cloud (2).png" class="cloud" />
+              <img src="assets/image/cloud (3).png" class="cloud" />
+              <img src="assets/image/cloud (4).png" class="cloud" />
+              <img src="assets/image/cloud (5).png" class="cloud" />
+              <img src="assets/image/cloud (6).png" class="cloud" />
+              <img src="assets/image/cloud (7).png" class="cloud" />
+            </div>
+          </div>
+          <div class="cloud-track reverse mt-10">
+            <div class="cloud-group">
+              <img src="assets/image/cloud (8).png" class="cloud" />
+              <img src="assets/image/cloud (9).png" class="cloud" />
+              <img src="assets/image/cloud (10).png" class="cloud" />
+              <img src="assets/image/cloud (11).png" class="cloud" />
+              <img src="assets/image/cloud (12).png" class="cloud" />
+              <img src="assets/image/cloud (13).png" class="cloud" />
+              <img src="assets/image/cloud (14).png" class="cloud" />
+              <img src="assets/image/cloud (15).png" class="cloud" />
+            </div>
+
+            <div class="cloud-group">
+              <img src="assets/image/cloud (8).png" class="cloud" />
+              <img src="assets/image/cloud (9).png" class="cloud" />
+              <img src="assets/image/cloud (10).png" class="cloud" />
+              <img src="assets/image/cloud (11).png" class="cloud" />
+              <img src="assets/image/cloud (12).png" class="cloud" />
+              <img src="assets/image/cloud (13).png" class="cloud" />
+              <img src="assets/image/cloud (14).png" class="cloud" />
+              <img src="assets/image/cloud (15).png" class="cloud" />
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="px-6 py-3 bg-black text-white rounded-full font-medium shadow-lg transition transform hover:scale-105 font-[Poppins] z-10"
+        >
+          Mulai Test MBTI
+        </button>
+      </section>
 
       <!-- Divider -->
       <div class="w-full flex justify-center">
@@ -70,21 +503,271 @@
       </div>
 
       <!-- Service Section -->
-      <div id="service-section"></div>
+      <section class="min-h-screen flex items-center pt-20 px-6">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-12 max-w-4xl mx-auto">
+            <h2
+              class="text-3xl md:text-4xl font-bold font-[Poppins] text-gray-900 mb-4"
+            >
+              Gak Perlu Memendam Semuanya Sendirian
+            </h2>
+            <p class="text-xl text-gray-500 leading-relaxed">
+              Bingung mau cerita ke mana? Di sini kamu bisa curhat sama AI, baca
+              buku, atau ngobrol sama psikolog beneran. Yuk, pilih bantuan yang
+              kamu butuhin sekarang.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <div
+              class="relative group transition-all duration-300 hover:-translate-y-1 mt-8"
+            >
+              <img
+                src="assets/image/cloud (1).png"
+                class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 z-20 drop-shadow-xl"
+              />
+              <div
+                class="relative h-full overflow-hidden flex flex-col items-center text-center bg-black/5 backdrop-blur-md rounded-3xl p-8 shadow-sm hover:shadow-xl border border-white/30"
+              >
+                <div
+                  class="absolute top-1/4 left-10 w-32 h-32 bg-yellow-400/30 rounded-full blur-3xl pointer-events-none -z-10"
+                ></div>
+                <div
+                  class="absolute bottom-1 right-4 w-40 h-40 bg-blue-400/30 rounded-full blur-3xl pointer-events-none -z-10"
+                ></div>
+                <div
+                  class="relative z-10 flex flex-col items-center mt-6 flex-grow"
+                >
+                  <h3
+                    class="text-xl font-bold font-[Poppins] text-slate-900 mb-3"
+                  >
+                    Teman Ngobrol 24/7
+                  </h3>
+                  <p
+                    class="text-gray-500 mb-6 leading-relaxed font-[Poppins] flex-grow"
+                  >
+                    Lagi butuh teman cerita tengah malam? Yuk, luapkan
+                    unek-unekmu di sini. Gratis, rahasia, dan pastinya bebas
+                    curhat apa saja.
+                  </p>
+                  <a
+                    href="login.html"
+                    class="inline-flex items-center text-white font-medium bg-black px-4 py-2 rounded-full font-[Poppins] mt-auto"
+                  >
+                    Curhat Sekarang
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div
+              class="relative group transition-all duration-300 hover:-translate-y-1 mt-8"
+            >
+              <img
+                src="assets/image/cloud (2).png"
+                class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 z-20 drop-shadow-xl"
+              />
+              <div
+                class="relative h-full overflow-hidden flex flex-col items-center text-center bg-black/5 backdrop-blur-md rounded-3xl p-8 shadow-sm hover:shadow-xl border border-white/30"
+              >
+                <div
+                  class="absolute top-1/4 left-10 w-32 h-32 bg-yellow-400/30 rounded-full blur-3xl pointer-events-none -z-10"
+                ></div>
+                <div
+                  class="absolute bottom-1 right-4 w-40 h-40 bg-blue-400/30 rounded-full blur-3xl pointer-events-none -z-10"
+                ></div>
+                <div
+                  class="relative z-10 flex flex-col items-center mt-6 flex-grow"
+                >
+                  <h3
+                    class="text-xl font-bold font-[Poppins] text-gray-900 mb-3"
+                  >
+                    Temukan Titik Terang
+                  </h3>
+                  <p
+                    class="text-gray-500 mb-6 leading-relaxed font-[Poppins] flex-grow"
+                  >
+                    Masalah terasa berat? Bicarakan langsung dengan Psikolog &
+                    Psikiater terverifikasi. Penanganan tepat, hati lebih
+                    tenang.
+                  </p>
+                  <a
+                    href="login.html"
+                    class="inline-flex items-center text-white font-medium bg-black px-4 py-2 rounded-full font-[Poppins] mt-auto"
+                  >
+                    Konsultasi Ahli
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div
+              class="relative group transition-all duration-300 hover:-translate-y-1 mt-8"
+            >
+              <img
+                src="assets/image/cloud.png"
+                class="absolute -top-14 left-1/2 -translate-x-1/2 w-28 h-28 z-20 drop-shadow-xl"
+              />
+              <div
+                class="relative h-full overflow-hidden flex flex-col items-center text-center bg-black/5 backdrop-blur-md rounded-3xl p-8 shadow-sm hover:shadow-xl border border-white/30"
+              >
+                <div
+                  class="absolute top-1/4 left-10 w-32 h-32 bg-yellow-400/30 rounded-full blur-3xl pointer-events-none -z-10"
+                ></div>
+                <div
+                  class="absolute bottom-1 right-4 w-40 h-40 bg-blue-400/30 rounded-full blur-3xl pointer-events-none -z-10"
+                ></div>
+                <div
+                  class="relative z-10 flex flex-col items-center mt-6 flex-grow"
+                >
+                  <h3
+                    class="text-xl font-bold font-[Poppins] text-gray-900 mb-3"
+                  >
+                    Perpus Psikologi
+                  </h3>
+                  <p
+                    class="text-gray-500 mb-6 leading-relaxed font-[Poppins] flex-grow"
+                  >
+                    Pahami dirimu lebih dalam lewat koleksi E-book & Jurnal
+                    Psikologi. Akses gratis untuk bahan bacaan berkualitas.
+                  </p>
+                  <a
+                    href="login.html"
+                    class="inline-flex items-center text-white font-medium bg-black px-4 py-2 rounded-full font-[Poppins] mt-auto"
+                  >
+                    Lihat E-Book
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <!-- Invitation Section -->
-      <div id="invitation"></div>
+      <section class="py-0 px-6">
+        <div class="max-w-8xl mx-auto -mb-10">
+          <div class="relative pt-12 pb-20 md:pb-32 overflow-hidden">
+            <div
+              class="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto"
+            >
+              <h2
+                class="text-3xl md:text-4xl font-bold font-[Poppins] text-slate-900 mb-4 leading-tight"
+              >
+                Tak Perlu Selalu Terlihat Kuat
+              </h2>
+
+              <p
+                class="text-gray-500 text-lg md:text-xl mb-10 leading-relaxed max-w-4xl font-[Poppins]"
+              >
+                Kadang, hal paling berani yang bisa kamu lakukan adalah
+                beristirahat dan berbagi cerita. Izinkan kami membantumu
+                meringankan beban itu.
+              </p>
+
+              <a
+                href="login.html"
+                class="inline-flex items-center justify-center bg-black text-white font-medium font-[Poppins] px-8 py-4 rounded-full hover:scale-105 transition-all duration-300"
+              >
+                Mulai Perjalananmu Sekarang
+              </a>
+            </div>
+
+            <img
+              src="assets/image/cloud (3).png"
+              alt="Mascot Left"
+              class="absolute -bottom-4 left-0 md:left-10 w-32 md:w-56 translate-y-1/4 rotate-12 z-0 drop-shadow-lg"
+            />
+
+            <img
+              src="assets/image/cloud (3).png"
+              alt="Mascot Right"
+              class="absolute -bottom-4 right-0 md:right-10 w-32 md:w-56 translate-y-1/4 -rotate-12 scale-x-[-1] z-0 drop-shadow-lg"
+            />
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Footer Section -->
     <footer
-      id="footer"
       class="sticky bottom-0 -z-10 w-full text-white pt-32 pb-10 px-6 md:px-20 h-auto"
-    ></footer>
+    >
+      <div
+        class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-[1fr_auto] gap-y-12 md:gap-x-12"
+      >
+        <div class="flex flex-col gap-y-6">
+          <img
+            src="assets/image/logo_brand-removebg-preview.png"
+            alt="Logo"
+            class="w-32 brightness-0 invert"
+          />
+          <p class="text-gray-400 text-sm max-w-xs">
+            Teman cerita yang siap mendengarkan dan membantu kesehatan mentalmu.
+          </p>
+        </div>
+
+        <div
+          class="grid grid-cols-2 gap-x-12 md:gap-x-24 text-sm font-semibold"
+        >
+          <div class="flex flex-col gap-y-3">
+            <a href="#about" class="hover:text-gray-300 transition-colors"
+              >Tentang Kami</a
+            >
+            <a href="#service" class="hover:text-gray-300 transition-colors"
+              >Layanan</a
+            >
+            <a href="#" class="hover:text-gray-300 transition-colors">E-Book</a>
+            <a href="#" class="hover:text-gray-300 transition-colors"
+              >Artikel</a
+            >
+          </div>
+          <div class="flex flex-col gap-y-3">
+            <a href="#" class="hover:text-gray-300 transition-colors"
+              >Hubungi Kami</a
+            >
+            <a href="#" class="hover:text-gray-300 transition-colors"
+              >Bantuan</a
+            >
+            <a href="#" class="hover:text-gray-300 transition-colors">Karir</a>
+            <a href="#" class="hover:text-gray-300 transition-colors"
+              >Instagram</a
+            >
+          </div>
+        </div>
+
+        <div
+          class="hidden md:flex justify-between items-end col-span-2 mt-12 pt-8 border-t border-gray-800 text-xs text-gray-500"
+        >
+          <p>© Mental Health Care 2025. All rights reserved.</p>
+          <div class="flex gap-6">
+            <a href="#" class="hover:text-gray-300">Privacy policy</a>
+            <a href="#" class="hover:text-gray-300">Terms</a>
+          </div>
+        </div>
+
+        <div
+          class="md:hidden flex flex-col gap-4 mt-8 pt-8 border-t border-gray-800 text-xs text-gray-500"
+        >
+          <p>© Mental Health Care 2025</p>
+          <div class="flex gap-6">
+            <a href="#" class="hover:text-gray-300">Privacy</a>
+            <a href="#" class="hover:text-gray-300">Terms</a>
+          </div>
+        </div>
+      </div>
+    </footer>
     <!-- AOS Init -->
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         AOS.init();
+        initCloudBgSection();
+        initNavbar();
+        initScrollSection();
+        initShapeSection();
       });
     </script>
   </body>

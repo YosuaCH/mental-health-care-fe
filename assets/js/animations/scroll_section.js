@@ -1,11 +1,5 @@
 function initScrollSection() {
-  const wrapper = document.getElementById("scroll-section");
-  if (!wrapper) {
-    console.warn("scroll-section belum ada");
-    return;
-  }
-
-  const section = wrapper.querySelector("section");
+  const section = document.getElementById("scroll-section");
   if (!section) {
     console.warn("section di dalam scroll-section belum ada");
     return;
