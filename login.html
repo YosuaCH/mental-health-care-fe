@@ -42,7 +42,7 @@
         Masuk untuk melanjutkan perjalanan kesehatan mentalmu
       </p>
 
-      <form id="loginForm" class="space-y-4">
+      <form id="loginForm" class="space-y-4" novalidate>
         <div class="relative mb-5">
           <input
             id="email"
@@ -134,7 +134,10 @@
           </div>
 
           <div class="flex justify-between mt-2">
-            <span id="passwordError" class="text-xs text-red-500 hidden"></span>
+            <span
+              id="passwordError"
+              class="text-xs ml-2 text-red-500 hidden"
+            ></span>
             <a
               href="#"
               class="text-xs text-gray-500 hover:text-[#f2ca4b] transition ml-auto"

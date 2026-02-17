@@ -12,43 +12,48 @@ const clearError = (input, errorSpan) => {
   errorSpan.innerText = "";
 };
 
+function showError(input, span, msg) {
+  input.classList.add("ring-2", "ring-red-500", "focus:ring-red-500");
+  span.innerText = msg;
+  span.classList.remove("hidden");
+}
+
 emailInput.addEventListener("input", () => clearError(emailInput, emailError));
 passwordInput.addEventListener("input", () =>
   clearError(passwordInput, passwordError),
 );
 
+emailInput.addEventListener("invalid", (e) => {
+  e.preventDefault();
+  const msg = emailInput.validity.valueMissing
+    ? "Email tidak boleh kosong"
+    : "Format email salah";
+  showError(emailInput, emailError, msg);
+});
+
+passwordInput.addEventListener("invalid", (e) => {
+  e.preventDefault();
+  showError(passwordInput, passwordError, "Kata sandi tidak boleh kosong");
+});
+
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  clearError(emailInput, emailError);
-  clearError(passwordInput, passwordError);
+  if (!loginForm.reportValidity()) return;
 
   try {
     const res = await login(emailInput.value, passwordInput.value);
     const data = await res.json();
 
     if (res.ok) {
-      alert("Login Berhasil!");
+      alert(data.message);
       window.location.href = "dashboard.html";
     } else {
       const message = data.message;
-
       if (message.includes("Email")) {
-        emailInput.classList.add(
-          "ring-2",
-          "ring-red-500",
-          "focus:ring-red-500",
-        );
-        emailError.innerText = message;
-        emailError.classList.remove("hidden");
+        showError(emailInput, emailError, message);
       } else if (message.includes("Password")) {
-        passwordInput.classList.add(
-          "ring-2",
-          "ring-red-500",
-          "focus:ring-red-500",
-        );
-        passwordError.innerText = message;
-        passwordError.classList.remove("hidden");
+        showError(passwordInput, passwordError, message);
       } else {
         alert(message);
       }
