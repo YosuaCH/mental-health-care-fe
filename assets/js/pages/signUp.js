@@ -8,7 +8,7 @@ const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const confirmInput = document.getElementById("confirmPassword");
 
-// Error spans
+// Error span elements
 const emailError = document.getElementById("emailError");
 const usernameError = document.getElementById("usernameError");
 const passwordError = document.getElementById("passwordError");
@@ -24,37 +24,52 @@ const clearError = (input, errorSpan) => {
   }
 };
 
-const showError = (input, span, msg) => {
+function showError(input, span, msg) {
   input.classList.add("ring-2", "ring-red-500", "focus:ring-red-500");
   if (span) {
     span.innerText = msg;
     span.classList.remove("hidden");
   }
-};
+}
 
-[
-  [emailInput, emailError],
-  [usernameInput, usernameError],
-  [passwordInput, passwordError],
-  [confirmInput, confirmError],
-].forEach(([input, span]) => {
-  input.addEventListener("input", () => clearError(input, span));
-});
+emailInput.addEventListener("input", () => clearError(emailInput, emailError));
+usernameInput.addEventListener("input", () =>
+  clearError(usernameInput, usernameError),
+);
+passwordInput.addEventListener("input", () =>
+  clearError(passwordInput, passwordError),
+);
+confirmInput.addEventListener("input", () =>
+  clearError(confirmInput, confirmError),
+);
 
 emailInput.addEventListener("invalid", (e) => {
   e.preventDefault();
   const msg = emailInput.validity.valueMissing
-    ? "Email wajib diisi"
+    ? "Email tidak boleh kosong"
     : "Format email salah";
   showError(emailInput, emailError, msg);
+});
+
+usernameInput.addEventListener("invalid", (e) => {
+  e.preventDefault();
+  showError(usernameInput, usernameError, "Username tidak boleh kosong");
+});
+
+passwordInput.addEventListener("invalid", (e) => {
+  e.preventDefault();
+  showError(passwordInput, passwordError, "Kata sandi tidak boleh kosong");
+});
+
+confirmInput.addEventListener("invalid", (e) => {
+  e.preventDefault();
+  showError(confirmInput, confirmError, "Konfirmasi kata sandi wajib diisi");
 });
 
 registerForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  [emailInput, usernameInput, passwordInput, confirmInput].forEach((input) => {
-    input.classList.remove("ring-2", "ring-red-500", "focus:ring-red-500");
-  });
+  if (!registerForm.reportValidity()) return;
 
   if (!isPasswordValid()) {
     showError(
@@ -86,11 +101,11 @@ registerForm.addEventListener("submit", async (e) => {
       } else if (message.toLowerCase().includes("password")) {
         showError(passwordInput, passwordError, message);
       } else {
-        // alert("Terjadi kesalahan: " + message);
+        alert(message);
       }
     }
   } catch (err) {
     console.error(err);
-    alert("Server tidak merespon, coba lagi nanti.");
+    alert("Koneksi gagal: Server tidak merespon");
   }
 });
