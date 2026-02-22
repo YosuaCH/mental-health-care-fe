@@ -1,4 +1,4 @@
-function initNavbar() {
+function initNavbarButton() {
   const joinWrapper = document.getElementById("joinWrapper");
 
   window.addEventListener("scroll", () => {
