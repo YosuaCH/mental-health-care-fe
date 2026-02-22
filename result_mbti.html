@@ -23,7 +23,9 @@
     <!-- Cloud Background JS -->
     <script src="../assets/js/animations/cloud_background.js"></script>
     <!-- MBTI Data JS -->
-    <script src="../assets/js/animations/result_mbti.js"></script>
+    <script src="../assets/js/pages/result_mbti.js"></script>
+    <!-- MBTI Service -->
+    <script src="../assets/js/services/mbtiService.js"></script>
   </head>
   <body
     class="overflow-x-hidden bg-[#f8f8f8] font-[Poppins] min-h-screen text-slate-900"
@@ -209,32 +211,5 @@
         <span>Kembali ke Dashboard</span>
       </a>
     </section>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        //Ambil Data dari LocalStorage
-        const userResult = localStorage.getItem("mbti_result");
-
-        //Proteksi Halaman
-        if (!userResult || !mbtiData[userResult]) {
-          alert("Kamu belum melakukan tes! Yuk tes dulu.");
-          window.location.href = "test_mbti.html";
-          return;
-        }
-
-        //Ambil data spesifik mbti dari objek data
-        const data = mbtiData[userResult];
-
-        //Calling func
-        initUserProfile();
-        initCloudBgSection();
-        updateHeroSection(userResult, data);
-        renderTraits(userResult, data.traits);
-        renderProsCons(data);
-        renderDevelopmentTips(data.developmentTips);
-
-        console.log("Menampilkan hasil untuk:", userResult);
-      });
-    </script>
   </body>
 </html>
