@@ -98,6 +98,31 @@ function attachAnswerListeners() {
       };
 
       console.log(`Question ${questionId} updated:`, answers[questionId]);
+
+      const cards = gsap.utils.toArray(".card");
+      const currentIndex = cards.findIndex((card) =>
+        card.querySelector(`[data-q="${questionId}"]`),
+      );
+
+      if (currentIndex !== -1 && currentIndex < cards.length - 1) {
+        setTimeout(() => {
+          const st = ScrollTrigger.getAll().find(
+            (s) => s.trigger === document.getElementById("stack-container"),
+          );
+
+          if (st) {
+            const totalCards = cards.length;
+            const targetProgress = (currentIndex + 1) / (totalCards - 1);
+            const targetScroll =
+              st.start + targetProgress * (st.end - st.start);
+
+            window.scrollTo({
+              top: targetScroll,
+              behavior: "smooth",
+            });
+          }
+        }, 100);
+      }
     });
   });
 }

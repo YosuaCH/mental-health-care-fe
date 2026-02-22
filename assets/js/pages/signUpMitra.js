@@ -1,5 +1,5 @@
 import { registerPsikiater } from "../services/authService.js";
-import { setupPasswordValidator } from "../animations/password_validator.js";
+import { setupPasswordValidator } from "../utils/password_validator.js";
 
 // Form Input Elements
 const registerForm = document.getElementById("registerForm");
