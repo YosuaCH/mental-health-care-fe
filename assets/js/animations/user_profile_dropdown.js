@@ -1,21 +1,31 @@
 function initUserProfile() {
-  const userData = {
-    name: "Username",
-    email: "username@example.com",
-  };
+  const userJson = localStorage.getItem("user");
 
-  // update text dengan data
+  if (!userJson) {
+    console.warn("User data tidak ditemukan di Local Storage.");
+    return;
+  }
+
+  const userDataRaw = JSON.parse(userJson);
+  const displayName =
+    userDataRaw.username || userDataRaw.namaLengkap || "Username";
+  const displayEmail = userDataRaw.email || "username@example.com";
+
   const name = document.getElementById("user-name");
-  if (name) name.innerText = userData.name;
-  const nameText = document.getElementById("user-name-text");
-  if (nameText) nameText.innerText = userData.name;
-  const dropdownName = document.getElementById("user-name-dropdown");
-  if (dropdownName) dropdownName.innerText = userData.name;
+  if (name) name.innerText = displayName;
 
-  // gambar random
+  const nameText = document.getElementById("user-name-text");
+  if (nameText) nameText.innerText = displayName;
+
+  const dropdownName = document.getElementById("user-name-dropdown");
+  if (dropdownName) dropdownName.innerText = displayName;
+
+  const dropdownEmail = document.querySelector("#profile-dropdown p.text-xs");
+  if (dropdownEmail) dropdownEmail.innerText = displayEmail;
+
   const avatarImg = document.getElementById("user-avatar");
   if (avatarImg) {
-    avatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${Math.random()}`;
+    avatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${displayName}`;
   }
 }
 
@@ -30,7 +40,6 @@ function toggleProfileMenu() {
   }
 }
 
-// buat tutup menu kalau klik di luar area
 document.addEventListener("click", function (event) {
   const dropdown = document.getElementById("profile-dropdown");
   const button = event.target.closest("button");
@@ -39,7 +48,7 @@ document.addEventListener("click", function (event) {
   if (dropdown && !dropdown.classList.contains("hidden") && !button) {
     dropdown.classList.add("hidden");
     if (arrow) {
-      arrow.classList.remove("rotate-180");
+      arrow.classList.remove("-rotate-180");
     }
   }
 });
