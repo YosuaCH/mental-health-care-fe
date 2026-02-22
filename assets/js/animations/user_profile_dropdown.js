@@ -52,3 +52,10 @@ document.addEventListener("click", function (event) {
     }
   }
 });
+
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("mbti_result");
+  alert("Log out");
+  window.location.href = "../index.html";
+}
