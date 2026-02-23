@@ -1,7 +1,12 @@
+import { getUserData } from "../utils/userProfile.js";
+
 let questionsData = [];
 
 async function initQuestionPage() {
   try {
+    const user = await getUserData();
+
+    if (!user) return;
     questionsData = await getAllQuestions();
 
     if (!questionsData || questionsData.length === 0) {
@@ -11,7 +16,6 @@ async function initQuestionPage() {
     startAnimations();
   } catch (error) {
     console.error("Page Error:", error);
-    alert("Waduh, gagal memuat pertanyaan. Cek koneksi server kamu ya!");
   }
 }
 

@@ -32,6 +32,8 @@
       src="../assets/js/animations/user_profile_dropdown.js"
       defer
     ></script>
+    <!-- module dashboard -->
+    <script type="module" src="../assets/js/pages/dashboard.js" defer></script>
   </head>
 
   <body class="bg-[#f8f8f8] font-[Poppins]">
@@ -361,9 +363,6 @@
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         AOS.init({ once: true });
-        initCloudBgSection();
-        generateDailyQuote();
-        initUserProfile();
       });
     </script>
   </body>

@@ -7,8 +7,12 @@ function initUserProfile() {
   }
 
   const userDataRaw = JSON.parse(userJson);
+
   const displayName =
-    userDataRaw.username || userDataRaw.namaLengkap || "Username";
+    userDataRaw.username ||
+    userDataRaw.namaLengkap ||
+    (userDataRaw.email ? userDataRaw.email.split("@")[0] : "Username");
+
   const displayEmail = userDataRaw.email || "username@example.com";
 
   const name = document.getElementById("user-name");
@@ -25,7 +29,11 @@ function initUserProfile() {
 
   const avatarImg = document.getElementById("user-avatar");
   if (avatarImg) {
-    avatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${displayName}`;
+    if (userDataRaw.picture) {
+      avatarImg.src = userDataRaw.picture;
+    } else {
+      avatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${displayName}`;
+    }
   }
 }
 
@@ -57,5 +65,5 @@ function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("mbti_result");
   alert("Log out");
-  window.location.href = "../index.html";
+  window.location.href = "http://127.0.0.1:8080/logout";
 }

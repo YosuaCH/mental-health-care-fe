@@ -6,6 +6,22 @@ const passwordInput = document.getElementById("password");
 const emailError = document.getElementById("emailError");
 const passwordError = document.getElementById("passwordError");
 
+document.addEventListener("DOMContentLoaded", () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const errorType = urlParams.get("error");
+
+  if (errorType === "manual") {
+    alert(
+      "Email ini terdaftar secara manual. Silakan masukkan kata sandi Anda untuk login.",
+    );
+
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if (errorType === "oauth_failed") {
+    alert("Gagal melakukan login dengan Google. Silakan coba lagi.");
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+});
+
 const clearError = (input, errorSpan) => {
   input.classList.remove("ring-2", "ring-red-500", "focus:ring-red-500");
   errorSpan.classList.add("hidden");
