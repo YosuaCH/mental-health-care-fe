@@ -64,6 +64,7 @@ document.addEventListener("click", function (event) {
 function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("mbti_result");
+  localStorage.clear();
   alert("Log out");
   window.location.href = "http://127.0.0.1:8080/logout";
 }
