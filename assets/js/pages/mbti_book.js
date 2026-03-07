@@ -1,4 +1,5 @@
 import { fetchAllEbooks } from "../services/mbti_book.js";
+import { getUserData } from "../utils/userProfile.js";
 
 const getCleanPreviewUrl = (url) => {
   if (!url || url === "#") return "#";
@@ -23,9 +24,9 @@ const getCleanPreviewUrl = (url) => {
 const cleanDescription = (htmlText) => {
   if (!htmlText) return "";
   return htmlText
-    .replace(/<\/?[^>]+(>|$)/g, "") // Hapus tag HTML
-    .replace(/\s+/g, " ") // Bersihkan enter/spasi ganda jadi satu spasi
-    .trim(); // Hapus spasi ujung
+    .replace(/<\/?[^>]+(>|$)/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 };
 
 const renderEbooks = async () => {
@@ -111,4 +112,18 @@ const renderEbooks = async () => {
   }
 };
 
-document.addEventListener("DOMContentLoaded", renderEbooks);
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    const userData = await getUserData();
+
+    if (userData) {
+      initUserProfile();
+      await renderEbooks();
+    } else {
+      console.warn("User tidak terautentikasi, mengalihkan...");
+      window.location.href = "login.html";
+    }
+  } catch (error) {
+    console.error("Gagal inisialisasi halaman E-Book:", error);
+  }
+});

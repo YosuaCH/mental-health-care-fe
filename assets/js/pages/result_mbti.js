@@ -9,12 +9,9 @@ async function initResultPage() {
   }
 
   try {
-    // 2. Ambil data dari Backend menggunakan Service
-    // Pastikan mbtiService.js sudah di-load di HTML sebelum file ini
     const data = await mbtiService.getMbtiDetail(code);
 
     if (data) {
-      // 3. Masukkan data ke elemen-elemen UI menggunakan fungsi render yang sudah ada
       updateHeroSection(code, data);
       renderTraits(code, data.traits);
       renderProsCons(data);
@@ -28,9 +25,6 @@ async function initResultPage() {
   }
 }
 
-/**
- * FUNGSI RENDER (Tetap gunakan punyamu yang sudah bagus)
- */
 function updateHeroSection(code, data) {
   document
     .querySelectorAll(".mbti-code")
@@ -107,11 +101,8 @@ function renderDevelopmentTips(tips) {
     .join("");
 }
 
-// Jalankan inisialisasi saat halaman dimuat
 document.addEventListener("DOMContentLoaded", () => {
   initResultPage();
-
-  // Panggil fungsi UI lainnya jika ada
   if (typeof initUserProfile === "function") initUserProfile();
   if (typeof initCloudBgSection === "function") initCloudBgSection();
 });
