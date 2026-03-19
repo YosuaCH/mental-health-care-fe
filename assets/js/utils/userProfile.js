@@ -3,7 +3,6 @@ import { getCurrentUser } from "../services/authService.js";
 export async function getUserData() {
   try {
     const res = await getCurrentUser();
-
     if (res.ok) {
       const result = await res.json();
       if (result.data) {
@@ -11,17 +10,15 @@ export async function getUserData() {
         return result.data;
       }
     }
-
-    const localData = localStorage.getItem("user");
-    if (localData) {
-      return JSON.parse(localData);
-    }
-
+    console.warn("Sesi tidak valid, mengalihkan ke login...");
+    localStorage.removeItem("user");
     window.location.href = "login.html";
     return null;
   } catch (err) {
-    console.error("Gagal sinkronisasi profil:", err);
-    const localData = localStorage.getItem("user");
-    return localData ? JSON.parse(localData) : null;
+    console.error("Server tidak dapat dijangkau:", err);
+    localStorage.removeItem("user");
+
+    window.location.href = "login.html";
+    return null;
   }
 }

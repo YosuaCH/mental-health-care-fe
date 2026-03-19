@@ -1,3 +1,10 @@
+import { logout as authLogout } from "../services/authService.js";
+
+window.logout = authLogout;
+
+window.initUserProfile = initUserProfile;
+window.toggleProfileMenu = toggleProfileMenu;
+
 function initUserProfile() {
   const userJson = localStorage.getItem("user");
 
@@ -7,7 +14,6 @@ function initUserProfile() {
   }
 
   const userDataRaw = JSON.parse(userJson);
-
   const displayName =
     userDataRaw.username ||
     userDataRaw.namaLengkap ||
@@ -18,9 +24,6 @@ function initUserProfile() {
   const name = document.getElementById("user-name");
   if (name) name.innerText = displayName;
 
-  const nameText = document.getElementById("user-name-text");
-  if (nameText) nameText.innerText = displayName;
-
   const dropdownName = document.getElementById("user-name-dropdown");
   if (dropdownName) dropdownName.innerText = displayName;
 
@@ -29,11 +32,9 @@ function initUserProfile() {
 
   const avatarImg = document.getElementById("user-avatar");
   if (avatarImg) {
-    if (userDataRaw.picture) {
-      avatarImg.src = userDataRaw.picture;
-    } else {
-      avatarImg.src = `https://api.dicebear.com/9.x/avataaars/svg?seed=${displayName}`;
-    }
+    avatarImg.src = userDataRaw.picture
+      ? userDataRaw.picture
+      : `https://api.dicebear.com/9.x/avataaars/svg?seed=${displayName}`;
   }
 }
 
@@ -60,11 +61,3 @@ document.addEventListener("click", function (event) {
     }
   }
 });
-
-function logout() {
-  localStorage.removeItem("user");
-  localStorage.removeItem("mbti_result");
-  localStorage.clear();
-  alert("Log out");
-  window.location.href = "http://127.0.0.1:8080/logout";
-}

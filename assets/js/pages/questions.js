@@ -7,6 +7,7 @@ async function initQuestionPage() {
     const user = await getUserData();
 
     if (!user) return;
+    document.body.classList.remove("opacity-0");
     questionsData = await getAllQuestions();
 
     if (!questionsData || questionsData.length === 0) {

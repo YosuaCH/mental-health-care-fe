@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const userData = await getUserData();
     if (userData) {
+      document.body.classList.remove("opacity-0");
       initUserProfile();
       initCloudBgSection();
       generateDailyQuote();

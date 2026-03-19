@@ -33,3 +33,19 @@ export const getCurrentUser = async () => {
     credentials: "include",
   });
 };
+
+export const logout = async () => {
+  try {
+    await fetch("http://127.0.0.1:8080/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (error) {
+    console.error("Logout backend failed:", error);
+  } finally {
+    localStorage.removeItem("user");
+    localStorage.removeItem("mbti_result");
+    localStorage.clear();
+    window.location.href = "login.html";
+  }
+};
