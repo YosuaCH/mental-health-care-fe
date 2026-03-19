@@ -12,6 +12,7 @@ async function initResultPage() {
     const data = await mbtiService.getMbtiDetail(code);
 
     if (data) {
+      document.body.style.display = "block";
       updateHeroSection(code, data);
       renderTraits(code, data.traits);
       renderProsCons(data);

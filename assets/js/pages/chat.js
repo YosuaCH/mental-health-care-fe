@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.body.style.display = "block";
       initUserProfile();
       initCloudBgSection();
-      generateDailyQuote();
     }
   } catch (error) {
     console.error("Gagal inisialisasi dashboard:", error);

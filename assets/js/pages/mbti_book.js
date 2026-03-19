@@ -117,6 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const userData = await getUserData();
 
     if (userData) {
+      document.body.style.display = "block";
       initUserProfile();
       await renderEbooks();
     } else {

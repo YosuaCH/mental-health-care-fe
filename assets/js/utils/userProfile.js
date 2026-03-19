@@ -3,7 +3,7 @@ import { getCurrentUser } from "../services/authService.js";
 export async function getUserData() {
   try {
     const res = await getCurrentUser();
-    if (res.ok) {
+    if (res.ok && res) {
       const result = await res.json();
       if (result.data) {
         localStorage.setItem("user", JSON.stringify(result.data));
