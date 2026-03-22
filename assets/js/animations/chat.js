@@ -2,8 +2,10 @@ import { askGemini } from "../services/ai_chat_services.js";
 
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
+let isCurrentContactAI = true;
 
 let chatHistories = JSON.parse(sessionStorage.getItem("chatHistories")) || {};
+let paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
 
 document.addEventListener("DOMContentLoaded", function () {
   loadCurrentChat();
@@ -26,6 +28,19 @@ function saveMessageToHistory(html) {
 
 function loadCurrentChat() {
   const container = document.getElementById("chat-container");
+  const headerArea = container.previousElementSibling;
+  const inputArea = container.nextElementSibling;
+
+  if (!isCurrentContactAI && !paidDoctors[currentDoctorName]) {
+    if (headerArea) headerArea.classList.add("hidden");
+    if (inputArea) inputArea.classList.add("hidden");
+
+    showPaymentUI(container);
+    return;
+  }
+
+  if (headerArea) headerArea.classList.remove("hidden");
+  if (inputArea) inputArea.classList.remove("hidden");
 
   container.innerHTML = `
     <div class="flex justify-center mb-6 mt-2">
@@ -40,6 +55,65 @@ function loadCurrentChat() {
   }
   scrollToBottom();
 }
+
+// Payment UI
+function showPaymentUI(container) {
+  let price = currentDoctorName.includes("Elena")
+    ? "Rp300.000"
+    : currentDoctorName.includes("Sarah")
+      ? "Rp250.000"
+      : "Rp200.000";
+
+  container.innerHTML = `
+    <div class="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
+        <div class=" p-8 w-full max-w-md">
+            <p class="text-sm text-slate-500 mb-6">Selesaikan pembayaran untuk terhubung dengan <b>${currentDoctorName}</b></p>
+
+            <div class="border border-slate-200 p-6 rounded-2xl mb-6 bg-slate-50/50 shadow-sm">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Pembayaran+Klinik+Mental+Health+${currentDoctorName}" alt="QRIS" class="mx-auto w-40 h-40 mb-4 rounded-xl shadow-sm mix-blend-multiply"/>
+                <p class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Total Tagihan</p>
+                <p class="text-3xl font-black text-slate-800">${price}</p>
+            </div>
+
+            <button onclick="simulatePaymentSuccess()" class="w-full py-4 bg-[#f2ca4b] hover:bg-[#e8ba35] text-slate-900 text-sm font-bold rounded-xl transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+                Click
+            </button>
+        </div>
+    </div>
+  `;
+}
+
+window.simulatePaymentSuccess = function () {
+  paidDoctors[currentDoctorName] = true;
+  sessionStorage.setItem("paidDoctors", JSON.stringify(paidDoctors));
+
+  const container = document.getElementById("chat-container");
+
+  container.innerHTML = `
+        <div class="flex flex-col items-center justify-center h-full animate-fade-in-up">
+            <div class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mb-6 shadow-lg shadow-green-500/30">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-2">Pembayaran Berhasil!</h3>
+            <p class="text-sm text-slate-500 animate-pulse">Menyiapkan ruang obrolan pribadi Anda...</p>
+        </div>
+    `;
+
+  setTimeout(() => {
+    loadCurrentChat();
+
+    setTimeout(() => {
+      showTypingIndicator();
+      scrollToBottom();
+      setTimeout(() => {
+        removeTypingIndicator();
+        displayDoctorMessage(
+          `Halo, saya ${currentDoctorName}. Pembayaran Anda sudah saya terima. Apa yang ingin Anda ceritakan hari ini?`,
+        );
+      }, 1500);
+    }, 500);
+  }, 2000);
+};
 
 window.handleEnter = function (e) {
   if (e.key === "Enter") {
@@ -70,13 +144,12 @@ window.sendMessage = async function () {
   input.value = "";
   scrollToBottom();
 
-  if (currentDoctorName === "AI Assistant") {
+  if (isCurrentContactAI) {
     showTypingIndicator();
     scrollToBottom();
 
     try {
       const aiResponse = await askGemini(messageText);
-
       removeTypingIndicator();
       displayDoctorMessage(aiResponse);
     } catch (error) {
@@ -84,7 +157,6 @@ window.sendMessage = async function () {
       displayDoctorMessage(
         "Maaf, koneksi ke asisten AI terputus. Pastikan backend sudah dijalankan.",
       );
-      console.error("Error AI:", error);
     }
   } else {
     setTimeout(() => {
@@ -93,7 +165,7 @@ window.sendMessage = async function () {
       setTimeout(() => {
         removeTypingIndicator();
         displayDoctorMessage(
-          "Halo, saya sedang membaca pesan Anda. Mohon tunggu sebentar ya.",
+          "Terima kasih sudah bercerita. Saya sedang merangkum catatan untuk sesi ini.",
         );
       }, 1500);
     }, 500);
@@ -118,6 +190,7 @@ function displayDoctorMessage(text) {
 window.selectContact = function (name, img, isAi = false) {
   currentDoctorName = name;
   currentDoctorImg = img;
+  isCurrentContactAI = isAi;
 
   document.getElementById("header-name").innerText = name;
   document.getElementById("header-avatar").src = img;
@@ -154,7 +227,6 @@ function setActiveContact(name) {
   const activeContact = document.querySelector(`[data-contact="${name}"]`);
   if (activeContact) {
     const isAI = name === "AI Assistant";
-
     if (isAI) {
       activeContact.className =
         "p-3 rounded-2xl bg-gradient-to-br from-[#f2ca4b]/30 to-transparent border-2 border-[#f2ca4b] cursor-pointer relative group transition-all";
