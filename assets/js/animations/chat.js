@@ -1,3 +1,5 @@
+import { askGemini } from "../services/ai_chat_services.js";
+
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
 
@@ -12,13 +14,13 @@ function scrollToBottom() {
   }
 }
 
-function handleEnter(e) {
+window.handleEnter = function (e) {
   if (e.key === "Enter") {
-    sendMessage();
+    window.sendMessage();
   }
-}
+};
 
-function sendMessage() {
+window.sendMessage = async function () {
   const input = document.getElementById("message-input");
   const messageText = input.value.trim();
   const container = document.getElementById("chat-container");
@@ -40,27 +42,51 @@ function sendMessage() {
   input.value = "";
   scrollToBottom();
 
-  setTimeout(() => {
+  if (currentDoctorName === "AI Assistant") {
     showTypingIndicator();
     scrollToBottom();
 
-    setTimeout(() => {
+    try {
+      const aiResponse = await askGemini(messageText);
+
       removeTypingIndicator();
-      const doctorHtml = `
-        <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up">
-          <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1" />
-          <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
-            <p>I hear you. Can you tell me more about that? ${currentDoctorName.includes("AI") ? "I'm processing this info." : "I'm here to listen."}</p>
-          </div>
-        </div>
-      `;
-      container.insertAdjacentHTML("beforeend", doctorHtml);
+      displayDoctorMessage(aiResponse);
+    } catch (error) {
+      removeTypingIndicator();
+      displayDoctorMessage(
+        "Maaf, koneksi ke asisten AI terputus. Pastikan backend sudah dijalankan.",
+      );
+      console.error("Error AI:", error);
+    }
+  } else {
+    setTimeout(() => {
+      showTypingIndicator();
       scrollToBottom();
-    }, 1500);
-  }, 500);
+      setTimeout(() => {
+        removeTypingIndicator();
+        displayDoctorMessage(
+          "Halo, saya sedang membaca pesan Anda. Mohon tunggu sebentar ya.",
+        );
+      }, 1500);
+    }, 500);
+  }
+};
+
+function displayDoctorMessage(text) {
+  const container = document.getElementById("chat-container");
+  const doctorHtml = `
+    <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up">
+      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1" />
+      <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
+        <p>${text}</p>
+      </div>
+    </div>
+  `;
+  container.insertAdjacentHTML("beforeend", doctorHtml);
+  scrollToBottom();
 }
 
-function selectContact(name, img, isAi = false) {
+window.selectContact = function (name, img, isAi = false) {
   currentDoctorName = name;
   currentDoctorImg = img;
 
@@ -69,9 +95,12 @@ function selectContact(name, img, isAi = false) {
   const endBtn = document.getElementById("end-session-btn");
 
   if (isAi) {
-    endBtn.classList.add("hidden");
+    if (endBtn) endBtn.classList.add("hidden");
   } else {
-    endBtn.classList.remove("hidden");
+    if (endBtn) {
+      endBtn.classList.remove("hidden");
+      endBtn.innerText = "End Session";
+    }
   }
 
   const container = document.getElementById("chat-container");
@@ -82,12 +111,13 @@ function selectContact(name, img, isAi = false) {
   `;
 
   setActiveContact(name);
-}
+};
 
 function setActiveContact(name) {
   const allContacts = document.querySelectorAll("[data-contact]");
   allContacts.forEach((contact) => {
-    const isAI = contact.getAttribute("data-contact") === "AI Assistant";
+    const contactName = contact.getAttribute("data-contact");
+    const isAI = contactName === "AI Assistant";
 
     if (isAI) {
       contact.className =
