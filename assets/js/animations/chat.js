@@ -3,8 +3,10 @@ import { askGemini } from "../services/ai_chat_services.js";
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
 
+let chatHistories = JSON.parse(sessionStorage.getItem("chatHistories")) || {};
+
 document.addEventListener("DOMContentLoaded", function () {
-  scrollToBottom();
+  loadCurrentChat();
 });
 
 function scrollToBottom() {
@@ -12,6 +14,31 @@ function scrollToBottom() {
   if (container) {
     container.scrollTop = container.scrollHeight;
   }
+}
+
+function saveMessageToHistory(html) {
+  if (!chatHistories[currentDoctorName]) {
+    chatHistories[currentDoctorName] = [];
+  }
+  chatHistories[currentDoctorName].push(html);
+  sessionStorage.setItem("chatHistories", JSON.stringify(chatHistories));
+}
+
+function loadCurrentChat() {
+  const container = document.getElementById("chat-container");
+
+  container.innerHTML = `
+    <div class="flex justify-center mb-6 mt-2">
+      <span class="text-[10px] font-medium text-slate-400 bg-slate-200/50 px-2 py-1 rounded-full">Conversation started with ${currentDoctorName}</span>
+    </div>
+  `;
+
+  if (chatHistories[currentDoctorName]) {
+    chatHistories[currentDoctorName].forEach((msgHtml) => {
+      container.insertAdjacentHTML("beforeend", msgHtml);
+    });
+  }
+  scrollToBottom();
 }
 
 window.handleEnter = function (e) {
@@ -28,7 +55,7 @@ window.sendMessage = async function () {
   if (messageText === "") return;
 
   const userHtml = `
-    <div class="flex items-end justify-end gap-2 animate-fade-in-up">
+    <div class="flex items-end justify-end gap-2 animate-fade-in-up mb-4">
       <div class="max-w-[85%] flex flex-col items-end">
         <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
           <p>${escapeHtml(messageText)}</p>
@@ -39,6 +66,7 @@ window.sendMessage = async function () {
   `;
 
   container.insertAdjacentHTML("beforeend", userHtml);
+  saveMessageToHistory(userHtml);
   input.value = "";
   scrollToBottom();
 
@@ -75,14 +103,15 @@ window.sendMessage = async function () {
 function displayDoctorMessage(text) {
   const container = document.getElementById("chat-container");
   const doctorHtml = `
-    <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up">
-      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1" />
+    <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
+      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
       <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
         <p>${text}</p>
       </div>
     </div>
   `;
   container.insertAdjacentHTML("beforeend", doctorHtml);
+  saveMessageToHistory(doctorHtml);
   scrollToBottom();
 }
 
@@ -103,13 +132,7 @@ window.selectContact = function (name, img, isAi = false) {
     }
   }
 
-  const container = document.getElementById("chat-container");
-  container.innerHTML = `
-    <div class="flex justify-center">
-      <span class="text-[10px] font-medium text-slate-400 bg-slate-200/50 px-2 py-1 rounded-full">Conversation started with ${name}</span>
-    </div>
-  `;
-
+  loadCurrentChat();
   setActiveContact(name);
 };
 
@@ -145,8 +168,8 @@ function setActiveContact(name) {
 function showTypingIndicator() {
   const container = document.getElementById("chat-container");
   const html = `
-     <div id="typing-indicator" class="flex items-end gap-2 max-w-[85%]">
-      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1" />
+     <div id="typing-indicator" class="flex items-end gap-2 max-w-[85%] mb-4">
+      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
       <div class="bg-white p-3 px-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100">
          <div class="flex gap-1">
            <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></div>

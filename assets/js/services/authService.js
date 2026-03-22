@@ -43,6 +43,8 @@ export const logout = async () => {
   } catch (error) {
     console.error("Logout backend failed:", error);
   } finally {
+    sessionStorage.removeItem("chatHistories");
+    sessionStorage.clear();
     localStorage.removeItem("user");
     localStorage.removeItem("mbti_result");
     localStorage.clear();
