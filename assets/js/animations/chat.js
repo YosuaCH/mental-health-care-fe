@@ -1,4 +1,9 @@
 import { askGemini } from "../services/ai_chat_services.js";
+import {
+  getAllDoctors,
+  getPaymentInfo,
+  processPaymentSimulation,
+} from "../services/payment_services.js";
 
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
@@ -18,14 +23,7 @@ async function loadDoctorsFromServer() {
   if (!listContainer) return;
 
   try {
-    const response = await fetch("http://127.0.0.1:8080/payment/all-doctors", {
-      method: "GET",
-      credentials: "include",
-    });
-
-    if (!response.ok) throw new Error("Gagal mengambil daftar dokter");
-
-    const doctors = await response.json();
+    const doctors = await getAllDoctors();
     listContainer.innerHTML = "";
 
     let hasVisibleDoctors = false;
@@ -82,6 +80,7 @@ function loadCurrentChat() {
   const container = document.getElementById("chat-container");
   const headerArea = document.getElementById("chat-header");
   const inputArea = document.getElementById("chat-input-area");
+
   if (!isCurrentContactAI && !paidDoctors[currentDoctorNoStr]) {
     if (headerArea) headerArea.classList.add("hidden");
     if (inputArea) inputArea.classList.add("hidden");
@@ -111,15 +110,7 @@ async function showPaymentUI(container) {
   container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Menghitung tagihan...</p></div>`;
 
   try {
-    const response = await fetch(
-      `http://127.0.0.1:8080/payment/info?noStr=${encodeURIComponent(currentDoctorNoStr)}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
-
-    const data = await response.json();
+    const data = await getPaymentInfo(currentDoctorNoStr);
     console.log("Data pembayaran diterima:", data);
 
     container.innerHTML = `
@@ -149,14 +140,7 @@ window.simulatePaymentSuccess = async function () {
   container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Memverifikasi pembayaran...</p></div>`;
 
   try {
-    const response = await fetch(
-      `http://127.0.0.1:8080/payment/simulate-success?noStr=${encodeURIComponent(currentDoctorNoStr)}`,
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-    const result = await response.json();
+    const result = await processPaymentSimulation(currentDoctorNoStr);
 
     if (result.status === "PAID") {
       paidDoctors[currentDoctorNoStr] = true;
@@ -261,9 +245,7 @@ window.sendMessage = async function () {
       scrollToBottom();
       setTimeout(() => {
         removeTypingIndicator();
-        displayDoctorMessage(
-          "Terima kasih sudah bercerita. Saya sedang merangkum catatan untuk sesi ini.",
-        );
+        displayDoctorMessage();
       }, 1500);
     }, 500);
   }
