@@ -93,7 +93,6 @@ async function loadDoctorsFromServer() {
                     <h4 class="font-semibold text-slate-900 text-sm truncate">${doc.namaLengkap}</h4>
                     <span class="text-[10px] font-medium text-slate-500">Rp${doc.hargaKonsultasi.toLocaleString("id-ID")}</span>
                 </div>
-                <p class="text-xs text-slate-500 truncate">STR: ${doc.noStr}</p>
             </div>
         </div>
       `;
