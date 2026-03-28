@@ -2,6 +2,7 @@ import { askGemini } from "../services/ai_chat_services.js";
 
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
+let currentDoctorNoStr = "";
 let isCurrentContactAI = true;
 
 let chatHistories = JSON.parse(sessionStorage.getItem("chatHistories")) || {};
@@ -9,32 +10,81 @@ let paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
 
 document.addEventListener("DOMContentLoaded", function () {
   loadCurrentChat();
+  loadDoctorsFromServer();
 });
 
-function scrollToBottom() {
-  const container = document.getElementById("chat-container");
-  if (container) {
-    container.scrollTop = container.scrollHeight;
+async function loadDoctorsFromServer() {
+  const listContainer = document.getElementById("doctor-list");
+  if (!listContainer) return;
+
+  try {
+    const response = await fetch("http://127.0.0.1:8080/payment/all-doctors", {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!response.ok) throw new Error("Gagal mengambil daftar dokter");
+
+    const doctors = await response.json();
+    listContainer.innerHTML = "";
+
+    let hasVisibleDoctors = false;
+
+    doctors.forEach((doc) => {
+      if (!doc.hargaKonsultasi || doc.hargaKonsultasi === 0) {
+        return;
+      }
+
+      hasVisibleDoctors = true;
+
+      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.namaLengkap)}&amp;background=random&amp;color=fff&amp;size=100`;
+      const html = `
+        <div data-contact="${doc.namaLengkap}"
+             onclick="selectContact('${doc.namaLengkap}', '${avatarUrl}', false, '${doc.noStr}')"
+             class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group">
+            <div class="relative text-left">
+                <img src="${avatarUrl}" class="w-12 h-12 rounded-full object-cover" />
+                <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+            </div>
+            <div class="flex-1 min-w-0 text-left">
+                <div class="flex justify-between items-baseline">
+                    <h4 class="font-semibold text-slate-900 text-sm truncate">${doc.namaLengkap}</h4>
+                    <span class="text-[10px] font-medium text-slate-500">Rp${doc.hargaKonsultasi.toLocaleString("id-ID")}</span>
+                </div>
+                <p class="text-xs text-slate-500 truncate">STR: ${doc.noStr}</p>
+            </div>
+        </div>
+      `;
+      listContainer.insertAdjacentHTML("beforeend", html);
+    });
+
+    if (!hasVisibleDoctors) {
+      listContainer.innerHTML = `<p class="text-xs text-slate-400 p-4 text-center">Belum ada psikiater yang tersedia saat ini.</p>`;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    listContainer.innerHTML = `<p class="text-[10px] text-red-400 p-2 text-center">Gagal terhubung ke server.</p>`;
   }
 }
 
+function scrollToBottom() {
+  const container = document.getElementById("chat-container");
+  if (container) container.scrollTop = container.scrollHeight;
+}
+
 function saveMessageToHistory(html) {
-  if (!chatHistories[currentDoctorName]) {
-    chatHistories[currentDoctorName] = [];
-  }
+  if (!chatHistories[currentDoctorName]) chatHistories[currentDoctorName] = [];
   chatHistories[currentDoctorName].push(html);
   sessionStorage.setItem("chatHistories", JSON.stringify(chatHistories));
 }
 
 function loadCurrentChat() {
   const container = document.getElementById("chat-container");
-  const headerArea = container.previousElementSibling;
-  const inputArea = container.nextElementSibling;
-
-  if (!isCurrentContactAI && !paidDoctors[currentDoctorName]) {
+  const headerArea = document.getElementById("chat-header");
+  const inputArea = document.getElementById("chat-input-area");
+  if (!isCurrentContactAI && !paidDoctors[currentDoctorNoStr]) {
     if (headerArea) headerArea.classList.add("hidden");
     if (inputArea) inputArea.classList.add("hidden");
-
     showPaymentUI(container);
     return;
   }
@@ -57,39 +107,63 @@ function loadCurrentChat() {
 }
 
 // Payment UI
-function showPaymentUI(container) {
-  let price = currentDoctorName.includes("Elena")
-    ? "Rp300.000"
-    : currentDoctorName.includes("Sarah")
-      ? "Rp250.000"
-      : "Rp200.000";
+async function showPaymentUI(container) {
+  container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Menghitung tagihan...</p></div>`;
 
-  container.innerHTML = `
-    <div class="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
-        <div class=" p-8 w-full max-w-md">
-            <p class="text-sm text-slate-500 mb-6">Selesaikan pembayaran untuk terhubung dengan <b>${currentDoctorName}</b></p>
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:8080/payment/info?noStr=${encodeURIComponent(currentDoctorNoStr)}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
 
-            <div class="border border-slate-200 p-6 rounded-2xl mb-6 bg-slate-50/50 shadow-sm">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Pembayaran+Klinik+Mental+Health+${currentDoctorName}" alt="QRIS" class="mx-auto w-40 h-40 mb-4 rounded-xl shadow-sm mix-blend-multiply"/>
-                <p class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Total Tagihan</p>
-                <p class="text-3xl font-black text-slate-800">${price}</p>
-            </div>
+    const data = await response.json();
+    console.log("Data pembayaran diterima:", data);
 
-            <button onclick="simulatePaymentSuccess()" class="w-full py-4 bg-[#f2ca4b] hover:bg-[#e8ba35] text-slate-900 text-sm font-bold rounded-xl transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
-                Click
-            </button>
-        </div>
-    </div>
-  `;
+    container.innerHTML = `
+      <div class="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
+          <div class="p-8 w-full max-w-md">
+              <p class="text-sm text-slate-500 mb-6">Selesaikan pembayaran untuk terhubung dengan <br><b>${data.namaPsikiater}</b></p>
+              <div class="border border-slate-200 p-6 rounded-2xl mb-6 bg-slate-50/50 shadow-sm">
+                  <img src="${data.qrUrl}" alt="QRIS" class="mx-auto w-40 h-40 mb-4 rounded-xl shadow-sm mix-blend-multiply"/>
+                  <p class="text-xs font-bold text-slate-400 tracking-widest uppercase mb-1">Total Tagihan</p>
+                  <p class="text-3xl font-black text-slate-800">${data.price}</p>
+              </div>
+              <button onclick="simulatePaymentSuccess()" class="w-full py-4 bg-[#f2ca4b] hover:bg-[#e8ba35] text-slate-900 text-sm font-bold rounded-xl transition-all shadow-sm">
+                  Konfirmasi Pembayaran
+              </button>
+          </div>
+      </div>
+    `;
+  } catch (error) {
+    container.innerHTML = `<p class="text-red-500 text-sm text-center">Gagal memuat data pembayaran.</p>`;
+  }
 }
 
-window.simulatePaymentSuccess = function () {
-  paidDoctors[currentDoctorName] = true;
-  sessionStorage.setItem("paidDoctors", JSON.stringify(paidDoctors));
-
+window.simulatePaymentSuccess = async function () {
   const container = document.getElementById("chat-container");
 
-  container.innerHTML = `
+  // Animasi Loading
+  container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Memverifikasi pembayaran...</p></div>`;
+
+  try {
+    const response = await fetch(
+      `http://127.0.0.1:8080/payment/simulate-success?noStr=${encodeURIComponent(currentDoctorNoStr)}`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
+    const result = await response.json();
+
+    if (result.status === "PAID") {
+      paidDoctors[currentDoctorNoStr] = true;
+      sessionStorage.setItem("paidDoctors", JSON.stringify(paidDoctors));
+
+      // Animasi Sukses
+      container.innerHTML = `
         <div class="flex flex-col items-center justify-center h-full animate-fade-in-up">
             <div class="w-20 h-20 bg-green-500 text-white rounded-full flex items-center justify-center mb-6 shadow-lg shadow-green-500/30">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
@@ -97,22 +171,48 @@ window.simulatePaymentSuccess = function () {
             <h3 class="text-2xl font-bold text-slate-800 mb-2">Pembayaran Berhasil!</h3>
             <p class="text-sm text-slate-500 animate-pulse">Menyiapkan ruang obrolan pribadi Anda...</p>
         </div>
-    `;
+      `;
 
-  setTimeout(() => {
-    loadCurrentChat();
-
-    setTimeout(() => {
-      showTypingIndicator();
-      scrollToBottom();
       setTimeout(() => {
-        removeTypingIndicator();
-        displayDoctorMessage(
-          `Halo, saya ${currentDoctorName}. Pembayaran Anda sudah saya terima. Apa yang ingin Anda ceritakan hari ini?`,
-        );
-      }, 1500);
-    }, 500);
-  }, 2000);
+        loadCurrentChat();
+        setTimeout(() => {
+          showTypingIndicator();
+          scrollToBottom();
+          setTimeout(() => {
+            removeTypingIndicator();
+            displayDoctorMessage(
+              `Halo, saya ${currentDoctorName}. Pembayaran Anda sudah saya terima. Apa yang ingin Anda ceritakan hari ini?`,
+            );
+          }, 1500);
+        }, 500);
+      }, 2000);
+    }
+  } catch (err) {
+    alert("Koneksi server gagal.");
+  }
+};
+
+window.selectContact = function (name, img, isAi = false, noStr = "") {
+  currentDoctorName = name;
+  currentDoctorImg = img;
+  currentDoctorNoStr = noStr;
+  isCurrentContactAI = isAi;
+
+  document.getElementById("header-name").innerText = name;
+  document.getElementById("header-avatar").src = img;
+
+  const endBtn = document.getElementById("end-session-btn");
+  if (isAi) {
+    if (endBtn) endBtn.classList.add("hidden");
+  } else {
+    if (endBtn) {
+      endBtn.classList.remove("hidden");
+      endBtn.innerText = "End Session";
+    }
+  }
+
+  loadCurrentChat();
+  setActiveContact(name);
 };
 
 window.handleEnter = function (e) {
@@ -147,16 +247,13 @@ window.sendMessage = async function () {
   if (isCurrentContactAI) {
     showTypingIndicator();
     scrollToBottom();
-
     try {
       const aiResponse = await askGemini(messageText);
       removeTypingIndicator();
       displayDoctorMessage(aiResponse);
     } catch (error) {
       removeTypingIndicator();
-      displayDoctorMessage(
-        "Maaf, koneksi ke asisten AI terputus. Pastikan backend sudah dijalankan.",
-      );
+      displayDoctorMessage("Maaf, koneksi ke asisten AI terputus.");
     }
   } else {
     setTimeout(() => {
@@ -186,28 +283,6 @@ function displayDoctorMessage(text) {
   saveMessageToHistory(doctorHtml);
   scrollToBottom();
 }
-
-window.selectContact = function (name, img, isAi = false) {
-  currentDoctorName = name;
-  currentDoctorImg = img;
-  isCurrentContactAI = isAi;
-
-  document.getElementById("header-name").innerText = name;
-  document.getElementById("header-avatar").src = img;
-  const endBtn = document.getElementById("end-session-btn");
-
-  if (isAi) {
-    if (endBtn) endBtn.classList.add("hidden");
-  } else {
-    if (endBtn) {
-      endBtn.classList.remove("hidden");
-      endBtn.innerText = "End Session";
-    }
-  }
-
-  loadCurrentChat();
-  setActiveContact(name);
-};
 
 function setActiveContact(name) {
   const allContacts = document.querySelectorAll("[data-contact]");

@@ -184,114 +184,11 @@
               Available Psychiatrists
             </h2>
 
-            <div class="space-y-1">
-              <!-- Dr. Sarah Jenkins -->
+            <div class="space-y-1" id="doctor-list">
               <div
-                data-contact="Dr. Sarah Jenkins"
-                onclick="
-                  selectContact(
-                    'Dr. Sarah Jenkins',
-                    'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100&h=100',
-                  )
-                "
-                class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group"
+                class="text-center py-4 text-xs text-slate-400 animate-pulse"
               >
-                <div class="relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=100&h=100"
-                    class="w-12 h-12 rounded-full object-cover"
-                  />
-                  <div
-                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
-                  ></div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-baseline">
-                    <h4 class="font-semibold text-slate-900 text-sm">
-                      Dr. Sarah Jenkins
-                    </h4>
-                    <span class="text-[10px] font-medium text-slate-500"
-                      >Rp250.000</span
-                    >
-                  </div>
-                  <div class="flex justify-between items-end mt-0.5">
-                    <p class="text-xs text-slate-500 truncate">
-                      Clinical Psychiatrist
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Dr. Amin Ray -->
-              <div
-                data-contact="Dr. Amin Ray"
-                onclick="
-                  selectContact(
-                    'Dr. Amin Ray',
-                    'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=100&h=100',
-                  )
-                "
-                class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group"
-              >
-                <div class="relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=100&h=100"
-                    class="w-12 h-12 rounded-full object-cover grayscale-[20%] group-hover:grayscale-0"
-                  />
-                  <div
-                    class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
-                  ></div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-baseline">
-                    <h4 class="font-medium text-slate-900 text-sm">
-                      Dr. Amin Ray
-                    </h4>
-                    <span
-                      class="text-[10px] font-medium text-slate-400 group-hover:text-slate-600"
-                      >Rp200.000</span
-                    >
-                  </div>
-                  <p class="text-xs text-slate-500 truncate">
-                    Cognitive Behavioral Therapy
-                  </p>
-                </div>
-              </div>
-
-              <!-- Dr. Elena Rostova -->
-              <div
-                data-contact="Dr. Elena Rostova"
-                onclick="
-                  selectContact(
-                    'Dr. Elena Rostova',
-                    'https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100&h=100',
-                  )
-                "
-                class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group"
-              >
-                <div class="relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=100&h=100"
-                    class="w-12 h-12 rounded-full object-cover grayscale-[20%] group-hover:grayscale-0"
-                  />
-                  <div
-                    class="absolute bottom-0 right-0 w-3 h-3 bg-gray-300 border-2 border-white rounded-full"
-                  ></div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex justify-between items-baseline">
-                    <h4 class="font-medium text-slate-900 text-sm">
-                      Dr. Elena Rostova
-                    </h4>
-                    <span
-                      class="text-[10px] font-medium text-slate-400 group-hover:text-slate-600"
-                      >Rp300.000</span
-                    >
-                  </div>
-                  <p class="text-xs text-slate-500 truncate">
-                    Trauma Specialist
-                  </p>
-                </div>
+                Memuat daftar psikiater...
               </div>
             </div>
           </div>
@@ -302,6 +199,7 @@
         class="flex-1 flex flex-col h-full rounded-2xl overflow-hidden shadow-sm border border-slate-200"
       >
         <div
+          id="chat-header"
           class="h-16 px-6 flex items-center justify-between bg-white/20 backdrop-blur-sm border-b border-slate-200 shadow-[0_2px_8px_rgba(0,0,0,0.02)] flex-shrink-0"
         >
           <div class="flex items-center gap-3">
@@ -340,7 +238,10 @@
           </div>
         </div>
 
-        <div class="p-4 bg-white border-t border-slate-200 flex-shrink-0">
+        <div
+          id="chat-input-area"
+          class="p-4 bg-white border-t border-slate-200 flex-shrink-0"
+        >
           <div class="flex items-center gap-2 max-w-4xl mx-auto w-full">
             <button
               class="p-2.5 text-slate-400 hover:text-[#f2ca4b] hover:bg-slate-50 rounded-full transition-colors"
@@ -401,6 +302,9 @@
         if (typeof initCloudBgSection === "function") {
           initCloudBgSection();
           selectContact("AI Assistant", "../assets/image/cloud (3).png", true);
+        }
+        if (typeof loadDoctorsFromServer === "function") {
+          loadDoctorsFromServer();
         }
       });
     </script>
