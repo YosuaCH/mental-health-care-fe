@@ -16,7 +16,51 @@ let paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
 document.addEventListener("DOMContentLoaded", function () {
   loadCurrentChat();
   loadDoctorsFromServer();
+
+  const endBtn = document.getElementById("end-session-btn");
+  if (endBtn) {
+    endBtn.onclick = function () {
+      showEndSessionModal();
+    };
+  }
 });
+
+//end session dialog
+function showEndSessionModal() {
+  const mainChatWrapper =
+    document.getElementById("chat-container").parentElement;
+  mainChatWrapper.classList.add("relative");
+
+  if (document.getElementById("custom-modal-overlay")) return;
+
+  const modalHtml = `
+    <div id="custom-modal-overlay" class="absolute top-16 bottom-0 left-0 right-0 z-[100] flex justify-center items-start pt-10 p-6 bg-slate-900/30 backdrop-blur-sm animate-fade-in rounded-b-2xl">
+        <div class="bg-white w-full max-w-sm rounded-3xl shadow-2xl border border-slate-100 p-6 scale-up-center">
+            <div class="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            
+            <h3 class="text-lg font-bold text-slate-900 text-center mb-2">Akhiri Sesi?</h3>
+            <p class="text-sm text-slate-500 text-center mb-6">
+                Sesi dengan <b>${currentDoctorName}</b> akan diakhiri dan riwayat pesan akan dihapus secara permanen.
+            </p>
+            
+            <div class="flex flex-col gap-2">
+                <button onclick="confirmEndSession()" class="w-full py-3 bg-red-500 hover:bg-red-600 text-white text-sm font-bold rounded-xl transition-all shadow-sm">
+                    Ya, Akhiri Sesi
+                </button>
+                <button onclick="closeCustomModal()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-bold rounded-xl transition-all">
+                    Batalkan
+                </button>
+            </div>
+        </div>
+    </div>
+  `;
+
+  mainChatWrapper.insertAdjacentHTML("beforeend", modalHtml);
+}
 
 async function loadDoctorsFromServer() {
   const listContainer = document.getElementById("doctor-list");
@@ -137,6 +181,111 @@ async function showPaymentUI(container, targetNoStr) {
   }
 }
 
+function displayDoctorMessage(text) {
+  const container = document.getElementById("chat-container");
+  const doctorHtml = `
+    <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
+      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
+      <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
+        <p>${text}</p>
+      </div>
+    </div>
+  `;
+  container.insertAdjacentHTML("beforeend", doctorHtml);
+  saveMessageToHistory(doctorHtml);
+  scrollToBottom();
+}
+
+function setActiveContact(name) {
+  const allContacts = document.querySelectorAll("[data-contact]");
+  allContacts.forEach((contact) => {
+    const contactName = contact.getAttribute("data-contact");
+    const isAI = contactName === "AI Assistant";
+
+    if (isAI) {
+      contact.className =
+        "p-3 rounded-2xl bg-gradient-to-br from-[#f2ca4b]/20 to-transparent border-2 border-[#f2ca4b]/40 cursor-pointer relative group transition-all";
+    } else {
+      contact.className =
+        "flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border-2 border-transparent hover:border-slate-100 transition-all cursor-pointer group";
+    }
+  });
+
+  const activeContact = document.querySelector(`[data-contact="${name}"]`);
+  if (activeContact) {
+    const isAI = name === "AI Assistant";
+    if (isAI) {
+      activeContact.className =
+        "p-3 rounded-2xl bg-gradient-to-br from-[#f2ca4b]/30 to-transparent border-2 border-[#f2ca4b] cursor-pointer relative group transition-all";
+    } else {
+      activeContact.className =
+        "flex items-center gap-3 p-3 rounded-xl bg-slate-50 border-2 border-slate-300 shadow-sm cursor-pointer group";
+    }
+  }
+}
+
+function showTypingIndicator() {
+  const container = document.getElementById("chat-container");
+  const html = `
+     <div id="typing-indicator" class="flex items-end gap-2 max-w-[85%] mb-4">
+      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
+      <div class="bg-white p-3 px-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100">
+         <div class="flex gap-1">
+           <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></div>
+           <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-75"></div>
+           <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></div>
+         </div>
+      </div>
+    </div>
+  `;
+  container.insertAdjacentHTML("beforeend", html);
+}
+
+function removeTypingIndicator() {
+  const el = document.getElementById("typing-indicator");
+  if (el) el.remove();
+}
+
+function getCurrentTime() {
+  const now = new Date();
+  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function escapeHtml(text) {
+  const map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  };
+  return text.replace(/[&<>"']/g, function (m) {
+    return map[m];
+  });
+}
+
+window.closeCustomModal = function () {
+  const modal = document.getElementById("custom-modal-overlay");
+  if (modal) modal.remove();
+};
+
+window.confirmEndSession = function () {
+  closeCustomModal();
+
+  if (currentDoctorNoStr) {
+    delete paidDoctors[currentDoctorNoStr];
+    sessionStorage.setItem("paidDoctors", JSON.stringify(paidDoctors));
+  }
+
+  if (chatHistories[currentDoctorName]) {
+    delete chatHistories[currentDoctorName];
+    sessionStorage.setItem("chatHistories", JSON.stringify(chatHistories));
+  }
+
+  loadCurrentChat();
+  console.log("Sesi berakhir.");
+};
+
 window.simulatePaymentSuccess = async function () {
   const container = document.getElementById("chat-container");
 
@@ -254,86 +403,3 @@ window.sendMessage = async function () {
     }, 500);
   }
 };
-
-function displayDoctorMessage(text) {
-  const container = document.getElementById("chat-container");
-  const doctorHtml = `
-    <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
-      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
-      <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
-        <p>${text}</p>
-      </div>
-    </div>
-  `;
-  container.insertAdjacentHTML("beforeend", doctorHtml);
-  saveMessageToHistory(doctorHtml);
-  scrollToBottom();
-}
-
-function setActiveContact(name) {
-  const allContacts = document.querySelectorAll("[data-contact]");
-  allContacts.forEach((contact) => {
-    const contactName = contact.getAttribute("data-contact");
-    const isAI = contactName === "AI Assistant";
-
-    if (isAI) {
-      contact.className =
-        "p-3 rounded-2xl bg-gradient-to-br from-[#f2ca4b]/20 to-transparent border-2 border-[#f2ca4b]/40 cursor-pointer relative group transition-all";
-    } else {
-      contact.className =
-        "flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border-2 border-transparent hover:border-slate-100 transition-all cursor-pointer group";
-    }
-  });
-
-  const activeContact = document.querySelector(`[data-contact="${name}"]`);
-  if (activeContact) {
-    const isAI = name === "AI Assistant";
-    if (isAI) {
-      activeContact.className =
-        "p-3 rounded-2xl bg-gradient-to-br from-[#f2ca4b]/30 to-transparent border-2 border-[#f2ca4b] cursor-pointer relative group transition-all";
-    } else {
-      activeContact.className =
-        "flex items-center gap-3 p-3 rounded-xl bg-slate-50 border-2 border-slate-300 shadow-sm cursor-pointer group";
-    }
-  }
-}
-
-function showTypingIndicator() {
-  const container = document.getElementById("chat-container");
-  const html = `
-     <div id="typing-indicator" class="flex items-end gap-2 max-w-[85%] mb-4">
-      <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
-      <div class="bg-white p-3 px-4 rounded-2xl rounded-tl-none shadow-sm border border-slate-100">
-         <div class="flex gap-1">
-           <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></div>
-           <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-75"></div>
-           <div class="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></div>
-         </div>
-      </div>
-    </div>
-  `;
-  container.insertAdjacentHTML("beforeend", html);
-}
-
-function removeTypingIndicator() {
-  const el = document.getElementById("typing-indicator");
-  if (el) el.remove();
-}
-
-function getCurrentTime() {
-  const now = new Date();
-  return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
-
-function escapeHtml(text) {
-  const map = {
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#039;",
-  };
-  return text.replace(/[&<>"']/g, function (m) {
-    return map[m];
-  });
-}
