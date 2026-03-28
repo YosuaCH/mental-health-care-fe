@@ -84,7 +84,7 @@ function loadCurrentChat() {
   if (!isCurrentContactAI && !paidDoctors[currentDoctorNoStr]) {
     if (headerArea) headerArea.classList.add("hidden");
     if (inputArea) inputArea.classList.add("hidden");
-    showPaymentUI(container);
+    showPaymentUI(container, currentDoctorNoStr);
     return;
   }
 
@@ -106,12 +106,16 @@ function loadCurrentChat() {
 }
 
 // Payment UI
-async function showPaymentUI(container) {
+async function showPaymentUI(container, targetNoStr) {
   container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Menghitung tagihan...</p></div>`;
 
   try {
-    const data = await getPaymentInfo(currentDoctorNoStr);
+    const data = await getPaymentInfo(targetNoStr);
     console.log("Data pembayaran diterima:", data);
+    if (currentDoctorNoStr !== targetNoStr) {
+      console.log("User pindah kontak, batalkan render UI pembayaran.");
+      return;
+    }
 
     container.innerHTML = `
       <div class="flex flex-col items-center justify-center h-full text-center animate-fade-in-up">
