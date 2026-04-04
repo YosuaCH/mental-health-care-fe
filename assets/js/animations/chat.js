@@ -89,14 +89,26 @@ async function loadDoctorsFromServer() {
 
     let hasVisibleDoctors = false;
 
-    doctors.forEach((doc) => {
+    for (const doc of doctors) {
       if (!doc.hargaKonsultasi || doc.hargaKonsultasi === 0) {
-        return;
+        continue;
       }
 
       hasVisibleDoctors = true;
 
       const avatarUrl = doc.picture ? doc.picture : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(doc.namaLengkap)}`;
+      
+      let unreadCount = 0;
+      if (currentUser && currentUser.id) {
+         try {
+           const rId = `room_${currentUser.id}_${doc.noStr}`;
+           const res = await fetch(`${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`, { credentials: "include" });
+           unreadCount = await res.json();
+         } catch(e) {}
+      }
+
+      const badgeHtml = `<div id="badge-${doc.noStr}" class="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm ${unreadCount > 0 ? '' : 'hidden'}">${unreadCount}</div>`;
+
       const html = `
         <div data-contact="${doc.namaLengkap}"
              onclick="selectContact('${doc.namaLengkap}', '${avatarUrl}', false, '${doc.noStr}')"
@@ -104,6 +116,7 @@ async function loadDoctorsFromServer() {
             <div class="relative text-left">
                 <img src="${avatarUrl}" class="w-12 h-12 rounded-full object-cover" />
                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                ${badgeHtml}
             </div>
             <div class="flex-1 min-w-0 text-left">
                 <div class="flex justify-between items-baseline">
@@ -114,7 +127,7 @@ async function loadDoctorsFromServer() {
         </div>
       `;
       listContainer.insertAdjacentHTML("beforeend", html);
-    });
+    }
 
     if (!hasVisibleDoctors) {
       listContainer.innerHTML = `<p class="text-xs text-slate-400 p-4 text-center">Belum ada psikiater yang tersedia saat ini.</p>`;
@@ -145,7 +158,7 @@ function connectWebSocket(roomId) {
 
       const message = JSON.parse(messageOutput.body);
       if (currentUser && message.senderName !== currentUser.namaLengkap) {
-        displayDoctorMessage(message.content);
+        displayDoctorMessage(message.content, message.timestamp);
       }
     });
   });
@@ -157,16 +170,49 @@ function connectGlobalNotification() {
   globalStompClient = Stomp.over(socket);
   globalStompClient.debug = null;
   globalStompClient.connect({}, function (frame) {
-    globalStompClient.subscribe(
-      "/topic/doctor/" + currentUser.noStr,
-      function (msg) {
-        if (msg.body === "NEW_SESSION") {
-          if (typeof window.loadPatientsFromServer === "function") {
-            window.loadPatientsFromServer(true);
+    const userId = currentUser ? (currentUser.noStr || currentUser.id) : null;
+    if (userId) {
+      globalStompClient.subscribe(`/topic/global/${userId}`, function (msg) {
+        try {
+          const chatPayload = JSON.parse(msg.body);
+          if (chatPayload && chatPayload.roomId) {
+            if (chatPayload.roomId !== currentRoomId) {
+              const parts = chatPayload.roomId.split("_");
+              if (parts.length >= 3) {
+                 const isPsikiater = currentUser.role && currentUser.role.toLowerCase() === 'psikiater';
+                 const otherId = isPsikiater ? parts[1] : parts[2];
+                 const badgeEl = document.getElementById("badge-" + otherId);
+                 if (badgeEl) {
+                   badgeEl.classList.remove("hidden");
+                   let currentNum = parseInt(badgeEl.innerText, 10) || 0;
+                   badgeEl.innerText = currentNum + 1;
+                 }
+              }
+            } else {
+              if (chatPayload.senderName !== currentUser.namaLengkap) {
+                 fetch(`${BACKEND_URL}/api/v1/chat/history/${chatPayload.roomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`, {
+                     method: 'PUT', credentials: 'include'
+                 }).catch(e => console.error(e));
+              }
+            }
           }
-        }
-      },
-    );
+        } catch(e) { }
+      });
+    }
+
+    const doctorId = currentUser && currentUser.role && currentUser.role.toLowerCase() === 'psikiater' ? currentUser.noStr : null;
+    if (doctorId) {
+      globalStompClient.subscribe(
+        "/topic/doctor/" + doctorId,
+        function (msg) {
+          if (msg.body === "NEW_SESSION") {
+            if (typeof window.loadPatientsFromServer === "function") {
+              window.loadPatientsFromServer(true);
+            }
+          }
+        },
+      );
+    }
   });
 }
 
@@ -226,6 +272,7 @@ function loadCurrentChat() {
                                 <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
                                   <p>${escapeHtml(msg.content)}</p>
                                 </div>
+                                <span class="text-[10px] text-slate-400 mt-1 mr-1">${formatTimestamp(msg.timestamp)}</span>
                               </div>
                             </div>`;
               container.insertAdjacentHTML("beforeend", userHtml);
@@ -233,8 +280,11 @@ function loadCurrentChat() {
               const doctorHtml = `
                             <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
                               <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
-                              <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
-                                <p>${escapeHtml(msg.content)}</p>
+                              <div class="flex flex-col items-start w-full">
+                                <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100 inline-block">
+                                  <p>${escapeHtml(msg.content)}</p>
+                                </div>
+                                <span class="text-[10px] text-slate-400 mt-1 ml-1">${formatTimestamp(msg.timestamp)}</span>
                               </div>
                             </div>`;
               container.insertAdjacentHTML("beforeend", doctorHtml);
@@ -254,6 +304,13 @@ function loadCurrentChat() {
               `<p class="text-center text-xs text-slate-400 my-4">Pembayaran sukses! Sesi pribadi berbayar sudah siap. Silakan mulai ceritakan keluhan Anda.</p>`,
             );
           }
+        }
+        
+        if (currentUser && currentUser.namaLengkap) {
+           fetch(`${BACKEND_URL}/api/v1/chat/history/${currentRoomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`, {
+               method: 'PUT',
+               credentials: 'include'
+           }).catch(e => console.error("Mark read error:", e));
         }
       })
       .catch((e) => console.error(e));
@@ -297,13 +354,17 @@ async function showPaymentUI(container, targetNoStr) {
   }
 }
 
-function displayDoctorMessage(text) {
+function displayDoctorMessage(text, timeStr = null) {
   const container = document.getElementById("chat-container");
+  const timeDisplay = formatTimestamp(timeStr) || getCurrentTime();
   const doctorHtml = `
     <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
       <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
-      <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
-        <p>${text}</p>
+      <div class="flex flex-col items-start w-full">
+        <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100 inline-block">
+          <p>${escapeHtml(text)}</p>
+        </div>
+        <span class="text-[10px] text-slate-400 mt-1 ml-1">${timeDisplay}</span>
       </div>
     </div>
   `;
@@ -365,6 +426,17 @@ function removeTypingIndicator() {
 function getCurrentTime() {
   const now = new Date();
   return now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+function formatTimestamp(timestampStr) {
+  if (!timestampStr) return "";
+  try {
+    const d = new Date(timestampStr);
+    if (isNaN(d.getTime())) return timestampStr.slice(11, 16); // return raw substring if invalid Date wrap
+    return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  } catch(e) {
+    return "";
+  }
 }
 
 function escapeHtml(text) {
@@ -466,6 +538,12 @@ window.selectContact = function (name, img, isAi = false, noStr = "") {
   currentDoctorImg = img;
   currentDoctorNoStr = noStr;
   isCurrentContactAI = isAi;
+
+  const badgeEl = document.getElementById("badge-" + noStr);
+  if (badgeEl) {
+    badgeEl.classList.add("hidden");
+    badgeEl.innerText = "0";
+  }
 
   if (isAi && stompClient) {
     stompClient.disconnect();
@@ -579,7 +657,7 @@ window.loadPatientsFromServer = async function (silent = false) {
     let tempHtml = "";
 
     if (patients && patients.length > 0) {
-      patients.forEach((patient) => {
+      for (const patient of patients) {
         const patientName =
           patient.namaLengkap ||
           patient.username ||
@@ -588,6 +666,17 @@ window.loadPatientsFromServer = async function (silent = false) {
         const patientId = patient.id || patient._id || patient.noStr || "";
 
         const avatarUrl = patient.picture ? patient.picture : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(patientName)}`;
+        
+        let unreadCount = 0;
+        if (currentUser && currentUser.noStr) {
+           try {
+             const rId = `room_${patientId}_${currentUser.noStr}`;
+             const res = await fetch(`${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`, { credentials: "include" });
+             unreadCount = await res.json();
+           } catch(e) {}
+        }
+        
+        const badgeHtml = `<div id="badge-${patientId}" class="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm ${unreadCount > 0 ? '' : 'hidden'}">${unreadCount}</div>`;
         const html = `
           <div data-contact="${patientName}"
                onclick="selectContact('${patientName}', '${avatarUrl}', false, '${patientId}')"
@@ -595,6 +684,7 @@ window.loadPatientsFromServer = async function (silent = false) {
               <div class="relative text-left">
                   <img src="${avatarUrl}" class="w-12 h-12 rounded-full object-cover" />
                   <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+                  ${badgeHtml}
               </div>
               <div class="flex-1 min-w-0 text-left">
                   <div class="flex justify-between items-baseline">
@@ -604,7 +694,7 @@ window.loadPatientsFromServer = async function (silent = false) {
           </div>
         `;
         tempHtml += html;
-      });
+      }
       listContainer.innerHTML = tempHtml;
     } else {
       listContainer.innerHTML = `<p class="text-xs text-slate-400 p-4 text-center">Belum ada obrolan dengan pasien saat ini.</p>`;
