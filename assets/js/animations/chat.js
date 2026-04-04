@@ -95,7 +95,7 @@ async function loadDoctorsFromServer() {
 
       hasVisibleDoctors = true;
 
-      const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.namaLengkap)}&amp;background=random&amp;color=fff&amp;size=100`;
+      const avatarUrl = doc.picture ? doc.picture : `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(doc.namaLengkap)}`;
       const html = `
         <div data-contact="${doc.namaLengkap}"
              onclick="selectContact('${doc.namaLengkap}', '${avatarUrl}', false, '${doc.noStr}')"
