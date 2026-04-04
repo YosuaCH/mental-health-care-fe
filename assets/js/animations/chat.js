@@ -96,18 +96,23 @@ async function loadDoctorsFromServer() {
 
       hasVisibleDoctors = true;
 
-      const avatarUrl = doc.picture ? doc.picture : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(doc.namaLengkap)}`;
-      
+      const avatarUrl = doc.picture
+        ? doc.picture
+        : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(doc.namaLengkap)}`;
+
       let unreadCount = 0;
       if (currentUser && currentUser.id) {
-         try {
-           const rId = `room_${currentUser.id}_${doc.noStr}`;
-           const res = await fetch(`${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`, { credentials: "include" });
-           unreadCount = await res.json();
-         } catch(e) {}
+        try {
+          const rId = `room_${currentUser.id}_${doc.noStr}`;
+          const res = await fetch(
+            `${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`,
+            { credentials: "include" },
+          );
+          unreadCount = await res.json();
+        } catch (e) {}
       }
 
-      const badgeHtml = `<div id="badge-${doc.noStr}" class="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm ${unreadCount > 0 ? '' : 'hidden'}">${unreadCount}</div>`;
+      const badgeHtml = `<div id="badge-${doc.noStr}" class="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm ${unreadCount > 0 ? "" : "hidden"}">${unreadCount}</div>`;
 
       const html = `
         <div data-contact="${doc.namaLengkap}"
@@ -170,7 +175,7 @@ function connectGlobalNotification() {
   globalStompClient = Stomp.over(socket);
   globalStompClient.debug = null;
   globalStompClient.connect({}, function (frame) {
-    const userId = currentUser ? (currentUser.noStr || currentUser.id) : null;
+    const userId = currentUser ? currentUser.noStr || currentUser.id : null;
     if (userId) {
       globalStompClient.subscribe(`/topic/global/${userId}`, function (msg) {
         try {
@@ -179,39 +184,47 @@ function connectGlobalNotification() {
             if (chatPayload.roomId !== currentRoomId) {
               const parts = chatPayload.roomId.split("_");
               if (parts.length >= 3) {
-                 const isPsikiater = currentUser.role && currentUser.role.toLowerCase() === 'psikiater';
-                 const otherId = isPsikiater ? parts[1] : parts[2];
-                 const badgeEl = document.getElementById("badge-" + otherId);
-                 if (badgeEl) {
-                   badgeEl.classList.remove("hidden");
-                   let currentNum = parseInt(badgeEl.innerText, 10) || 0;
-                   badgeEl.innerText = currentNum + 1;
-                 }
+                const isPsikiater =
+                  currentUser.role &&
+                  currentUser.role.toLowerCase() === "psikiater";
+                const otherId = isPsikiater ? parts[1] : parts[2];
+                const badgeEl = document.getElementById("badge-" + otherId);
+                if (badgeEl) {
+                  badgeEl.classList.remove("hidden");
+                  let currentNum = parseInt(badgeEl.innerText, 10) || 0;
+                  badgeEl.innerText = currentNum + 1;
+                }
               }
             } else {
               if (chatPayload.senderName !== currentUser.namaLengkap) {
-                 fetch(`${BACKEND_URL}/api/v1/chat/history/${chatPayload.roomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`, {
-                     method: 'PUT', credentials: 'include'
-                 }).catch(e => console.error(e));
+                fetch(
+                  `${BACKEND_URL}/api/v1/chat/history/${chatPayload.roomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`,
+                  {
+                    method: "PUT",
+                    credentials: "include",
+                  },
+                ).catch((e) => console.error(e));
               }
             }
           }
-        } catch(e) { }
+        } catch (e) {}
       });
     }
 
-    const doctorId = currentUser && currentUser.role && currentUser.role.toLowerCase() === 'psikiater' ? currentUser.noStr : null;
+    const doctorId =
+      currentUser &&
+      currentUser.role &&
+      currentUser.role.toLowerCase() === "psikiater"
+        ? currentUser.noStr
+        : null;
     if (doctorId) {
-      globalStompClient.subscribe(
-        "/topic/doctor/" + doctorId,
-        function (msg) {
-          if (msg.body === "NEW_SESSION") {
-            if (typeof window.loadPatientsFromServer === "function") {
-              window.loadPatientsFromServer(true);
-            }
+      globalStompClient.subscribe("/topic/doctor/" + doctorId, function (msg) {
+        if (msg.body === "NEW_SESSION") {
+          if (typeof window.loadPatientsFromServer === "function") {
+            window.loadPatientsFromServer(true);
           }
-        },
-      );
+        }
+      });
     }
   });
 }
@@ -265,18 +278,22 @@ function loadCurrentChat() {
       .then((histories) => {
         if (histories && histories.length > 0) {
           histories.forEach((msg) => {
+            const timeDisplay = formatTimestamp(msg.timestamp);
+
             if (msg.senderName === currentUser.namaLengkap) {
+              removePreviousDuplicateTime(currentUser.namaLengkap, timeDisplay);
               const userHtml = `
                             <div class="flex items-end justify-end gap-2 animate-fade-in-up mb-4">
                               <div class="max-w-[85%] flex flex-col items-end">
                                 <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
                                   <p>${escapeHtml(msg.content)}</p>
                                 </div>
-                                <span class="text-[10px] text-slate-400 mt-1 mr-1">${formatTimestamp(msg.timestamp)}</span>
+                                <span class="chat-time text-[10px] text-slate-400 mt-1 mr-1" data-sender="${currentUser.namaLengkap}" data-time="${timeDisplay}">${timeDisplay}</span>
                               </div>
                             </div>`;
               container.insertAdjacentHTML("beforeend", userHtml);
             } else {
+              removePreviousDuplicateTime(currentDoctorName, timeDisplay);
               const doctorHtml = `
                             <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
                               <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
@@ -284,7 +301,7 @@ function loadCurrentChat() {
                                 <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100 inline-block">
                                   <p>${escapeHtml(msg.content)}</p>
                                 </div>
-                                <span class="text-[10px] text-slate-400 mt-1 ml-1">${formatTimestamp(msg.timestamp)}</span>
+                                <span class="chat-time text-[10px] text-slate-400 mt-1 ml-1" data-sender="${currentDoctorName}" data-time="${timeDisplay}">${timeDisplay}</span>
                               </div>
                             </div>`;
               container.insertAdjacentHTML("beforeend", doctorHtml);
@@ -305,12 +322,15 @@ function loadCurrentChat() {
             );
           }
         }
-        
+
         if (currentUser && currentUser.namaLengkap) {
-           fetch(`${BACKEND_URL}/api/v1/chat/history/${currentRoomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`, {
-               method: 'PUT',
-               credentials: 'include'
-           }).catch(e => console.error("Mark read error:", e));
+          fetch(
+            `${BACKEND_URL}/api/v1/chat/history/${currentRoomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`,
+            {
+              method: "PUT",
+              credentials: "include",
+            },
+          ).catch((e) => console.error("Mark read error:", e));
         }
       })
       .catch((e) => console.error(e));
@@ -357,6 +377,8 @@ async function showPaymentUI(container, targetNoStr) {
 function displayDoctorMessage(text, timeStr = null) {
   const container = document.getElementById("chat-container");
   const timeDisplay = formatTimestamp(timeStr) || getCurrentTime();
+  removePreviousDuplicateTime(currentDoctorName, timeDisplay);
+
   const doctorHtml = `
     <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
       <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
@@ -364,7 +386,7 @@ function displayDoctorMessage(text, timeStr = null) {
         <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100 inline-block">
           <p>${escapeHtml(text)}</p>
         </div>
-        <span class="text-[10px] text-slate-400 mt-1 ml-1">${timeDisplay}</span>
+        <span class="chat-time text-[10px] text-slate-400 mt-1 ml-1" data-sender="${currentDoctorName}" data-time="${timeDisplay}">${timeDisplay}</span>
       </div>
     </div>
   `;
@@ -432,10 +454,36 @@ function formatTimestamp(timestampStr) {
   if (!timestampStr) return "";
   try {
     const d = new Date(timestampStr);
-    if (isNaN(d.getTime())) return timestampStr.slice(11, 16); // return raw substring if invalid Date wrap
+    if (isNaN(d.getTime())) return timestampStr.slice(11, 16);
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  } catch(e) {
+  } catch (e) {
     return "";
+  }
+}
+
+function removePreviousDuplicateTime(senderName, timeStr) {
+  const container = document.getElementById("chat-container");
+  if (!container) return;
+  const timeSpans = container.querySelectorAll(".chat-time");
+  if (timeSpans.length > 0) {
+    const lastSpan = timeSpans[timeSpans.length - 1];
+    if (
+      lastSpan.getAttribute("data-sender") === String(senderName) &&
+      lastSpan.getAttribute("data-time") === timeStr
+    ) {
+      const mainBubble = lastSpan.closest(".animate-fade-in-up");
+      lastSpan.remove();
+
+      if (mainBubble) {
+        mainBubble.classList.remove("mb-4");
+        mainBubble.style.marginBottom = "4px";
+
+        const prevImg = mainBubble.querySelector("img");
+        if (prevImg) {
+          prevImg.classList.add("opacity-0");
+        }
+      }
+    }
   }
 }
 
@@ -472,13 +520,10 @@ window.confirmEndSession = async function () {
 
   if (!isCurrentContactAI && currentRoomId) {
     try {
-      await fetch(
-        `${BACKEND_URL}/api/v1/chat/session/${currentRoomId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
+      await fetch(`${BACKEND_URL}/api/v1/chat/session/${currentRoomId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
       if (stompClient) stompClient.disconnect();
     } catch (e) {}
   }
@@ -586,13 +631,16 @@ window.sendMessage = async function () {
 
   if (messageText === "") return;
 
+  const timeDisplay = getCurrentTime();
+  removePreviousDuplicateTime(currentUser.namaLengkap, timeDisplay);
+
   const userHtml = `
     <div class="flex items-end justify-end gap-2 animate-fade-in-up mb-4">
       <div class="max-w-[85%] flex flex-col items-end">
         <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
           <p>${escapeHtml(messageText)}</p>
         </div>
-        <span class="text-[10px] text-slate-400 mt-1 mr-1">${getCurrentTime()}</span>
+        <span class="chat-time text-[10px] text-slate-400 mt-1 mr-1" data-sender="${currentUser.namaLengkap}" data-time="${timeDisplay}">${timeDisplay}</span>
       </div>
     </div>
   `;
@@ -665,18 +713,23 @@ window.loadPatientsFromServer = async function (silent = false) {
           "Tidak Diketahui";
         const patientId = patient.id || patient._id || patient.noStr || "";
 
-        const avatarUrl = patient.picture ? patient.picture : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(patientName)}`;
-        
+        const avatarUrl = patient.picture
+          ? patient.picture
+          : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(patientName)}`;
+
         let unreadCount = 0;
         if (currentUser && currentUser.noStr) {
-           try {
-             const rId = `room_${patientId}_${currentUser.noStr}`;
-             const res = await fetch(`${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`, { credentials: "include" });
-             unreadCount = await res.json();
-           } catch(e) {}
+          try {
+            const rId = `room_${patientId}_${currentUser.noStr}`;
+            const res = await fetch(
+              `${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`,
+              { credentials: "include" },
+            );
+            unreadCount = await res.json();
+          } catch (e) {}
         }
-        
-        const badgeHtml = `<div id="badge-${patientId}" class="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm ${unreadCount > 0 ? '' : 'hidden'}">${unreadCount}</div>`;
+
+        const badgeHtml = `<div id="badge-${patientId}" class="absolute -top-1 -right-1 z-10 w-5 h-5 bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full border-2 border-white shadow-sm ${unreadCount > 0 ? "" : "hidden"}">${unreadCount}</div>`;
         const html = `
           <div data-contact="${patientName}"
                onclick="selectContact('${patientName}', '${avatarUrl}', false, '${patientId}')"
