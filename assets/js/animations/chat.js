@@ -203,7 +203,7 @@ function loadCurrentChat() {
 
   if (!isCurrentContactAI && currentUser) {
     if (isPsikiater) {
-      currentRoomId = `room_${currentDoctorNoStr}_${currentUser.noStr}`; // currentDoctorNoStr carries patientId
+      currentRoomId = `room_${currentDoctorNoStr}_${currentUser.noStr}`;
     } else {
       currentRoomId = `room_${currentUser.id}_${currentDoctorNoStr}`;
     }
@@ -586,7 +586,7 @@ window.loadPatientsFromServer = async function (silent = false) {
           "Tidak Diketahui";
         const patientId = patient.id || patient._id || patient.noStr || "";
 
-        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(patientName)}&background=random&color=fff&size=100`;
+        const avatarUrl = patient.picture ? patient.picture : `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(patientName)}`;
         const html = `
           <div data-contact="${patientName}"
                onclick="selectContact('${patientName}', '${avatarUrl}', false, '${patientId}')"
