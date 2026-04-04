@@ -6,6 +6,13 @@ import {
   processPaymentSimulation,
 } from "../services/payment_services.js";
 import { BACKEND_URL, DICEBEAR_BASE_URL } from "../const/base_url.js";
+import {
+  fetchUnreadCount,
+  markRoomAsRead,
+  fetchChatHistory,
+  fetchPatientsByDoctor,
+  endChatSession,
+} from "../services/chat_services.js";
 
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
@@ -104,11 +111,7 @@ async function loadDoctorsFromServer() {
       if (currentUser && currentUser.id) {
         try {
           const rId = `room_${currentUser.id}_${doc.noStr}`;
-          const res = await fetch(
-            `${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`,
-            { credentials: "include" },
-          );
-          unreadCount = await res.json();
+          unreadCount = await fetchUnreadCount(rId, currentUser.namaLengkap);
         } catch (e) {}
       }
 
@@ -197,12 +200,9 @@ function connectGlobalNotification() {
               }
             } else {
               if (chatPayload.senderName !== currentUser.namaLengkap) {
-                fetch(
-                  `${BACKEND_URL}/api/v1/chat/history/${chatPayload.roomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`,
-                  {
-                    method: "PUT",
-                    credentials: "include",
-                  },
+                markRoomAsRead(
+                  chatPayload.roomId,
+                  currentUser.namaLengkap,
                 ).catch((e) => console.error(e));
               }
             }
@@ -270,11 +270,7 @@ function loadCurrentChat() {
 
     connectWebSocket(currentRoomId);
 
-    fetch(`${BACKEND_URL}/api/v1/chat/history/${currentRoomId}`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((res) => res.json())
+    fetchChatHistory(currentRoomId)
       .then((histories) => {
         if (histories && histories.length > 0) {
           histories.forEach((msg) => {
@@ -324,13 +320,9 @@ function loadCurrentChat() {
         }
 
         if (currentUser && currentUser.namaLengkap) {
-          fetch(
-            `${BACKEND_URL}/api/v1/chat/history/${currentRoomId}/read?readerName=${encodeURIComponent(currentUser.namaLengkap)}`,
-            {
-              method: "PUT",
-              credentials: "include",
-            },
-          ).catch((e) => console.error("Mark read error:", e));
+          markRoomAsRead(currentRoomId, currentUser.namaLengkap).catch((e) =>
+            console.error("Mark read error:", e),
+          );
         }
       })
       .catch((e) => console.error(e));
@@ -476,7 +468,7 @@ function removePreviousDuplicateTime(senderName, timeStr) {
 
       if (mainBubble) {
         mainBubble.classList.remove("mb-4");
-        mainBubble.style.marginBottom = "4px";
+        mainBubble.style.marginBottom = "8px";
 
         const prevImg = mainBubble.querySelector("img");
         if (prevImg) {
@@ -520,10 +512,7 @@ window.confirmEndSession = async function () {
 
   if (!isCurrentContactAI && currentRoomId) {
     try {
-      await fetch(`${BACKEND_URL}/api/v1/chat/session/${currentRoomId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      await endChatSession(currentRoomId);
       if (stompClient) stompClient.disconnect();
     } catch (e) {}
   }
@@ -687,19 +676,7 @@ window.loadPatientsFromServer = async function (silent = false) {
       listContainer.innerHTML = `<p class="text-xs text-slate-400 p-4 text-center animate-pulse">Memuat daftar pasien...</p>`;
     }
 
-    const response = await fetch(
-      `${BACKEND_URL}/api/v1/chat/patients/${doctorId}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error("Gagal mengambil data pasien dari server");
-    }
-
-    const result = await response.json();
+    const result = await fetchPatientsByDoctor(doctorId);
     const patients = result.data || result;
 
     let tempHtml = "";
@@ -721,11 +698,7 @@ window.loadPatientsFromServer = async function (silent = false) {
         if (currentUser && currentUser.noStr) {
           try {
             const rId = `room_${patientId}_${currentUser.noStr}`;
-            const res = await fetch(
-              `${BACKEND_URL}/api/v1/chat/unread/${rId}?viewerName=${encodeURIComponent(currentUser.namaLengkap)}`,
-              { credentials: "include" },
-            );
-            unreadCount = await res.json();
+            unreadCount = await fetchUnreadCount(rId, currentUser.namaLengkap);
           } catch (e) {}
         }
 
