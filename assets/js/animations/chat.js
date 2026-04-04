@@ -26,11 +26,7 @@ let globalStompClient = null;
 
 getUserData().then((data) => {
   currentUser = data;
-  if (
-    currentUser &&
-    currentUser.role &&
-    currentUser.role.toLowerCase() === "psikiater"
-  ) {
+  if (currentUser) {
     setTimeout(() => connectGlobalNotification(), 1000);
   }
 });
@@ -110,8 +106,9 @@ async function loadDoctorsFromServer() {
       let unreadCount = 0;
       if (currentUser && currentUser.id) {
         try {
+          const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
           const rId = `room_${currentUser.id}_${doc.noStr}`;
-          unreadCount = await fetchUnreadCount(rId, currentUser.namaLengkap);
+          unreadCount = await fetchUnreadCount(rId, validName);
         } catch (e) {}
       }
 
@@ -165,8 +162,11 @@ function connectWebSocket(roomId) {
       if (currentRoomId !== roomId) return;
 
       const message = JSON.parse(messageOutput.body);
-      if (currentUser && message.senderName !== currentUser.namaLengkap) {
-        displayDoctorMessage(message.content, message.timestamp);
+      if (currentUser) {
+        const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+        if (message.senderName !== validName) {
+          displayDoctorMessage(message.content, message.timestamp);
+        }
       }
     });
   });
@@ -199,10 +199,11 @@ function connectGlobalNotification() {
                 }
               }
             } else {
-              if (chatPayload.senderName !== currentUser.namaLengkap) {
+              const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+              if (chatPayload.senderName !== validName) {
                 markRoomAsRead(
                   chatPayload.roomId,
-                  currentUser.namaLengkap,
+                  validName,
                 ).catch((e) => console.error(e));
               }
             }
@@ -275,16 +276,17 @@ function loadCurrentChat() {
         if (histories && histories.length > 0) {
           histories.forEach((msg) => {
             const timeDisplay = formatTimestamp(msg.timestamp);
+            const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
 
-            if (msg.senderName === currentUser.namaLengkap) {
-              removePreviousDuplicateTime(currentUser.namaLengkap, timeDisplay);
+            if (msg.senderName === validName) {
+              removePreviousDuplicateTime(validName, timeDisplay);
               const userHtml = `
                             <div class="flex items-end justify-end gap-2 animate-fade-in-up mb-4">
                               <div class="max-w-[85%] flex flex-col items-end">
                                 <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
                                   <p>${escapeHtml(msg.content)}</p>
                                 </div>
-                                <span class="chat-time text-[10px] text-slate-400 mt-1 mr-1" data-sender="${currentUser.namaLengkap}" data-time="${timeDisplay}">${timeDisplay}</span>
+                                <span class="chat-time text-[10px] text-slate-400 mt-1 mr-1" data-sender="${validName}" data-time="${timeDisplay}">${timeDisplay}</span>
                               </div>
                             </div>`;
               container.insertAdjacentHTML("beforeend", userHtml);
@@ -319,8 +321,9 @@ function loadCurrentChat() {
           }
         }
 
-        if (currentUser && currentUser.namaLengkap) {
-          markRoomAsRead(currentRoomId, currentUser.namaLengkap).catch((e) =>
+        if (currentUser) {
+          const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+          markRoomAsRead(currentRoomId, validName).catch((e) =>
             console.error("Mark read error:", e),
           );
         }
@@ -621,7 +624,8 @@ window.sendMessage = async function () {
   if (messageText === "") return;
 
   const timeDisplay = getCurrentTime();
-  removePreviousDuplicateTime(currentUser.namaLengkap, timeDisplay);
+  const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+  removePreviousDuplicateTime(validName, timeDisplay);
 
   const userHtml = `
     <div class="flex items-end justify-end gap-2 animate-fade-in-up mb-4">
@@ -629,7 +633,7 @@ window.sendMessage = async function () {
         <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
           <p>${escapeHtml(messageText)}</p>
         </div>
-        <span class="chat-time text-[10px] text-slate-400 mt-1 mr-1" data-sender="${currentUser.namaLengkap}" data-time="${timeDisplay}">${timeDisplay}</span>
+        <span class="chat-time text-[10px] text-slate-400 mt-1 mr-1" data-sender="${validName}" data-time="${timeDisplay}">${timeDisplay}</span>
       </div>
     </div>
   `;
@@ -654,7 +658,7 @@ window.sendMessage = async function () {
     if (stompClient && stompClient.connected) {
       const chatMessage = {
         roomId: currentRoomId,
-        senderName: currentUser.namaLengkap,
+        senderName: validName,
         content: messageText,
         timestamp: new Date(),
       };
@@ -697,8 +701,9 @@ window.loadPatientsFromServer = async function (silent = false) {
         let unreadCount = 0;
         if (currentUser && currentUser.noStr) {
           try {
+            const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
             const rId = `room_${patientId}_${currentUser.noStr}`;
-            unreadCount = await fetchUnreadCount(rId, currentUser.namaLengkap);
+            unreadCount = await fetchUnreadCount(rId, validName);
           } catch (e) {}
         }
 
