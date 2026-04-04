@@ -5,6 +5,7 @@ import {
   getPaymentInfo,
   processPaymentSimulation,
 } from "../services/payment_services.js";
+import { BACKEND_URL, DICEBEAR_BASE_URL } from "../const/base_url.js";
 
 let currentDoctorName = "AI Assistant";
 let currentDoctorImg = "../assets/image/cloud (3).png";
@@ -95,7 +96,7 @@ async function loadDoctorsFromServer() {
 
       hasVisibleDoctors = true;
 
-      const avatarUrl = doc.picture ? doc.picture : `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(doc.namaLengkap)}`;
+      const avatarUrl = doc.picture ? doc.picture : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(doc.namaLengkap)}`;
       const html = `
         <div data-contact="${doc.namaLengkap}"
              onclick="selectContact('${doc.namaLengkap}', '${avatarUrl}', false, '${doc.noStr}')"
@@ -134,7 +135,7 @@ function connectWebSocket(roomId) {
     if (stompClient.roomId === roomId) return;
     stompClient.disconnect();
   }
-  const socket = new SockJS("http://127.0.0.1:8080/ws");
+  const socket = new SockJS(`${BACKEND_URL}/ws`);
   stompClient = Stomp.over(socket);
   stompClient.roomId = roomId;
   stompClient.connect({}, function (frame) {
@@ -152,7 +153,7 @@ function connectWebSocket(roomId) {
 
 function connectGlobalNotification() {
   if (globalStompClient && globalStompClient.connected) return;
-  const socket = new SockJS("http://127.0.0.1:8080/ws");
+  const socket = new SockJS(`${BACKEND_URL}/ws`);
   globalStompClient = Stomp.over(socket);
   globalStompClient.debug = null;
   globalStompClient.connect({}, function (frame) {
@@ -210,7 +211,7 @@ function loadCurrentChat() {
 
     connectWebSocket(currentRoomId);
 
-    fetch(`http://127.0.0.1:8080/api/v1/chat/history/${currentRoomId}`, {
+    fetch(`${BACKEND_URL}/api/v1/chat/history/${currentRoomId}`, {
       method: "GET",
       credentials: "include",
     })
@@ -400,7 +401,7 @@ window.confirmEndSession = async function () {
   if (!isCurrentContactAI && currentRoomId) {
     try {
       await fetch(
-        `http://127.0.0.1:8080/api/v1/chat/session/${currentRoomId}`,
+        `${BACKEND_URL}/api/v1/chat/session/${currentRoomId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -561,7 +562,7 @@ window.loadPatientsFromServer = async function (silent = false) {
     }
 
     const response = await fetch(
-      `http://127.0.0.1:8080/api/v1/chat/patients/${doctorId}`,
+      `${BACKEND_URL}/api/v1/chat/patients/${doctorId}`,
       {
         method: "GET",
         credentials: "include",
@@ -586,7 +587,7 @@ window.loadPatientsFromServer = async function (silent = false) {
           "Tidak Diketahui";
         const patientId = patient.id || patient._id || patient.noStr || "";
 
-        const avatarUrl = patient.picture ? patient.picture : `https://api.dicebear.com/9.x/avataaars/svg?seed=${encodeURIComponent(patientName)}`;
+        const avatarUrl = patient.picture ? patient.picture : `${DICEBEAR_BASE_URL}?seed=${encodeURIComponent(patientName)}`;
         const html = `
           <div data-contact="${patientName}"
                onclick="selectContact('${patientName}', '${avatarUrl}', false, '${patientId}')"

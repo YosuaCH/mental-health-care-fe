@@ -1,4 +1,5 @@
-const API_URL = "http://127.0.0.1:8080/auth";
+import { BACKEND_URL } from "../const/base_url.js";
+const API_URL = `${BACKEND_URL}/auth`;
 
 export const login = async (email, password) => {
   return fetch(`${API_URL}/login`, {
@@ -43,7 +44,7 @@ export const logout = async () => {
         for (const doctorId of Object.keys(paidDoctors)) {
             const roomId = `room_${userJson.id}_${doctorId}`;
             try {
-                await fetch(`http://127.0.0.1:8080/api/v1/chat/session/${roomId}`, {
+                await fetch(`${BACKEND_URL}/api/v1/chat/session/${roomId}`, {
                     method: 'DELETE',
                     credentials: 'include'
                 });
@@ -53,7 +54,7 @@ export const logout = async () => {
         }
     }
 
-    await fetch("http://127.0.0.1:8080/logout", {
+    await fetch(`${BACKEND_URL}/logout`, {
       method: "POST",
       credentials: "include",
     });

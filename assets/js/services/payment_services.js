@@ -1,4 +1,5 @@
-const BASE_URL = "http://127.0.0.1:8080/payment";
+import { BACKEND_URL } from "../const/base_url.js";
+const BASE_URL = `${BACKEND_URL}/payment`;
 
 export const getAllDoctors = async () => {
   const response = await fetch(`${BASE_URL}/all-doctors`, {

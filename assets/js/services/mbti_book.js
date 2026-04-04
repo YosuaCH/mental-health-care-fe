@@ -1,4 +1,5 @@
-const API_URL = "http://127.0.0.1:8080/api";
+import { BACKEND_URL } from "../const/base_url.js";
+const API_URL = `${BACKEND_URL}/api`;
 export const fetchAllEbooks = async () => {
   try {
     const response = await fetch(`${API_URL}/ebooks`, {

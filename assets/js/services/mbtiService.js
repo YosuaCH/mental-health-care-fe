@@ -1,4 +1,5 @@
-const MBTI_API_URL = "http://127.0.0.1:8080/mbti";
+import { BACKEND_URL } from "../const/base_url.js";
+const MBTI_API_URL = `${BACKEND_URL}/mbti`;
 
 const mbtiService = {
   async getMbtiDetail(code) {

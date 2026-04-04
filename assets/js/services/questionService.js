@@ -1,4 +1,5 @@
-const API_BASE_URL = "http://127.0.0.1:8080";
+import { BACKEND_URL } from "../const/base_url.js";
+const API_BASE_URL = BACKEND_URL;
 
 async function getAllQuestions() {
   try {

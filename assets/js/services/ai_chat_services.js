@@ -1,4 +1,5 @@
-const BASE_URL = "http://127.0.0.1:8080/api/v1/ai";
+import { BACKEND_URL } from "../const/base_url.js";
+const BASE_URL = `${BACKEND_URL}/api/v1/ai`;
 
 export const askGemini = async (message) => {
   try {
