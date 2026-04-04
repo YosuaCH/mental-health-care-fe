@@ -36,6 +36,23 @@ export const getCurrentUser = async () => {
 
 export const logout = async () => {
   try {
+    // buat auto end session chat jika logout
+    const paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
+    const userJson = JSON.parse(localStorage.getItem("user"));
+    if (userJson && userJson.id && Object.keys(paidDoctors).length > 0) {
+        for (const doctorId of Object.keys(paidDoctors)) {
+            const roomId = `room_${userJson.id}_${doctorId}`;
+            try {
+                await fetch(`http://127.0.0.1:8080/api/v1/chat/session/${roomId}`, {
+                    method: 'DELETE',
+                    credentials: 'include'
+                });
+            } catch (e) {
+                console.warn("Failed to end session on logout", e);
+            }
+        }
+    }
+
     await fetch("http://127.0.0.1:8080/logout", {
       method: "POST",
       credentials: "include",
