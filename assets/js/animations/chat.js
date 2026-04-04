@@ -1,4 +1,5 @@
 import { askGemini } from "../services/ai_chat_services.js";
+import { getUserData } from "../utils/userProfile.js";
 import {
   getAllDoctors,
   getPaymentInfo,
@@ -10,12 +11,27 @@ let currentDoctorImg = "../assets/image/cloud (3).png";
 let currentDoctorNoStr = "";
 let isCurrentContactAI = true;
 
+let currentUser = null;
+let stompClient = null;
+let currentRoomId = null;
+let globalStompClient = null;
+
+getUserData().then((data) => {
+  currentUser = data;
+  if (
+    currentUser &&
+    currentUser.role &&
+    currentUser.role.toLowerCase() === "psikiater"
+  ) {
+    setTimeout(() => connectGlobalNotification(), 1000);
+  }
+});
+
 let chatHistories = JSON.parse(sessionStorage.getItem("chatHistories")) || {};
 let paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
 
 document.addEventListener("DOMContentLoaded", function () {
   loadCurrentChat();
-  loadDoctorsFromServer();
 
   const endBtn = document.getElementById("end-session-btn");
   if (endBtn) {
@@ -83,7 +99,7 @@ async function loadDoctorsFromServer() {
       const html = `
         <div data-contact="${doc.namaLengkap}"
              onclick="selectContact('${doc.namaLengkap}', '${avatarUrl}', false, '${doc.noStr}')"
-             class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border border-transparent hover:border-slate-100 transition-all cursor-pointer group">
+             class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border-2 border-transparent hover:border-slate-100 transition-all cursor-pointer group">
             <div class="relative text-left">
                 <img src="${avatarUrl}" class="w-12 h-12 rounded-full object-cover" />
                 <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
@@ -113,6 +129,46 @@ function scrollToBottom() {
   if (container) container.scrollTop = container.scrollHeight;
 }
 
+function connectWebSocket(roomId) {
+  if (stompClient && stompClient.connected) {
+    if (stompClient.roomId === roomId) return;
+    stompClient.disconnect();
+  }
+  const socket = new SockJS("http://127.0.0.1:8080/ws");
+  stompClient = Stomp.over(socket);
+  stompClient.roomId = roomId;
+  stompClient.connect({}, function (frame) {
+    stompClient.subscribe("/topic/room/" + roomId, function (messageOutput) {
+      //Buat cegah chat nyasar ke room lain
+      if (currentRoomId !== roomId) return;
+
+      const message = JSON.parse(messageOutput.body);
+      if (currentUser && message.senderName !== currentUser.namaLengkap) {
+        displayDoctorMessage(message.content);
+      }
+    });
+  });
+}
+
+function connectGlobalNotification() {
+  if (globalStompClient && globalStompClient.connected) return;
+  const socket = new SockJS("http://127.0.0.1:8080/ws");
+  globalStompClient = Stomp.over(socket);
+  globalStompClient.debug = null;
+  globalStompClient.connect({}, function (frame) {
+    globalStompClient.subscribe(
+      "/topic/doctor/" + currentUser.noStr,
+      function (msg) {
+        if (msg.body === "NEW_SESSION") {
+          if (typeof window.loadPatientsFromServer === "function") {
+            window.loadPatientsFromServer(true);
+          }
+        }
+      },
+    );
+  });
+}
+
 function saveMessageToHistory(html) {
   if (!chatHistories[currentDoctorName]) chatHistories[currentDoctorName] = [];
   chatHistories[currentDoctorName].push(html);
@@ -124,7 +180,12 @@ function loadCurrentChat() {
   const headerArea = document.getElementById("chat-header");
   const inputArea = document.getElementById("chat-input-area");
 
-  if (!isCurrentContactAI && !paidDoctors[currentDoctorNoStr]) {
+  const isPsikiater =
+    currentUser &&
+    currentUser.role &&
+    currentUser.role.toLowerCase() === "psikiater";
+
+  if (!isCurrentContactAI && !isPsikiater && !paidDoctors[currentDoctorNoStr]) {
     if (headerArea) headerArea.classList.add("hidden");
     if (inputArea) inputArea.classList.add("hidden");
     showPaymentUI(container, currentDoctorNoStr);
@@ -140,7 +201,62 @@ function loadCurrentChat() {
     </div>
   `;
 
-  if (chatHistories[currentDoctorName]) {
+  if (!isCurrentContactAI && currentUser) {
+    if (isPsikiater) {
+      currentRoomId = `room_${currentDoctorNoStr}_${currentUser.noStr}`; // currentDoctorNoStr carries patientId
+    } else {
+      currentRoomId = `room_${currentUser.id}_${currentDoctorNoStr}`;
+    }
+
+    connectWebSocket(currentRoomId);
+
+    fetch(`http://127.0.0.1:8080/api/v1/chat/history/${currentRoomId}`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((histories) => {
+        if (histories && histories.length > 0) {
+          histories.forEach((msg) => {
+            if (msg.senderName === currentUser.namaLengkap) {
+              const userHtml = `
+                            <div class="flex items-end justify-end gap-2 animate-fade-in-up mb-4">
+                              <div class="max-w-[85%] flex flex-col items-end">
+                                <div class="bg-[#f2ca4b] p-3.5 rounded-2xl rounded-tr-none shadow-sm text-slate-900 text-sm leading-relaxed">
+                                  <p>${escapeHtml(msg.content)}</p>
+                                </div>
+                              </div>
+                            </div>`;
+              container.insertAdjacentHTML("beforeend", userHtml);
+            } else {
+              const doctorHtml = `
+                            <div class="flex items-end gap-2 max-w-[85%] animate-fade-in-up mb-4">
+                              <img src="${currentDoctorImg}" class="w-8 h-8 rounded-full object-cover shadow-sm mb-1 flex-shrink-0" />
+                              <div class="bg-white p-3.5 rounded-2xl rounded-tl-none shadow-sm text-slate-800 text-sm leading-relaxed border border-slate-100">
+                                <p>${escapeHtml(msg.content)}</p>
+                              </div>
+                            </div>`;
+              container.insertAdjacentHTML("beforeend", doctorHtml);
+            }
+          });
+          scrollToBottom();
+        } else {
+          // Jika belum ada chat history (baru bayar)
+          if (isPsikiater) {
+            container.insertAdjacentHTML(
+              "beforeend",
+              `<p class="text-center text-xs text-slate-400 my-4">Sesi terbuka. Pasien sedang menunggu, Anda bisa menyapanya terlebih dahulu!</p>`,
+            );
+          } else {
+            container.insertAdjacentHTML(
+              "beforeend",
+              `<p class="text-center text-xs text-slate-400 my-4">Pembayaran sukses! Sesi pribadi berbayar sudah siap. Silakan mulai ceritakan keluhan Anda.</p>`,
+            );
+          }
+        }
+      })
+      .catch((e) => console.error(e));
+  } else if (chatHistories[currentDoctorName]) {
     chatHistories[currentDoctorName].forEach((msgHtml) => {
       container.insertAdjacentHTML("beforeend", msgHtml);
     });
@@ -268,7 +384,7 @@ window.closeCustomModal = function () {
   if (modal) modal.remove();
 };
 
-window.confirmEndSession = function () {
+window.confirmEndSession = async function () {
   closeCustomModal();
 
   if (currentDoctorNoStr) {
@@ -279,6 +395,19 @@ window.confirmEndSession = function () {
   if (chatHistories[currentDoctorName]) {
     delete chatHistories[currentDoctorName];
     sessionStorage.setItem("chatHistories", JSON.stringify(chatHistories));
+  }
+
+  if (!isCurrentContactAI && currentRoomId) {
+    try {
+      await fetch(
+        `http://127.0.0.1:8080/api/v1/chat/session/${currentRoomId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
+      if (stompClient) stompClient.disconnect();
+    } catch (e) {}
   }
 
   loadCurrentChat();
@@ -292,7 +421,10 @@ window.simulatePaymentSuccess = async function () {
   container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Memverifikasi pembayaran...</p></div>`;
 
   try {
-    const result = await processPaymentSimulation(currentDoctorNoStr);
+    const result = await processPaymentSimulation(
+      currentUser.id,
+      currentDoctorNoStr,
+    );
 
     if (result.status === "PAID") {
       paidDoctors[currentDoctorNoStr] = true;
@@ -334,11 +466,22 @@ window.selectContact = function (name, img, isAi = false, noStr = "") {
   currentDoctorNoStr = noStr;
   isCurrentContactAI = isAi;
 
+  if (isAi && stompClient) {
+    stompClient.disconnect();
+    stompClient = null;
+    currentRoomId = null;
+  }
+
   document.getElementById("header-name").innerText = name;
   document.getElementById("header-avatar").src = img;
 
   const endBtn = document.getElementById("end-session-btn");
-  if (isAi) {
+  const isPsikiater =
+    currentUser &&
+    currentUser.role &&
+    currentUser.role.toLowerCase() === "psikiater";
+
+  if (isAi || isPsikiater) {
     if (endBtn) endBtn.classList.add("hidden");
   } else {
     if (endBtn) {
@@ -392,13 +535,102 @@ window.sendMessage = async function () {
       displayDoctorMessage("Maaf, koneksi ke asisten AI terputus.");
     }
   } else {
-    setTimeout(() => {
-      showTypingIndicator();
-      scrollToBottom();
-      setTimeout(() => {
-        removeTypingIndicator();
-        displayDoctorMessage();
-      }, 1500);
-    }, 500);
+    if (stompClient && stompClient.connected) {
+      const chatMessage = {
+        roomId: currentRoomId,
+        senderName: currentUser.namaLengkap,
+        content: messageText,
+        timestamp: new Date(),
+      };
+      stompClient.send("/app/chat.send", {}, JSON.stringify(chatMessage));
+    }
+  }
+};
+
+window.loadDoctorsFromServer = loadDoctorsFromServer;
+
+window.loadPatientsFromServer = async function (silent = false) {
+  const listContainer = document.getElementById("doctor-list");
+  if (!listContainer) return;
+
+  const doctorId = currentUser ? currentUser.noStr : "";
+
+  try {
+    if (!silent) {
+      listContainer.innerHTML = `<p class="text-xs text-slate-400 p-4 text-center animate-pulse">Memuat daftar pasien...</p>`;
+    }
+
+    const response = await fetch(
+      `http://127.0.0.1:8080/api/v1/chat/patients/${doctorId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error("Gagal mengambil data pasien dari server");
+    }
+
+    const result = await response.json();
+    const patients = result.data || result;
+
+    let tempHtml = "";
+
+    if (patients && patients.length > 0) {
+      patients.forEach((patient) => {
+        const patientName =
+          patient.namaLengkap ||
+          patient.username ||
+          patient.email ||
+          "Tidak Diketahui";
+        const patientId = patient.id || patient._id || patient.noStr || "";
+
+        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(patientName)}&background=random&color=fff&size=100`;
+        const html = `
+          <div data-contact="${patientName}"
+               onclick="selectContact('${patientName}', '${avatarUrl}', false, '${patientId}')"
+               class="flex items-center gap-3 p-3 rounded-xl hover:bg-white hover:shadow-sm border-2 border-transparent hover:border-slate-100 transition-all cursor-pointer group">
+              <div class="relative text-left">
+                  <img src="${avatarUrl}" class="w-12 h-12 rounded-full object-cover" />
+                  <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+              </div>
+              <div class="flex-1 min-w-0 text-left">
+                  <div class="flex justify-between items-baseline">
+                      <h4 class="font-semibold text-slate-900 text-sm truncate">${patientName}</h4>
+                  </div>
+              </div>
+          </div>
+        `;
+        tempHtml += html;
+      });
+      listContainer.innerHTML = tempHtml;
+    } else {
+      listContainer.innerHTML = `<p class="text-xs text-slate-400 p-4 text-center">Belum ada obrolan dengan pasien saat ini.</p>`;
+    }
+
+    if (currentDoctorName !== "AI Assistant") {
+      const activePatientStillExists =
+        patients &&
+        patients.some(
+          (p) => (p.id || p._id || p.noStr || "") === currentDoctorNoStr,
+        );
+
+      if (!activePatientStillExists) {
+        selectContact(
+          "AI Assistant",
+          "../assets/image/cloud (3).png",
+          true,
+          "",
+        );
+      } else if (silent) {
+        setActiveContact(currentDoctorName);
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    if (!silent) {
+      listContainer.innerHTML = `<p class="text-[10px] text-red-400 p-2 text-center">Endpoint API Pasien kemungkinan belum dibuat di BE.<br>(${error.message})</p>`;
+    }
   }
 };

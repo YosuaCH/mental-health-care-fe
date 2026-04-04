@@ -25,9 +25,9 @@ export const getPaymentInfo = async (noStr) => {
   return await response.json();
 };
 
-export const processPaymentSimulation = async (noStr) => {
+export const processPaymentSimulation = async (patientId, noStr) => {
   const response = await fetch(
-    `${BASE_URL}/simulate-success?noStr=${encodeURIComponent(noStr)}`,
+    `${BASE_URL}/simulate-success?patientId=${encodeURIComponent(patientId)}&noStr=${encodeURIComponent(noStr)}`,
     {
       method: "POST",
       credentials: "include",

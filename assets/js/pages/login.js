@@ -77,5 +77,6 @@ loginForm.addEventListener("submit", async (e) => {
     }
   } catch (err) {
     alert("Koneksi gagal: " + err);
+    alert(res);
   }
 });

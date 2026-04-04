@@ -21,6 +21,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Cloud JS -->
     <script src="../assets/js/animations/cloud_background.js" defer></script>
+    <!-- WebSocket Libs -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
     <!-- Chat JS -->
     <script type="module" src="../assets/js/animations/chat.js" defer></script>
     <!-- User Profile JS -->
@@ -132,16 +135,17 @@
         class="w-[360px] h-full flex flex-col bg-white/70 backdrop-blur-xl shadow-sm rounded-2xl overflow-hidden border border-slate-200 flex-shrink-0"
       >
         <div class="p-6 pb-4 flex-shrink-0">
-          <h1 class="text-xl font-bold text-slate-800">Obrolan Kamu</h1>
-          <p class="text-xs text-slate-500">
+          <h1 id="chat-page-title" class="text-xl font-bold text-slate-800">Obrolan Kamu</h1>
+          <p id="chat-page-subtitle" class="text-xs text-slate-500">
             Pilih AI atau dokter untuk mulai curhat
           </p>
         </div>
 
         <div class="flex-1 overflow-y-auto no-scrollbar px-3 space-y-4 pb-4">
           <!-- AI Assistant -->
-          <div
-            data-contact="AI Assistant"
+          <div id="ai-assistant-container">
+            <div
+              data-contact="AI Assistant"
             onclick="
               selectContact(
                 'AI Assistant',
@@ -176,9 +180,11 @@
               </div>
             </div>
           </div>
+          </div>
 
           <div>
             <h2
+              id="contact-list-title"
               class="px-2 text-xs font-bold text-slate-400 uppercase tracking-wider mb-2"
             >
               Available Psychiatrists
@@ -296,17 +302,5 @@
         </div>
       </div>
     </div>
-
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        if (typeof initCloudBgSection === "function") {
-          initCloudBgSection();
-          selectContact("AI Assistant", "../assets/image/cloud (3).png", true);
-        }
-        if (typeof loadDoctorsFromServer === "function") {
-          loadDoctorsFromServer();
-        }
-      });
-    </script>
   </body>
 </html>
