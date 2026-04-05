@@ -112,7 +112,7 @@ function renderSharedUI() {
 
             <div class="space-y-2">
               <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Username Baru</label>
-              <input type="text" id="edit-username" placeholder="Masukkan username..." class="w-full px-5 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none transition-all text-slate-700 font-medium"/>
+              <input type="text" id="edit-username" placeholder="Masukkan username..." class="w-full px-5 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#f2ca4b] focus:border-[#f2ca4b] outline-none transition-all text-slate-700 font-medium"/>
             </div>
 
             <div class="flex gap-3 pt-2">
