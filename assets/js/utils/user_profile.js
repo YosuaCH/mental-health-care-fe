@@ -1,4 +1,4 @@
-import { getCurrentUser } from "../services/authService.js";
+import { getCurrentUser } from "../services/auth_service.js";
 
 export async function getUserData() {
   try {

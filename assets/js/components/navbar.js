@@ -1,4 +1,4 @@
-import { logout as authLogout } from "../services/authService.js";
+import { logout as authLogout } from "../services/auth_service.js";
 import { DICEBEAR_BASE_URL, BACKEND_URL } from "../const/base_url.js";
 
 window.logout = authLogout;

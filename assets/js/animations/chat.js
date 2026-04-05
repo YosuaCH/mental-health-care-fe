@@ -1,5 +1,5 @@
 import { askGemini } from "../services/ai_chat_services.js";
-import { getUserData } from "../utils/userProfile.js";
+import { getUserData } from "../utils/user_profile.js";
 import {
   getAllDoctors,
   getPaymentInfo,
@@ -106,7 +106,11 @@ async function loadDoctorsFromServer() {
       let unreadCount = 0;
       if (currentUser && currentUser.id) {
         try {
-          const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+          const validName =
+            currentUser.namaLengkap ||
+            currentUser.username ||
+            currentUser.email ||
+            "User";
           const rId = `room_${currentUser.id}_${doc.noStr}`;
           unreadCount = await fetchUnreadCount(rId, validName);
         } catch (e) {}
@@ -163,7 +167,11 @@ function connectWebSocket(roomId) {
 
       const message = JSON.parse(messageOutput.body);
       if (currentUser) {
-        const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+        const validName =
+          currentUser.namaLengkap ||
+          currentUser.username ||
+          currentUser.email ||
+          "User";
         if (message.senderName !== validName) {
           displayDoctorMessage(message.content, message.timestamp);
         }
@@ -199,12 +207,15 @@ function connectGlobalNotification() {
                 }
               }
             } else {
-              const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+              const validName =
+                currentUser.namaLengkap ||
+                currentUser.username ||
+                currentUser.email ||
+                "User";
               if (chatPayload.senderName !== validName) {
-                markRoomAsRead(
-                  chatPayload.roomId,
-                  validName,
-                ).catch((e) => console.error(e));
+                markRoomAsRead(chatPayload.roomId, validName).catch((e) =>
+                  console.error(e),
+                );
               }
             }
           }
@@ -276,7 +287,11 @@ function loadCurrentChat() {
         if (histories && histories.length > 0) {
           histories.forEach((msg) => {
             const timeDisplay = formatTimestamp(msg.timestamp);
-            const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+            const validName =
+              currentUser.namaLengkap ||
+              currentUser.username ||
+              currentUser.email ||
+              "User";
 
             if (msg.senderName === validName) {
               removePreviousDuplicateTime(validName, timeDisplay);
@@ -322,7 +337,11 @@ function loadCurrentChat() {
         }
 
         if (currentUser) {
-          const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+          const validName =
+            currentUser.namaLengkap ||
+            currentUser.username ||
+            currentUser.email ||
+            "User";
           markRoomAsRead(currentRoomId, validName).catch((e) =>
             console.error("Mark read error:", e),
           );
@@ -624,7 +643,11 @@ window.sendMessage = async function () {
   if (messageText === "") return;
 
   const timeDisplay = getCurrentTime();
-  const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+  const validName =
+    currentUser.namaLengkap ||
+    currentUser.username ||
+    currentUser.email ||
+    "User";
   removePreviousDuplicateTime(validName, timeDisplay);
 
   const userHtml = `
@@ -701,7 +724,11 @@ window.loadPatientsFromServer = async function (silent = false) {
         let unreadCount = 0;
         if (currentUser && currentUser.noStr) {
           try {
-            const validName = currentUser.namaLengkap || currentUser.username || currentUser.email || "User";
+            const validName =
+              currentUser.namaLengkap ||
+              currentUser.username ||
+              currentUser.email ||
+              "User";
             const rId = `room_${patientId}_${currentUser.noStr}`;
             unreadCount = await fetchUnreadCount(rId, validName);
           } catch (e) {}

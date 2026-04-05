@@ -41,17 +41,17 @@ export const logout = async () => {
     const paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
     const userJson = JSON.parse(localStorage.getItem("user"));
     if (userJson && userJson.id && Object.keys(paidDoctors).length > 0) {
-        for (const doctorId of Object.keys(paidDoctors)) {
-            const roomId = `room_${userJson.id}_${doctorId}`;
-            try {
-                await fetch(`${BACKEND_URL}/api/v1/chat/session/${roomId}`, {
-                    method: 'DELETE',
-                    credentials: 'include'
-                });
-            } catch (e) {
-                console.warn("Failed to end session on logout", e);
-            }
+      for (const doctorId of Object.keys(paidDoctors)) {
+        const roomId = `room_${userJson.id}_${doctorId}`;
+        try {
+          await fetch(`${BACKEND_URL}/api/v1/chat/session/${roomId}`, {
+            method: "DELETE",
+            credentials: "include",
+          });
+        } catch (e) {
+          console.warn("Failed to end session on logout", e);
         }
+      }
     }
 
     await fetch(`${BACKEND_URL}/logout`, {

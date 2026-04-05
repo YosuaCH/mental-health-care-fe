@@ -1,4 +1,4 @@
-import { getUserData } from "../utils/userProfile.js";
+import { getUserData } from "../utils/user_profile.js";
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const userData = await getUserData();

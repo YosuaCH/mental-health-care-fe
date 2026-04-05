@@ -1,4 +1,4 @@
-import { registerPsikiater } from "../services/authService.js";
+import { registerPsikiater } from "../services/auth_service.js";
 import { setupPasswordValidator } from "../utils/password_validator.js";
 
 // Form Input Elements

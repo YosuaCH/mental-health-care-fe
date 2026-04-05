@@ -1,4 +1,4 @@
-import { registerClient } from "../services/authService.js";
+import { registerClient } from "../services/auth_service.js";
 import { setupPasswordValidator } from "../utils/password_validator.js";
 
 // Input elements

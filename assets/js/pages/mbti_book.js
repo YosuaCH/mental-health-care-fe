@@ -1,5 +1,5 @@
 import { fetchAllEbooks } from "../services/mbti_book.js";
-import { getUserData } from "../utils/userProfile.js";
+import { getUserData } from "../utils/user_profile.js";
 
 const getCleanPreviewUrl = (url) => {
   if (!url || url === "#") return "#";
