@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mental Health Consultation</title>
+    <title>Consultation | Mental Health Care</title>
     <!-- Icon Web -->
     <link
       rel="icon"
@@ -27,7 +27,11 @@
     <!-- Chat JS -->
     <script type="module" src="../assets/js/animations/chat.js" defer></script>
     <!-- Shared Navbar Component -->
-    <script type="module" src="../assets/js/components/navbar.js" defer></script>
+    <script
+      type="module"
+      src="../assets/js/components/navbar.js"
+      defer
+    ></script>
     <!-- chat module -->
     <script type="module" src="../assets/js/pages/chat.js" defer></script>
     <!-- Guard if userData null -->
@@ -49,7 +53,9 @@
         class="w-[360px] h-full flex flex-col bg-white/70 backdrop-blur-xl shadow-sm rounded-2xl overflow-hidden border border-slate-200 flex-shrink-0"
       >
         <div class="p-6 pb-4 flex-shrink-0">
-          <h1 id="chat-page-title" class="text-xl font-bold text-slate-800">Obrolan Kamu</h1>
+          <h1 id="chat-page-title" class="text-xl font-bold text-slate-800">
+            Obrolan Kamu
+          </h1>
           <p id="chat-page-subtitle" class="text-xs text-slate-500">
             Pilih AI atau dokter untuk mulai curhat
           </p>
@@ -60,40 +66,40 @@
           <div id="ai-assistant-container">
             <div
               data-contact="AI Assistant"
-            onclick="
-              selectContact(
-                'AI Assistant',
-                '../assets/image/cloud (3).png',
-                true,
-              )
-            "
-          >
-            <div class="flex items-center gap-3">
-              <div class="relative">
-                <div
-                  class="w-12 h-12 rounded-full bg-[#f8f8f8] border border-slate-200 flex items-center justify-center text-slate-900"
-                >
-                  <img
-                    src="../assets/image/cloud (3).png"
-                    alt=""
-                    class="w-9 h-9"
-                  />
-                </div>
-                <div
-                  class="absolute -bottom-1 -right-1 bg-green-500 w-3.5 h-3.5 border-2 border-white rounded-full"
-                ></div>
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex justify-between items-center">
-                  <h3 class="font-semibold text-slate-900">AI Assistant</h3>
-                  <span
-                    class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
-                    >Free</span
+              onclick="
+                selectContact(
+                  'AI Assistant',
+                  '../assets/image/cloud (3).png',
+                  true,
+                )
+              "
+            >
+              <div class="flex items-center gap-3">
+                <div class="relative">
+                  <div
+                    class="w-12 h-12 rounded-full bg-[#f8f8f8] border border-slate-200 flex items-center justify-center text-slate-900"
                   >
+                    <img
+                      src="../assets/image/cloud (3).png"
+                      alt=""
+                      class="w-9 h-9"
+                    />
+                  </div>
+                  <div
+                    class="absolute -bottom-1 -right-1 bg-green-500 w-3.5 h-3.5 border-2 border-white rounded-full"
+                  ></div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-center">
+                    <h3 class="font-semibold text-slate-900">AI Assistant</h3>
+                    <span
+                      class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide"
+                      >Free</span
+                    >
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           </div>
 
           <div>
