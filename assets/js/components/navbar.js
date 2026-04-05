@@ -1,5 +1,5 @@
 import { logout as authLogout } from "../services/authService.js";
-import { DICEBEAR_BASE_URL } from "../const/base_url.js";
+import { DICEBEAR_BASE_URL, BACKEND_URL } from "../const/base_url.js";
 
 window.logout = authLogout;
 window.toggleProfileMenu = toggleProfileMenu;
@@ -117,7 +117,7 @@ function renderSharedUI() {
 
             <div class="flex gap-3 pt-2">
               <button type="button" onclick="toggleEditProfileModal()" class="flex-1 px-4 py-3 rounded-2xl font-bold text-slate-500 hover:bg-slate-100 transition-colors">Batal</button>
-              <button type="submit" class="flex-[2] bg-slate-900 text-white px-4 py-3 rounded-2xl font-bold hover:bg-blue-600 hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-95">Simpan</button>
+              <button type="submit" class="flex-[2] bg-slate-900 text-white px-4 py-3 rounded-2xl font-bold hover:bg-slate-800 hover:shadow-lg transition-all active:scale-95">Simpan</button>
             </div>
           </form>
         </div>
@@ -192,17 +192,49 @@ function previewImage(event) {
 
 function handleSaveProfile(e) {
   e.preventDefault();
-  const newUsername = document.getElementById("edit-username").value;
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+
+  const newName = document.getElementById("edit-username").value;
   const newAvatar = document.getElementById("modal-avatar-preview").src;
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
-  user.username = newUsername;
-  user.picture = newAvatar;
+  // Visual Loading State
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
+    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg> Menyimpan...
+  `;
 
-  localStorage.setItem("user", JSON.stringify(user));
-  initComponent();
-  toggleEditProfileModal();
-  console.log("Profil diperbarui!");
+  fetch(`${BACKEND_URL}/users/profile`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      name: newName,
+      picture: newAvatar,
+    }),
+  })
+    .then((res) => {
+      if (!res.ok) throw new Error("Gagal mengupdate profil");
+      return res.json();
+    })
+    .then((updatedUser) => {
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      initComponent();
+      toggleEditProfileModal();
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("Terjadi kesalahan: " + err.message);
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+    });
 }
 document.addEventListener("click", function (event) {
   const dropdown = document.getElementById("profile-dropdown");
