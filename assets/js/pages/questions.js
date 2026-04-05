@@ -1,4 +1,5 @@
 import { getUserData } from "../utils/userProfile.js";
+import { getAllQuestions } from "../services/questionService.js";
 
 let questionsData = [];
 

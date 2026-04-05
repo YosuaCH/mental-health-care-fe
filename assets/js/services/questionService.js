@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "../const/base_url.js";
 const API_BASE_URL = BACKEND_URL;
 
-async function getAllQuestions() {
+export async function getAllQuestions() {
   try {
     const response = await fetch(`${API_BASE_URL}/questions`, {
       method: "GET",

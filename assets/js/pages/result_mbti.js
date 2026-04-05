@@ -1,3 +1,4 @@
+import { mbtiService } from "../services/mbtiService.js";
 async function initResultPage() {
   const code = localStorage.getItem("mbti_result");
 
