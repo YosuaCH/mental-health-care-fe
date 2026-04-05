@@ -207,21 +207,7 @@ function handleSaveProfile(e) {
     </svg> Menyimpan...
   `;
 
-  fetch(`${BACKEND_URL}/users/profile`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({
-      name: newName,
-      picture: newAvatar,
-    }),
-  })
-    .then((res) => {
-      if (!res.ok) throw new Error("Gagal mengupdate profil");
-      return res.json();
-    })
+  updateProfile(newName, newAvatar)
     .then((updatedUser) => {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       initComponent();
