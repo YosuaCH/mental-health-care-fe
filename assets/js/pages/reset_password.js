@@ -11,7 +11,9 @@ const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get("token");
 
 if (!token) {
-  alert("Token tidak ditemukan. Silakan gunakan link dari email pemulihan Anda.");
+  alert(
+    "Token tidak ditemukan. Silakan gunakan link dari email pemulihan Anda.",
+  );
   window.location.href = "login.html";
 }
 
@@ -65,8 +67,35 @@ confirmPasswordInput.addEventListener("invalid", (e) => {
 resetPasswordForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const submitBtn = resetPasswordForm.querySelector('button[type="submit"]');
   const pass = passwordInput.value;
   const confirm = confirmPasswordInput.value;
+
+  //validasi kekuatan sandi
+  const validateStrength = (p) => {
+    const requirements = {
+      minLength: p.length >= 8,
+      hasUpperCase: /[A-Z]/.test(p),
+      hasNumber: /[0-9]/.test(p),
+      hasSpecialChar: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(p),
+    };
+    return requirements;
+  };
+
+  const strength = validateStrength(pass);
+  if (
+    !strength.minLength ||
+    !strength.hasUpperCase ||
+    !strength.hasNumber ||
+    !strength.hasSpecialChar
+  ) {
+    showError(
+      passwordInput,
+      passwordError,
+      "Sandi harus 8+ karakter, ada huruf besar, angka, dan simbol.",
+    );
+    return;
+  }
 
   if (pass !== confirm) {
     showError(confirmPasswordInput, matchError, "Kata sandi tidak cocok");
@@ -75,7 +104,6 @@ resetPasswordForm.addEventListener("submit", async (e) => {
 
   if (!resetPasswordForm.reportValidity()) return;
 
-  const submitBtn = resetPasswordForm.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
   submitBtn.innerText = "Menyimpan...";
 
@@ -91,10 +119,18 @@ resetPasswordForm.addEventListener("submit", async (e) => {
       alert(result.message);
       window.location.href = "login.html";
     } else {
-      alert(result.message || "Gagal mengatur ulang sandi.");
+      showError(
+        passwordInput,
+        passwordError,
+        result.message || "Gagal mengatur ulang sandi.",
+      );
     }
   } catch (err) {
-    alert("Koneksi gagal: " + err);
+    showError(
+      passwordInput,
+      passwordError,
+      "Koneksi gagal atau sesi habis. Silakan coba lagi.",
+    );
   } finally {
     submitBtn.disabled = false;
     submitBtn.innerText = "Simpan Sandi Baru";
