@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../const/base_url.js";
+import { resetPassword } from "../services/auth_service.js";
 
 const resetPasswordForm = document.getElementById("resetPasswordForm");
 const passwordInput = document.getElementById("password");

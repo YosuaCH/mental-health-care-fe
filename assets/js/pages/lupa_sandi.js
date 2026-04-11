@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../const/base_url.js";
+import { forgotPassword } from "../services/auth_service.js";
 
 const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const emailInput = document.getElementById("email");
