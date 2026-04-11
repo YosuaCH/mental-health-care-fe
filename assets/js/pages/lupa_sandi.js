@@ -38,15 +38,7 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
   submitBtn.innerText = "Mengirim...";
 
   try {
-    const response = await fetch(`${BACKEND_URL}/auth/forgot-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: emailInput.value,
-      }),
-    });
+    const response = await forgotPassword(emailInput.value);
 
     const result = await response.json();
 

@@ -69,3 +69,19 @@ export const logout = async () => {
     window.location.href = "login.html";
   }
 };
+
+export const forgotPassword = async (email) => {
+  return fetch(`${API_URL}/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+};
+
+export const resetPassword = async (data) => {
+  return fetch(`${API_URL}/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+};

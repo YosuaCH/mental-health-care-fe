@@ -80,15 +80,9 @@ resetPasswordForm.addEventListener("submit", async (e) => {
   submitBtn.innerText = "Menyimpan...";
 
   try {
-    const response = await fetch(`${BACKEND_URL}/auth/reset-password`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        token: token,
-        newPassword: pass,
-      }),
+    const response = await resetPassword({
+      token: token,
+      newPassword: pass,
     });
 
     const result = await response.json();
