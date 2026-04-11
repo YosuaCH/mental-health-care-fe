@@ -43,7 +43,8 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
     const result = await response.json();
 
     if (response.ok) {
-      alert(result.message);
+      formState.classList.add("hidden");
+      successState.classList.remove("hidden");
     } else {
       showError(
         emailInput,

@@ -32,42 +32,60 @@
         />
       </div>
 
-      <h1 class="text-2xl font-semibold text-center mb-2 text-gray-800">
-        Lupa Kata Sandi?
-      </h1>
-      <p class="text-center text-gray-500 mb-8 text-sm px-4">
-        Jangan khawatir! Masukkan emailmu di bawah dan kami akan mengirimkan
-        instruksi untuk mengatur ulang kata sandimu.
-      </p>
+      <!-- Form State -->
+      <div id="formState">
+        <h2 class="text-2xl font-bold text-slate-800 mb-2 text-center">
+          Lupa Sandi?
+        </h2>
+        <p class="text-slate-500 text-sm mb-8 leading-relaxed text-center">
+          Jangan khawatir! Masukkan alamat emailmu di bawah ini untuk
+          mendapatkan instruksi untuk mengatur ulang kata sandimu.
+        </p>
 
-      <form id="forgotPasswordForm" class="space-y-8">
-        <div class="relative mb-2">
-          <label
-            for="email"
-            class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1 mb-2 block"
-            >Alamat Email</label
-          >
-          <input
-            id="email"
-            type="email"
-            placeholder="Email"
-            required
-            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] bg-gray-50 transition-all"
-          />
-          <span
-            id="emailError"
-            class="text-xs text-red-500 absolute bottom-[-24px] left-2 hidden"
-            >Email tidak ditemukan</span
-          >
-        </div>
+        <form id="forgotPasswordForm" class="space-y-8">
+          <div class="relative mb-2">
+            <label
+              for="email"
+              class="block text-sm font-semibold text-slate-700 mb-2"
+              >Alamat Email</label
+            >
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 transition duration-300 peer"
+              placeholder="nama@email.com"
+              required
+            />
+            <span
+              id="emailError"
+              class="absolute -bottom-6 left-0 text-xs text-red-500 font-medium hidden"
+            ></span>
+          </div>
 
-        <button
-          type="submit"
-          class="w-full py-3 mt-6 bg-slate-900 text-white rounded-xl font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer active:scale-[0.98]"
+          <button
+            type="submit"
+            class="w-full py-3 mt-6 bg-slate-900 text-white rounded-xl font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer active:scale-[0.98]"
+          >
+            Pulihkan Akun
+          </button>
+        </form>
+      </div>
+
+      <!-- Success State (Hidden by Default) -->
+      <div id="successState" class="hidden text-center py-4 animate-fade-in">
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">Cek Email Anda!</h2>
+        <p class="text-slate-500 text-sm mb-8 leading-relaxed">
+          Tautan pemulihan kata sandi telah dikirim ke alamat email Anda.
+          Silakan periksa kotak masuk atau spam.
+        </p>
+        <a
+          href="login.html"
+          class="w-full py-3 px-6 mt-6 bg-slate-900 text-white rounded-xl font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer active:scale-[0.98]"
         >
-          Pulihkan Akun
-        </button>
-      </form>
+          Kembali ke Login
+        </a>
+      </div>
 
       <div class="text-center mt-8 text-sm text-gray-500">
         Butuh bantuan lebih lanjut?
