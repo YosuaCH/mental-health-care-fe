@@ -63,7 +63,6 @@ loginForm.addEventListener("submit", async (e) => {
 
     if (res.ok) {
       localStorage.setItem("user", JSON.stringify(data.data));
-      alert(data.message);
       window.location.href = "dashboard.html";
     } else {
       const message = data.message;
