@@ -28,9 +28,10 @@ function initCloudBgSection() {
   }
   container.innerHTML = "";
 
-  const numClouds = 10;
+  const isMobile = window.innerWidth < 768;
+  const numClouds = isMobile ? 4 : 10;
   const clouds = [];
-  const MIN_DISTANCE = 140;
+  const MIN_DISTANCE = isMobile ? 80 : 140;
 
   function shuffleArray(arr) {
     const a = [...arr];

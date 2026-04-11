@@ -5,9 +5,6 @@ body {
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y mandatory;
-  overflow-y: scroll;
-  height: 100vh;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
@@ -62,21 +59,34 @@ html::-webkit-scrollbar {
 
 .cloud-group {
   display: flex;
-  width: 100vw;
   align-items: center;
+  flex-shrink: 0; /* Ensures group never sizes down */
+  
+  /* Desktop gap and seamless looping rule */
   gap: 70px;
-  padding-inline: 120px;
-  box-sizing: border-box;
+  padding-right: 70px; 
 }
 
 .cloud {
   height: 100px;
   width: 120px;
   object-fit: contain;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Prevents image squishing */
   opacity: 0.9;
   filter: blur(0.3px);
   pointer-events: none;
+}
+
+/* Mobile responsive with strict Seamless Rule */
+@media (max-width: 768px) {
+  .cloud-group {
+    gap: 40px;
+    padding-right: 40px;
+  }
+  .cloud {
+    height: 70px;
+    width: 90px;
+  }
 }
 
 /* Marquee Kiri */
