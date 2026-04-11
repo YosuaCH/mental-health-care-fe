@@ -1,8 +1,19 @@
+import { BACKEND_URL } from "../const/base_url.js";
+
 const resetPasswordForm = document.getElementById("resetPasswordForm");
 const passwordInput = document.getElementById("password");
 const confirmPasswordInput = document.getElementById("confirmPassword");
 const passwordError = document.getElementById("passwordError");
 const matchError = document.getElementById("matchError");
+
+// Ambil token dari URL
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get("token");
+
+if (!token) {
+  alert("Token tidak ditemukan. Silakan gunakan link dari email pemulihan Anda.");
+  window.location.href = "login.html";
+}
 
 window.togglePassword = function (inputId, closedIconId, openIconId) {
   const input = document.getElementById(inputId);
@@ -51,7 +62,7 @@ confirmPasswordInput.addEventListener("invalid", (e) => {
   showError(confirmPasswordInput, matchError, msg);
 });
 
-resetPasswordForm.addEventListener("submit", (e) => {
+resetPasswordForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const pass = passwordInput.value;
@@ -64,6 +75,34 @@ resetPasswordForm.addEventListener("submit", (e) => {
 
   if (!resetPasswordForm.reportValidity()) return;
 
-  alert("Sandi berhasil diperbarui!");
-  window.location.href = "login.html";
+  const submitBtn = resetPasswordForm.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  submitBtn.innerText = "Menyimpan...";
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        token: token,
+        newPassword: pass,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert(result.message);
+      window.location.href = "login.html";
+    } else {
+      alert(result.message || "Gagal mengatur ulang sandi.");
+    }
+  } catch (err) {
+    alert("Koneksi gagal: " + err);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Simpan Sandi Baru";
+  }
 });

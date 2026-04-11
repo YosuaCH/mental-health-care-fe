@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "../const/base_url.js";
+
 const forgotPasswordForm = document.getElementById("forgotPasswordForm");
 const emailInput = document.getElementById("email");
 const emailError = document.getElementById("emailError");
@@ -35,8 +37,32 @@ forgotPasswordForm.addEventListener("submit", async (e) => {
   submitBtn.disabled = true;
   submitBtn.innerText = "Mengirim...";
 
-  setTimeout(() => {
-    alert("Instruksi pemulihan telah dikirim ke email Anda.");
-    window.location.href = "reset_password.html";
-  }, 1500);
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: emailInput.value,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert(result.message);
+    } else {
+      showError(
+        emailInput,
+        emailError,
+        result.message || "Gagal mengirim email.",
+      );
+    }
+  } catch (err) {
+    alert("Koneksi gagal: " + err);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerText = originalText;
+  }
 });
