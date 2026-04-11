@@ -17,6 +17,8 @@
       type="image/png"
       href="../assets/image/logo_brand-removebg-preview.png"
     />
+    <!-- Lupa Sandi JS -->
+    <script type="module" src="../assets/js/pages/lupa_sandi.js" defer></script>
   </head>
   <body
     class="min-h-screen bg-[#f8f8f8] flex items-center justify-center font-[Poppins]"
@@ -40,10 +42,10 @@
 
       <form
         id="forgotPasswordForm"
-        class="space-y-6"
+        class="space-y-8"
         action="reset_password.html"
       >
-        <div class="relative">
+        <div class="relative mb-2">
           <label
             for="email"
             class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1 mb-2 block"
@@ -58,14 +60,14 @@
           />
           <span
             id="emailError"
-            class="text-xs text-red-500 absolute bottom-[-20px] left-2 hidden"
+            class="text-xs text-red-500 absolute bottom-[-24px] left-2 hidden"
             >Email tidak ditemukan</span
           >
         </div>
 
         <button
           type="submit"
-          class="w-full py-3 bg-slate-900 text-white rounded-xl font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer active:scale-[0.98]"
+          class="w-full py-3 mt-6 bg-slate-900 text-white rounded-xl font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer active:scale-[0.98]"
         >
           Pulihkan Akun
         </button>
