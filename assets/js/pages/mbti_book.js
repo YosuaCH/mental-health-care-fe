@@ -71,33 +71,33 @@ const renderEbooks = async () => {
                              class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
                     </div>
 
-                    <div class="p-5 flex flex-col flex-grow">
-                        <h3 class="font-bold text-lg text-slate-800 mb-2 line-clamp-2 min-h-[3.5rem]">
+                    <div class="p-4 md:p-5 flex flex-col flex-grow">
+                        <h3 class="font-bold text-base md:text-lg text-slate-800 mb-1 md:mb-2 line-clamp-2 md:min-h-[3.5rem] min-h-[3rem] leading-snug">
                             ${title}
                         </h3>
-                        <p class="text-sm text-slate-600 mb-3 line-clamp-2 flex-grow min-h-[2.5rem] leading-relaxed" 
-                        style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; word-break: break-word; hyphens: auto;">
+                        <p class="text-[11px] sm:text-xs md:text-sm text-slate-600 mb-3 line-clamp-3 md:line-clamp-2 flex-grow min-h-[3.5rem] md:min-h-[2.5rem] leading-relaxed" 
+                        style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; word-break: break-word; hyphens: auto;">
                             ${desc}
                         </p>
 
-                        <div class="flex items-center gap-4 text-xs text-slate-500 mb-4">
-                            <span class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-[#f2ca4b]" fill="currentColor" viewBox="0 0 20 20">
+                        <div class="flex items-center gap-2 md:gap-4 text-[10px] md:text-xs text-slate-500 mb-3 md:mb-4">
+                            <span class="flex items-center gap-1 font-medium">
+                                <svg class="w-3 h-3 md:w-4 md:h-4 text-[#f2ca4b]" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                                 </svg>
                                 ${pages}
                             </span>
-                            <span class="flex items-center gap-1">
-                                <svg class="w-4 h-4 text-[#f2ca4b]" fill="currentColor" viewBox="0 0 20 20">
+                            <span class="flex items-center gap-1 font-medium">
+                                <svg class="w-3 h-3 md:w-4 md:h-4 text-[#f2ca4b]" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
                                 </svg>
-                                ~${Math.round(book.pageCount / 2 || 30)} menit
+                                ~${Math.round(book.pageCount / 2 || 30)} mnt
                             </span>
                         </div>
 
                         <button 
                             onclick="window.open('${finalPreviewLink}', '_blank')"
-                            class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 font-semibold py-2.5 rounded-xl transition-colors duration-300"
+                            class="w-full bg-[#f2ca4b] hover:bg-[#e5be42] text-slate-900 text-sm md:text-base font-bold py-2 md:py-2.5 rounded-xl transition-colors duration-300 active:scale-[0.98]"
                         >
                             Baca Sekarang
                         </button>
