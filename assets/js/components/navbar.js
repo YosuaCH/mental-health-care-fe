@@ -11,26 +11,26 @@ function renderSharedUI() {
   if (document.getElementById("profile-dropdown")) return;
 
   const navHtml = `
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-xl rounded-full z-50 px-4 py-2 w-auto min-w-[420px] max-w-2xl border border-white/40 flex justify-between items-center gap-4">
+    <nav class="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 bg-white/80 backdrop-blur-md shadow-xl rounded-full z-50 px-3 md:px-4 py-2 w-[90%] sm:w-auto sm:min-w-[420px] max-w-2xl border border-white/40 flex justify-between items-center gap-2 md:gap-4">
       <img
         src="assets/image/logo_brand-removebg-preview.png"
-        class="w-10 h-10 cursor-pointer"
+        class="w-8 h-8 md:w-10 md:h-10 cursor-pointer flex-shrink-0"
         onclick="location.href='dashboard.html'"
       />
 
-      <div class="text-sm font-medium text-slate-500 font-[Poppins]">
+      <div class="text-[11px] md:text-sm font-medium text-slate-500 font-[Poppins] whitespace-nowrap">
         Mental Health Care
       </div>
 
       <div class="relative">
         <button
           onclick="toggleProfileMenu()"
-          class="flex items-center gap-3 bg-white pl-1 pr-4 py-1 rounded-full border border-slate-200 shadow-sm hover:shadow-md transition-all group focus:outline-none"
+          class="flex items-center gap-2 md:gap-3 bg-white pl-1 pr-3 md:pr-4 py-1 rounded-full border border-slate-200 shadow-sm hover:shadow-md transition-all group focus:outline-none"
         >
           <img
             id="user-avatar"
             src=""
-            class="w-8 h-8 rounded-full ring-2 ring-white ml-2 object-cover flex-shrink-0"
+            class="w-7 h-7 md:w-8 md:h-8 rounded-full ring-2 ring-white ml-0 md:ml-2 object-cover flex-shrink-0"
           />
           <span
             id="user-name"

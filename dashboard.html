@@ -42,20 +42,20 @@
   <body class="bg-[#f8f8f8] font-[Poppins]" style="display: none">
     <section
       id="dashboard"
-      class="relative min-h-screen flex items-center justify-center px-10 pt-20 overflow-hidden z-10 bg-white font-[Poppins]"
+      class="relative min-h-[100dvh] flex flex-col px-5 md:px-10 pt-32 pb-8 overflow-x-hidden z-10 bg-white font-[Poppins]"
     >
       <div
         id="clouds-container"
         class="absolute inset-0 pointer-events-none"
       ></div>
 
-      <div class="relative z-10 w-full max-w-7xl">
+      <div class="relative z-10 w-full max-w-7xl mx-auto my-auto">
         <div
-          class="mb-12 backdrop-blur-[2px] bg-white/5 w-fit p-4 rounded-xl"
+          class="mb-8 md:mb-12 backdrop-blur-[2px] bg-white/5 w-fit p-4 rounded-xl"
           data-aos="fade-down"
           data-aos-duration="800"
         >
-          <h1 class="text-5xl font-bold text-slate-900 mb-3">
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-3">
             Halo, <span class="text-[#f2ca4b]">Selamat Datang!</span>
           </h1>
           <p class="text-slate-600 text-lg">
@@ -64,10 +64,10 @@
         </div>
 
         <!-- Cards Grid -->
-        <div class="grid grid-cols-12 gap-6 auto-rows-[180px] -mt-8">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-auto lg:auto-rows-[180px] lg:-mt-8 -mt-2">
           <!-- Card 1: MBTI  -->
           <div
-            class="col-span-5 row-span-2 card-hover"
+            class="col-span-1 md:col-span-12 lg:col-span-5 lg:row-span-2 card-hover"
             data-aos="fade-up"
             data-aos-duration="1000"
             data-aos-delay="100"
@@ -89,17 +89,17 @@
               <!-- Content -->
               <div class="relative z-10 flex-1 flex flex-col">
                 <h2
-                  class="text-3xl font-bold text-slate-900 mb-3 leading-tight"
+                  class="text-2xl md:text-3xl font-bold text-slate-900 mb-3 leading-tight"
                 >
                   Pahami Dirimu Lebih Baik
                 </h2>
-                <p class="text-slate-600 mb-6 text-sm leading-relaxed max-w-xs">
+                <p class="text-slate-600 mb-6 text-xs md:text-sm leading-relaxed max-w-xs">
                   Setiap orang itu istimewa dengan caranya sendiri. Mari selami
                   karaktermu dan temukan cara terbaik untuk mencintai dirimu.
                 </p>
                 <a
                   href="test_mbti.html"
-                  class="mx-auto mt-auto px-6 py-3 bg-slate-900 text-white rounded-full font-medium shadow-md hover:shadow-xl hover:bg-slate-800 transition-all duration-300 flex items-center gap-2"
+                  class="mx-auto mt-auto px-6 py-3 bg-slate-900 text-white rounded-full text-sm md:text-base font-medium shadow-md hover:shadow-xl hover:bg-slate-800 transition-all duration-300 flex items-center gap-2"
                 >
                   <span>Mulai Tes MBTI</span>
                   <svg
@@ -123,7 +123,7 @@
 
           <!-- Card 2: E-Book -->
           <div
-            class="col-span-4 row-span-1 card-hover"
+            class="col-span-1 md:col-span-6 lg:col-span-4 lg:row-span-1 card-hover"
             data-aos="fade-up"
             data-aos-duration="1000"
             data-aos-delay="200"
@@ -144,10 +144,10 @@
 
               <!-- Content -->
               <div class="relative z-10">
-                <h3 class="text-xl font-bold text-slate-900 mb-1">
+                <h3 class="text-lg md:text-xl font-bold text-slate-900 mb-1">
                   Ruang Baca
                 </h3>
-                <p class="text-slate-600 text-sm mb-4">
+                <p class="text-slate-600 text-xs md:text-sm mb-4">
                   Koleksi bacaan ringan untuk menenangkan pikiran.
                 </p>
                 <a
@@ -176,7 +176,7 @@
 
           <!-- Card 3: Quote -->
           <div
-            class="col-span-3 row-span-1 card-hover"
+            class="col-span-1 md:col-span-6 lg:col-span-3 lg:row-span-1 card-hover"
             data-aos="fade-up"
             data-aos-duration="1000"
             data-aos-delay="300"
@@ -199,7 +199,7 @@
 
                 <p
                   id="quote-text"
-                  class="text-slate-800 font-medium font-[Poppins] text-sm leading-relaxed italic transition-opacity duration-500"
+                  class="text-slate-800 font-medium font-[Poppins] text-xs md:text-sm leading-relaxed italic transition-opacity duration-500"
                 ></p>
               </div>
             </div>
@@ -207,7 +207,7 @@
 
           <!-- Card 4: Consultation -->
           <div
-            class="col-span-7 row-span-1 card-hover"
+            class="col-span-1 md:col-span-12 lg:col-span-7 lg:row-span-1 card-hover"
             data-aos="fade-up"
             data-aos-duration="1000"
             data-aos-delay="400"
@@ -226,15 +226,15 @@
                 <div>
                   <h3
                     id="consultation-title"
-                    class="text-2xl font-bold text-white mb-2"
+                    class="text-xl md:text-2xl font-bold text-white mb-2"
                   ></h3>
                   <p
                     id="consultation-desc"
-                    class="text-slate-300 text-sm mb-4 max-w-md"
+                    class="text-slate-300 text-xs md:text-sm mb-4 max-w-md"
                   ></p>
                   <a href="chat.html">
                     <button
-                      class="px-6 py-3 bg-white text-slate-900 rounded-full font-semibold shadow-md hover:shadow-xl hover:bg-[#f2ca4b] transition-all duration-300 flex items-center gap-2 group/btn"
+                      class="px-6 py-3 bg-white text-slate-900 rounded-full text-sm md:text-base font-semibold shadow-md hover:shadow-xl hover:bg-[#f2ca4b] transition-all duration-300 flex items-center gap-2 group/btn"
                     >
                       <span id="consultation-btn-text"></span>
                       <svg
