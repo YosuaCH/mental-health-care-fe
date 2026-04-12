@@ -43,7 +43,7 @@
   >
     <section
       id="start"
-      class="relative min-h-screen flex flex-col justify-start overflow-hidden px-4 md:px-8 lg:px-0"
+      class="relative min-h-[100dvh] flex flex-col justify-start overflow-x-hidden overflow-y-auto px-4 md:px-8 lg:px-0 pt-12 pb-16"
     >
       <!-- Header -->
       <div
@@ -76,10 +76,10 @@
 
       <!-- Cards Container -->
       <div
-        class="flex flex-1 flex-col md:flex-row mx-4 md:mx-12 lg:mx-[200px] my-8 md:my-8 gap-4 md:gap-6"
+        class="flex flex-col md:flex-row mx-4 md:mx-12 lg:mx-[15%] my-8 md:my-12 gap-4 md:gap-6 items-stretch"
       >
         <div
-          class="w-full h-auto md:h-auto bg-white shadow-lg rounded-xl p-4 md:p-6 items-center flex flex-col"
+          class="w-full bg-white shadow-lg rounded-xl p-6 md:p-8 items-center flex flex-col"
           data-aos="fade-up"
           data-aos-duration="1000"
           data-aos-delay="100"
@@ -87,16 +87,16 @@
           <img
             src="../assets/image/cloud_ok.png"
             alt=""
-            class="w-24 h-24 md:w-32 md:h-32"
+            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-2"
           />
-          <h1 class="text-lg md:text-xl font-bold mt-2">Semua Jawaban Valid</h1>
-          <p class="mt-2 text-center">
+          <h1 class="text-base md:text-lg lg:text-xl font-bold mt-2 text-center">Semua Jawaban Valid</h1>
+          <p class="mt-3 text-center text-xs md:text-sm lg:text-base text-slate-600">
             Ini bukan ujian sekolah, kok. Apapun pilihanmu adalah benar selama
             itu sesuai dengan apa yang kamu rasakan saat ini
           </p>
         </div>
         <div
-          class="w-full h-auto md:h-auto bg-white shadow-lg rounded-xl p-4 md:p-6 items-center flex flex-col"
+          class="w-full bg-white shadow-lg rounded-xl p-6 md:p-8 items-center flex flex-col"
           data-aos="fade-up"
           data-aos-duration="1000"
           data-aos-delay="200"
@@ -104,16 +104,16 @@
           <img
             src="../assets/image/cloud_hearts.png"
             alt=""
-            class="w-24 h-24 md:w-32 md:h-32"
+            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-2"
           />
-          <h1 class="text-lg md:text-xl font-bold mt-2">Jawab Sesuai Hatimu</h1>
-          <p class="mt-2 text-center">
+          <h1 class="text-base md:text-lg lg:text-xl font-bold mt-2 text-center">Jawab Sesuai Hatimu</h1>
+          <p class="mt-3 text-center text-xs md:text-sm lg:text-base text-slate-600">
             Hasil tes ini hanya untukmu. Jawablah apa adanya agar kamu bisa
             mengenal dirimu yang sesungguhnya secara akurat
           </p>
         </div>
         <div
-          class="w-full h-auto md:h-auto bg-white shadow-lg rounded-xl p-4 md:p-6 items-center flex flex-col"
+          class="w-full bg-white shadow-lg rounded-xl p-6 md:p-8 items-center flex flex-col"
           data-aos="fade-up"
           data-aos-duration="1000"
           data-aos-delay="300"
@@ -121,10 +121,10 @@
           <img
             src="../assets/image/cloud_chill.png"
             alt=""
-            class="w-24 h-24 md:w-32 md:h-32"
+            class="w-20 h-20 md:w-28 md:h-28 object-contain mb-2"
           />
-          <h1 class="text-lg md:text-xl font-bold mt-2">Santai Saja</h1>
-          <p class="mt-2 text-center">
+          <h1 class="text-base md:text-lg lg:text-xl font-bold mt-2 text-center">Santai Saja</h1>
+          <p class="mt-3 text-center text-xs md:text-sm lg:text-base text-slate-600">
             Tidak perlu buru-buru selesai. Nikmati proses menjawab setiap
             pertanyaannya agar kamu lebih memahami perasaanmu sendiri
           </p>
@@ -162,7 +162,7 @@
         <a
           href="result_mbti.html"
           onclick="finishTest(event)"
-          class="relative z-10 border border-slate-900 py-4 px-10 rounded-full bg-slate-900 text-white font-bold tracking-wide hover:bg-slate-800 transition duration-300 shadow-lg hover:shadow-slate-900/30"
+          class="relative z-10 border border-slate-900 py-3 md:py-4 px-6 md:px-10 rounded-full bg-slate-900 text-white text-sm md:text-base lg:text-lg font-bold tracking-wide hover:bg-slate-800 transition duration-300 shadow-lg hover:shadow-slate-900/30"
         >
           Intip Hasil Analisisnya
         </a>

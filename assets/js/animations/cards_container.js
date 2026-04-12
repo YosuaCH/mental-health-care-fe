@@ -13,21 +13,21 @@ function generateCards(data) {
 
   data.forEach((q) => {
     const card = document.createElement("div");
-    card.className = `card-stack w-[450px] h-[480px] md:w-[1200px] md:h-[490px] rounded-2xl p-8 shadow-lg flex flex-col justify-start card`;
+    card.className = `card-stack w-[90%] md:w-[85%] lg:w-[1000px] xl:w-[1200px] h-auto min-h-[360px] md:min-h-[480px] rounded-2xl p-4 md:p-8 shadow-lg flex flex-col justify-start card`;
     card.style.backgroundColor = "#1B1B3A";
 
     card.innerHTML = `
-      <h1 class="text-white text-center text-lg md:text-2xl font-semibold mb-2">
+      <h1 class="text-white text-center text-base md:text-xl lg:text-2xl font-semibold mb-1 md:mb-2 mt-2 md:mt-0">
           Pertanyaan ${q.questionId}
       </h1>
       
-      <div class="h-[80px] flex items-center justify-center mb-2 px-4">
-          <h2 class="text-white text-lg md:text-2xl font-semibold text-center leading-tight">
+      <div class="min-h-[60px] md:min-h-[80px] flex items-center justify-center mb-2 px-2 md:px-4">
+          <h2 class="text-white text-sm md:text-lg lg:text-2xl font-semibold text-center leading-tight">
               ${q.question}
           </h2>
       </div>
 
-      <div class="flex flex-1 w-full gap-4 md:gap-12 items-start justify-center">
+      <div class="flex flex-1 w-full gap-2 md:gap-8 lg:gap-12 items-stretch justify-center">
           ${q.answers
             .map((answer, answerIndex) => {
               const imagePath = `../assets/image/${answer.image}`;
@@ -36,9 +36,9 @@ function generateCards(data) {
                   data-a="${answer.id}"
                   data-q="${q.questionId}"
                   data-dimension="${answer.dimension}"
-                  class="answer answer${q.questionId}${answer.id} flex-1 min-w-0 flex flex-col items-center gap-3 cursor-pointer group"
+                  class="answer answer${q.questionId}${answer.id} flex-1 min-w-0 flex flex-col items-center gap-2 md:gap-3 cursor-pointer group"
               >
-                  <div class="relative w-full max-w-[400px] h-[200px] rounded-2xl overflow-hidden">
+                  <div class="relative w-full max-w-[400px] h-[120px] md:h-[180px] lg:h-[200px] rounded-xl md:rounded-2xl overflow-hidden">
                       <img
                           src="${imagePath}"
                           alt=""
@@ -52,20 +52,20 @@ function generateCards(data) {
                       />
                   </div>
 
-                  <div class="grid grid-cols-1 place-items-center text-center w-full px-4 md:px-12 h-[100px]">
-                      <div class="col-start-1 row-start-1 w-full flex items-center justify-center">
-                          <div class="choice-circle-not-chosen question-choice-circle is--not-chosen px-6 py-2 rounded-full border border-white text-white text-sm md:text-base font-medium transition-all duration-300 inline-block">
+                  <div class="grid grid-cols-1 text-center w-full flex-1 px-1 sm:px-4 md:px-12 py-1">
+                      <div class="col-start-1 row-start-1 w-full h-full flex items-stretch justify-center">
+                          <div class="choice-circle-not-chosen question-choice-circle is--not-chosen px-3 py-3 w-[95%] max-w-[280px] h-full rounded-[1.25rem] md:rounded-[2rem] border border-white text-white text-[11px] sm:text-xs md:text-base font-medium transition-all duration-300 flex items-center justify-center leading-snug">
                               ${answer.text}
                           </div>
                       </div>
-                      <div class="col-start-1 row-start-1 w-full flex items-center justify-center">
-                          <div class="choice-circle-chosen question-choice-circle is--chosen is--${q.questionId}${String.fromCharCode(96 + answer.id)} px-6 py-2 rounded-full bg-yellow-500 border border-yellow-500 text-[#1B1B3A] text-sm md:text-base font-medium transition-all duration-300 opacity-1 inline-block">
+                      <div class="col-start-1 row-start-1 w-full h-full flex items-stretch justify-center">
+                          <div class="choice-circle-chosen question-choice-circle is--chosen is--${q.questionId}${String.fromCharCode(96 + answer.id)} px-3 py-3 w-[95%] max-w-[280px] h-full rounded-[1.25rem] md:rounded-[2rem] bg-yellow-500 border border-yellow-500 text-[#1B1B3A] text-[11px] sm:text-xs md:text-base font-medium transition-all duration-300 opacity-1 flex items-center justify-center leading-snug">
                               ${answer.text}
                           </div>
                       </div>
                   </div>
               </div>
-              ${answerIndex === 0 ? '<div class="w-px h-52 bg-gradient-to-b from-transparent via-gray-500 to-transparent shrink-0"></div>' : ""}
+              ${answerIndex === 0 ? '<div class="w-px h-[70%] self-center bg-gradient-to-b from-transparent via-gray-500 to-transparent shrink-0"></div>' : ""}
             `;
             })
             .join("")}
