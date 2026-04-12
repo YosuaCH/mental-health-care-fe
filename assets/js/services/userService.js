@@ -2,7 +2,7 @@ import { BACKEND_URL } from "../const/base_url.js";
 
 export const updateProfile = async (name, picture) => {
   const response = await fetch(`${BACKEND_URL}/users/profile`, {
-    method: "PUT",
+    method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
