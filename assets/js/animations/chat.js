@@ -258,8 +258,12 @@ function loadCurrentChat() {
     currentUser.role.toLowerCase() === "psikiater";
 
   if (!isCurrentContactAI && !isPsikiater && !paidDoctors[currentDoctorNoStr]) {
-    if (headerArea) headerArea.classList.add("hidden");
+    if (headerArea) headerArea.classList.remove("hidden");
     if (inputArea) inputArea.classList.add("hidden");
+    
+    const endBtn = document.getElementById("end-session-btn");
+    if (endBtn) endBtn.classList.add("hidden");
+
     showPaymentUI(container, currentDoctorNoStr);
     return;
   }
@@ -571,6 +575,11 @@ window.simulatePaymentSuccess = async function () {
       `;
 
       setTimeout(() => {
+        const endBtn = document.getElementById("end-session-btn");
+        if (endBtn) {
+            endBtn.classList.remove("hidden");
+            endBtn.innerText = "End Session";
+        }
         loadCurrentChat();
         setTimeout(() => {
           showTypingIndicator();
@@ -589,7 +598,7 @@ window.simulatePaymentSuccess = async function () {
   }
 };
 
-window.selectContact = function (name, img, isAi = false, noStr = "") {
+window.selectContact = function (name, img, isAi = false, noStr = "", preventMobileSlide = false) {
   currentDoctorName = name;
   currentDoctorImg = img;
   currentDoctorNoStr = noStr;
@@ -627,7 +636,46 @@ window.selectContact = function (name, img, isAi = false, noStr = "") {
 
   loadCurrentChat();
   setActiveContact(name);
+
+  // Mobile Master-Detail trigger
+  if (!preventMobileSlide && window.innerWidth < 768) {
+    const sidebar = document.getElementById("chat-sidebar");
+    const chatBox = document.getElementById("chat-box-wrapper");
+    if (sidebar && chatBox) {
+      sidebar.classList.remove("flex");
+      sidebar.classList.add("hidden");
+      chatBox.classList.remove("hidden");
+      chatBox.classList.add("flex");
+      history.pushState({ panel: 'chat' }, "");
+    }
+  }
 };
+
+window.goBackToContactList = function (fromPopState = false) {
+  const sidebar = document.getElementById("chat-sidebar");
+  const chatBox = document.getElementById("chat-box-wrapper");
+  if (sidebar && chatBox) {
+    chatBox.classList.remove("flex");
+    chatBox.classList.add("hidden");
+    sidebar.classList.remove("hidden");
+    sidebar.classList.add("flex");
+    // Batalkan history layer jika diakses lewat tombol UI 
+    if (fromPopState !== true && history.state && history.state.panel === 'chat') {
+      history.back();
+    }
+  }
+};
+
+// Deteksi pemanggilan Hardware Back Navigator
+window.addEventListener("popstate", (e) => {
+  if (window.innerWidth < 768) {
+    const sidebar = document.getElementById("chat-sidebar");
+    // Jika Sidebar tertutup (berarti sedang di Chat View), kembalikan
+    if (sidebar && sidebar.classList.contains("hidden")) {
+      window.goBackToContactList(true);
+    }
+  }
+});
 
 window.handleEnter = function (e) {
   if (e.key === "Enter") {

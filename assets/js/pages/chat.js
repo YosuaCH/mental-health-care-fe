@@ -33,6 +33,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             "AI Assistant",
             "../assets/image/cloud (3).png",
             true,
+            "",
+            true
           );
         }
 
@@ -54,6 +56,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             "AI Assistant",
             "../assets/image/cloud (3).png",
             true,
+            "",
+            true
           );
         }
 
