@@ -34,11 +34,11 @@
       </div>
 
       <h1
-        class="text-2xl font-semibold text-center mb-2 text-gray-800 font-['Poppins']"
+        class="text-xl md:text-2xl font-semibold text-center mb-2 text-gray-800 font-['Poppins']"
       >
         Selamat Datang
       </h1>
-      <p class="text-center text-gray-500 mb-8 text-sm font-['Poppins']">
+      <p class="text-center text-gray-500 mb-6 md:mb-8 text-xs md:text-sm font-['Poppins']">
         Masuk untuk melanjutkan perjalanan kesehatan mentalmu
       </p>
 
@@ -49,11 +49,11 @@
             type="email"
             placeholder="Email"
             required
-            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] bg-gray-50 transition-all"
+            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] bg-gray-50 transition-all text-sm md:text-base"
           />
           <span
             id="emailError"
-            class="text-xs text-red-500 absolute left-2 bottom-[-24px] hidden"
+            class="text-[10px] md:text-xs text-red-500 absolute left-2 bottom-[-24px] hidden"
           ></span>
         </div>
 
@@ -64,7 +64,7 @@
               type="password"
               placeholder="Kata sandi"
               required
-              class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] bg-gray-50 transition-all"
+              class="w-full px-4 py-3 pr-12 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] bg-gray-50 transition-all text-sm md:text-base"
             />
 
             <!-- Button mata -->
@@ -136,11 +136,11 @@
           <div class="flex justify-between mt-2">
             <span
               id="passwordError"
-              class="text-xs ml-2 text-red-500 hidden"
+              class="text-[10px] md:text-xs ml-2 text-red-500 hidden"
             ></span>
             <a
               href="lupa_sandi.html"
-              class="text-xs text-gray-500 hover:text-[#f2ca4b] transition ml-auto"
+              class="text-[10px] md:text-xs text-gray-500 hover:text-[#f2ca4b] transition ml-auto"
             >
               Lupa kata sandi?
             </a>
@@ -149,7 +149,7 @@
 
         <button
           type="submit"
-          class="w-full py-3 -mt-4 bg-slate-900 text-white rounded-xl font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer"
+          class="w-full py-3 -mt-4 bg-slate-900 text-white rounded-xl text-sm md:text-base font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer"
         >
           Masuk
         </button>
@@ -159,14 +159,14 @@
         <div class="absolute inset-0 flex items-center">
           <div class="w-full border-t border-gray-200"></div>
         </div>
-        <div class="relative flex justify-center text-sm">
+        <div class="relative flex justify-center text-xs md:text-sm">
           <span class="px-2 text-gray-400 bg-[#f8f8f8]">atau</span>
         </div>
       </div>
 
       <a
         href="http://127.0.0.1:8080/oauth2/authorization/google"
-        class="w-full py-3 border border-gray-300 rounded-xl font-medium text-gray-700 hover:bg-gray-100 transition flex items-center justify-center gap-2 cursor-pointer"
+        class="w-full py-3 border border-gray-300 rounded-xl text-sm md:text-base font-medium text-gray-700 hover:bg-gray-100 transition flex items-center justify-center gap-2 cursor-pointer"
       >
         <img
           src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -176,7 +176,7 @@
         Masuk dengan Google
       </a>
 
-      <div class="text-center mt-8 text-sm text-gray-500 font-['Poppins']">
+      <div class="text-center mt-8 text-xs md:text-sm text-gray-500 font-['Poppins']">
         Belum punya akun?
         <a
           href="sign_up.html"
