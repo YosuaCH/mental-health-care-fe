@@ -181,7 +181,7 @@
         >
           <div class="flex items-center gap-2 max-w-4xl mx-auto w-full">
             <button
-              class="p-2.5 text-slate-400 hover:text-[#f2ca4b] hover:bg-slate-50 rounded-full transition-colors"
+              class="p-2.5 text-slate-400 hover:text-[#f2ca4b] hover:bg-slate-50 rounded-full transition-colors flex-shrink-0"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -205,14 +205,14 @@
               id="message-input"
               type="text"
               placeholder="Type your message..."
-              class="flex-1 bg-slate-100 text-slate-900 text-sm placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] focus:bg-white transition-all"
+              class="flex-1 min-w-0 bg-slate-100 text-slate-900 text-sm placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] focus:bg-white transition-all"
               onkeypress="handleEnter(event)"
             />
 
             <button
               id="send-button"
               onclick="sendMessage()"
-              class="p-3 bg-[#f2ca4b] text-slate-900 rounded-xl hover:bg-[#e8ba35] shadow-sm hover:shadow transition-all"
+              class="p-3 bg-[#f2ca4b] text-slate-900 rounded-xl hover:bg-[#e8ba35] shadow-sm hover:shadow transition-all flex-shrink-0"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
