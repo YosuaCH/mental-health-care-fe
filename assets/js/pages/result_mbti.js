@@ -47,7 +47,7 @@ function renderTraits(code, traits) {
       (trait) => `
         <div class="flex gap-8 items-start">
             <img src="../assets/image/cloud (11).png" class="w-12 h-12 md:w-14 md:h-14 flex-shrink-0" alt="icon" />
-            <p class="text-base md:text-lg leading-relaxed">
+            <p class="text-sm md:text-lg leading-relaxed">
                 <span class="font-bold">${code}</span> ${trait}
             </p>
         </div>
@@ -66,7 +66,7 @@ function renderProsCons(data) {
         (text) => `
             <li class="flex items-start gap-3 py-1">
                 <div class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-white font-bold shrink-0 mt-0.5">+</div>
-                <span class="leading-relaxed">${text}</span>
+                <span class="text-sm md:text-lg leading-relaxed">${text}</span>
             </li>
         `,
       )
@@ -79,7 +79,7 @@ function renderProsCons(data) {
         (text) => `
             <li class="flex items-start gap-3 py-1">
                 <div class="flex items-center justify-center w-6 h-6 rounded-full bg-rose-500 text-white font-bold shrink-0 mt-0.5">-</div>
-                <span class="leading-relaxed">${text}</span>
+                <span class="text-sm md:text-lg leading-relaxed">${text}</span>
             </li>
         `,
       )
@@ -96,7 +96,7 @@ function renderDevelopmentTips(tips) {
       (text) => `
         <div class="flex gap-8 items-start">
             <img src="../assets/image/cloud (11).png" class="w-14 h-14 mt-1 flex-shrink-0" alt="icon" />
-            <p class="text-lg leading-relaxed">${text}</p>
+            <p class="text-sm md:text-lg leading-relaxed">${text}</p>
         </div>
     `,
     )

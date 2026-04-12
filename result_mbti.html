@@ -23,32 +23,32 @@
     <script type="module" src="../assets/js/pages/result_mbti.js" defer></script>
   </head>
   <body
-    class="overflow-x-hidden bg-[#f8f8f8] font-[Poppins] min-h-screen text-slate-900"
+    class="bg-[#f8f8f8] font-[Poppins] min-h-screen text-slate-900"
   >
 
     <!-- Section Awal -->
-    <section class="flex items-center justify-center min-h-screen px-4">
+    <section class="relative flex flex-col items-center justify-center min-h-[100dvh] pt-32 pb-16 px-4 overflow-x-hidden">
       <div
         id="clouds-container"
         class="absolute inset-0 pointer-events-none -z-10"
       ></div>
 
       <div
-        class="flex flex-col md:flex-row items-center backdrop-blur-sm bg-white/5 p-6 md:p-8 gap-8"
+        class="flex flex-col md:flex-row items-center backdrop-blur-sm bg-white/5 p-4 md:p-8 gap-6 md:gap-8 w-full max-w-5xl"
       >
         <div
-          class="w-full md:w-[600px] items-start md:mr-12 flex flex-col gap-2"
+          class="w-full flex-1 items-start md:mr-8 flex flex-col gap-2"
         >
-          <h1 class="text-5xl md:text-8xl font-bold mbti-code"></h1>
-          <p id="mbti-title" class="text-xl md:text-2xl font-semibold pl-1"></p>
-          <p id="mbti-desc" class="text-base md:text-lg text-justify pl-1"></p>
+          <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold mbti-code tracking-tight"></h1>
+          <p id="mbti-title" class="text-lg sm:text-xl md:text-2xl font-bold pl-1 text-slate-800"></p>
+          <p id="mbti-desc" class="text-sm sm:text-base md:text-lg text-justify pl-1 text-slate-900 leading-relaxed mt-2"></p>
         </div>
 
-        <div>
+        <div class="flex-shrink-0">
           <img
             src="../assets/image/cloud (2).png"
             alt=""
-            class="w-40 h-40 md:w-64 md:h-64"
+            class="w-32 h-32 sm:w-40 sm:h-40 md:w-64 md:h-64 object-contain"
           />
         </div>
       </div>
@@ -62,7 +62,7 @@
         <div class="w-full h-[0.5px] bg-slate-900 my-6 md:my-8"></div>
         <p
           id="mbti-long-desc"
-          class="pt-4 text-slate-900 text-base md:text-lg leading-relaxed whitespace-pre-line"
+          class="pt-4 text-slate-900 text-sm md:text-lg leading-relaxed whitespace-pre-line"
         ></p>
       </div>
     </section>
@@ -120,7 +120,7 @@
 
       <a
         href="dashboard.html"
-        class="mt-24 mb-0 inline-block bg-slate-900 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-slate-800 transition-colors"
+        class="mt-16 md:mt-24 mb-0 inline-block bg-slate-900 text-white px-5 sm:px-6 md:px-8 py-2.5 md:py-3 rounded-full text-sm sm:text-base md:text-lg font-bold tracking-wide hover:bg-slate-800 transition-colors shadow-lg hover:shadow-slate-900/30"
       >
         <span>Kembali ke Dashboard</span>
       </a>
