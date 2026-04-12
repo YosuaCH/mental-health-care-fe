@@ -18,7 +18,7 @@ function renderSharedUI() {
         onclick="location.href='dashboard.html'"
       />
 
-      <div class="hidden sm:block text-sm font-medium text-slate-500 font-[Poppins]">
+      <div class="text-sm font-medium text-slate-500 font-[Poppins]">
         Mental Health Care
       </div>
 
