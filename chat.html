@@ -177,10 +177,16 @@
 
         <div
           id="chat-input-area"
-          class="p-4 bg-white border-t border-slate-200 flex-shrink-0"
+          class="p-4 bg-white border-t border-slate-200 flex-shrink-0 relative"
         >
-          <div class="flex items-center gap-2 max-w-4xl mx-auto w-full">
+          <div id="emoji-picker" class="hidden absolute bottom-20 left-4 w-72 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-slate-200 p-4 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
+             <div class="grid grid-cols-6 gap-2 h-40 overflow-y-auto no-scrollbar" id="emoji-grid">
+             </div>
+          </div>
+          <div class="flex items-end gap-2 max-w-4xl mx-auto w-full">
             <button
+              id="emoji-btn"
+              onclick="toggleEmojiPicker()"
               class="p-2.5 text-slate-400 hover:text-[#f2ca4b] hover:bg-slate-50 rounded-full transition-colors flex-shrink-0"
             >
               <svg
@@ -201,13 +207,14 @@
               </svg>
             </button>
 
-            <input
+            <textarea
               id="message-input"
-              type="text"
-              placeholder="Type your message..."
-              class="flex-1 min-w-0 bg-slate-100 text-slate-900 text-sm placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] focus:bg-white transition-all"
-              onkeypress="handleEnter(event)"
-            />
+              rows="1"
+              placeholder="Ketik Pesan"
+              class="flex-1 min-w-0 bg-slate-100 text-slate-900 text-sm placeholder-slate-400 px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f2ca4b] focus:bg-white transition-all resize-none max-h-32 overflow-y-auto"
+              onkeydown="handleEnter(event)"
+              oninput="autoResizeTextarea()"
+            ></textarea>
 
             <button
               id="send-button"

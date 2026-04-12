@@ -678,9 +678,18 @@ window.addEventListener("popstate", (e) => {
 });
 
 window.handleEnter = function (e) {
-  if (e.key === "Enter") {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
     window.sendMessage();
   }
+};
+
+window.autoResizeTextarea = function () {
+  const input = document.getElementById("message-input");
+  if (!input) return;
+  input.style.height = "auto";
+  const newHeight = Math.min(input.scrollHeight, 128);
+  input.style.height = newHeight + "px";
 };
 
 window.sendMessage = async function () {
@@ -712,6 +721,7 @@ window.sendMessage = async function () {
   container.insertAdjacentHTML("beforeend", userHtml);
   saveMessageToHistory(userHtml);
   input.value = "";
+  input.style.height = "auto";
   scrollToBottom();
 
   if (isCurrentContactAI) {
@@ -831,3 +841,62 @@ window.loadPatientsFromServer = async function (silent = false) {
     }
   }
 };
+
+const curatedEmojis = [
+  "😊", "😂", "🥰", "😍", "😇", "🤔", "😌", "😎", "🥺", "😭",
+  "👍", "👏", "🙌", "🔥", "✨", "❤️", "💖", "💙", "🌟", "☁️",
+  "🍃", "🧘", "🙏", "💪", "🌈", "☀️", "🌙", "🌻", "🍀", "🎉",
+  "🤝", "🤗", "💌", "👋", "✅", "💡",
+];
+
+let isEmojiPickerInitialized = false;
+
+window.initEmojiPicker = function () {
+  const grid = document.getElementById("emoji-grid");
+  if (!grid || isEmojiPickerInitialized) return;
+
+  curatedEmojis.forEach(emoji => {
+    const btn = document.createElement("button");
+    btn.className = "text-2xl hover:bg-slate-100 p-1 rounded-lg transition-all active:scale-90 flex items-center justify-center";
+    btn.innerText = emoji;
+    btn.onclick = () => window.insertEmoji(emoji);
+    grid.appendChild(btn);
+  });
+  isEmojiPickerInitialized = true;
+};
+
+window.toggleEmojiPicker = function () {
+  const picker = document.getElementById("emoji-picker");
+  if (picker) {
+    if (!isEmojiPickerInitialized) window.initEmojiPicker();
+    picker.classList.toggle("hidden");
+  }
+};
+
+window.insertEmoji = function (emoji) {
+  const input = document.getElementById("message-input");
+  if (!input) return;
+
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+  const text = input.value;
+
+  input.value = text.substring(0, start) + emoji + text.substring(end);
+  input.focus();
+  input.selectionStart = input.selectionEnd = start + emoji.length;
+
+  window.autoResizeTextarea();
+  const emojiBtn = document.getElementById("emoji-btn");
+  if (emojiBtn) {
+    emojiBtn.classList.add("text-[#f2ca4b]");
+    setTimeout(() => emojiBtn.classList.remove("text-[#f2ca4b]"), 500);
+  }
+};
+
+document.addEventListener("click", (e) => {
+  const picker = document.getElementById("emoji-picker");
+  const btn = document.getElementById("emoji-btn");
+  if (picker && !picker.classList.contains("hidden") && !picker.contains(e.target) && !btn.contains(e.target)) {
+    picker.classList.add("hidden");
+  }
+});
