@@ -102,7 +102,6 @@ registerForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-      alert("Registrasi Mitra Berhasil! Mohon tunggu verifikasi.");
       window.location.href = "login.html";
     } else {
       const msg = data.message || "";

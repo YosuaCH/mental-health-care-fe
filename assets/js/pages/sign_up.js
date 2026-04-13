@@ -80,6 +80,17 @@ registerForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Visual Loading State
+  const submitBtn = registerForm.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
+    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+    </svg> Menyiapkan Akun...
+  `;
+
   try {
     const res = await registerClient({
       email: emailInput.value,
@@ -90,9 +101,13 @@ registerForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-      alert(data.message || "Registrasi Berhasil!");
-      window.location.href = "login.html";
+      document.getElementById("registerContainer").classList.add("hidden");
+      document.getElementById("successState").classList.remove("hidden");
     } else {
+      // Revert loading state on error
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalBtnText;
+
       const message = data.message || "";
       if (message.toLowerCase().includes("email")) {
         showError(emailInput, emailError, message);
@@ -105,6 +120,10 @@ registerForm.addEventListener("submit", async (e) => {
       }
     }
   } catch (err) {
+    // Revert loading state on catch
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+
     console.error(err);
     alert("Koneksi gagal: Server tidak merespon");
   }
