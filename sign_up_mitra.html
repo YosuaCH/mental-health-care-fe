@@ -28,7 +28,7 @@
   <body
     class="min-h-screen bg-[#f8f8f8] font-[Poppins] flex items-start md:items-center justify-center overflow-y-auto md:overflow-hidden pt-6 pb-6 md:pt-0 md:pb-0"
   >
-    <div class="w-full max-w-2xl px-8 py-8 m-4 transition-all">
+    <div class="w-full max-w-2xl px-8 py-8 m-4 transition-all" id="registerContainer">
       <div class="text-center mb-8">
         <div class="flex justify-center mb-4">
           <img
@@ -255,6 +255,34 @@
           >
         </div>
       </div>
+    </div>
+
+    <!-- Success State (Hidden by Default) -->
+    <div
+      id="successState"
+      class="hidden w-full max-w-md mx-auto px-8 text-center py-4 animate-fade-in"
+    >
+      <div class="flex justify-center mb-6">
+        <img
+          src="../assets/image/logo_brand-removebg-preview.png"
+          class="w-16 h-16 object-contain"
+          alt="Logo"
+        />
+      </div>
+      <h2 class="text-xl md:text-2xl font-bold text-slate-800 mb-2">
+        Pendaftaran Mitra Berhasil!
+      </h2>
+      <p class="text-slate-500 text-xs md:text-sm mb-6 md:mb-8 leading-relaxed">
+        Terima kasih telah bergabung sebagai tenaga ahli. Kami telah mengirimkan
+        email selamat datang. Sekarang Anda dapat masuk untuk mulai
+        memberikan dampak positif.
+      </p>
+      <a
+        href="login.html"
+        class="block w-full py-3 px-6 mt-6 bg-slate-900 text-white rounded-xl text-sm md:text-base font-medium transition shadow-lg shadow-gray-900/20 hover:bg-slate-800 cursor-pointer active:scale-[0.98]"
+      >
+        Kembali ke Login
+      </a>
     </div>
   </body>
 </html>
