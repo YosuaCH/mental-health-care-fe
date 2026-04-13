@@ -61,10 +61,10 @@ html::-webkit-scrollbar {
   display: flex;
   align-items: center;
   flex-shrink: 0; /* Ensures group never sizes down */
-  
+
   /* Desktop gap and seamless looping rule */
   gap: 70px;
-  padding-right: 70px; 
+  padding-right: 70px;
 }
 
 .cloud {
@@ -152,4 +152,10 @@ html::-webkit-scrollbar {
 
 .answer.selected .choice-circle-not-chosen {
   opacity: 0;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

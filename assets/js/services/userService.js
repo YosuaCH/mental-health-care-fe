@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "../const/base_url.js";
 
-export const updateProfile = async (name, picture) => {
+export const updateProfile = async (name, picture, hargaKonsultasi) => {
   const response = await fetch(`${BACKEND_URL}/users/profile`, {
     method: "PATCH",
     headers: {
@@ -10,6 +10,7 @@ export const updateProfile = async (name, picture) => {
     body: JSON.stringify({
       name: name,
       picture: picture,
+      hargaKonsultasi: hargaKonsultasi,
     }),
   });
 

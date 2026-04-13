@@ -116,6 +116,11 @@ function renderSharedUI() {
               <input type="text" id="edit-username" placeholder="Masukkan username..." class="w-full px-5 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#f2ca4b] focus:border-[#f2ca4b] outline-none transition-all text-slate-700 font-medium"/>
             </div>
 
+            <div id="price-field-container" class="space-y-2 hidden">
+              <label class="text-xs font-bold text-slate-400 uppercase tracking-wider ml-1">Harga Konsultasi (Rp)</label>
+              <input type="number" id="edit-price" placeholder="Contoh: 50000" class="w-full px-5 py-3 rounded-2xl border border-slate-200 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-[#f2ca4b] focus:border-[#f2ca4b] outline-none transition-all text-slate-700 font-medium"/>
+            </div>
+
             <div class="flex gap-3 pt-2">
               <button type="button" onclick="toggleEditProfileModal()" class="flex-1 px-4 py-3 rounded-2xl font-bold text-slate-500 hover:bg-slate-100 transition-colors">Batal</button>
               <button type="submit" class="flex-[2] bg-slate-900 text-white px-4 py-3 rounded-2xl font-bold hover:bg-slate-800 hover:shadow-lg transition-all active:scale-95">Simpan</button>
@@ -177,6 +182,16 @@ function toggleEditProfileModal() {
     document.getElementById("edit-username").value = displayName;
     document.getElementById("modal-avatar-preview").src =
       user.picture || `${DICEBEAR_BASE_URL}?seed=${displayName}`;
+
+    const priceContainer = document.getElementById("price-field-container");
+    const priceInput = document.getElementById("edit-price");
+
+    if (user.role === "PSIKIATER") {
+      priceContainer.classList.remove("hidden");
+      priceInput.value = user.hargaKonsultasi || "";
+    } else {
+      priceContainer.classList.add("hidden");
+    }
   }
 }
 
@@ -198,6 +213,7 @@ function handleSaveProfile(e) {
 
   const newName = document.getElementById("edit-username").value;
   const newAvatar = document.getElementById("modal-avatar-preview").src;
+  const newPrice = document.getElementById("edit-price").value;
 
   // Visual Loading State
   submitBtn.disabled = true;
@@ -208,7 +224,7 @@ function handleSaveProfile(e) {
     </svg> Menyimpan...
   `;
 
-  updateProfile(newName, newAvatar)
+  updateProfile(newName, newAvatar, newPrice)
     .then((updatedUser) => {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       initComponent();
