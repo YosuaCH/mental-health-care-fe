@@ -1,4 +1,5 @@
 import { login } from "../services/auth_service.js";
+import { BACKEND_URL } from "../const/base_url.js";
 
 const loginForm = document.getElementById("loginForm");
 const emailInput = document.getElementById("email");
@@ -19,6 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
   } else if (errorType === "oauth_failed") {
     alert("Gagal melakukan login dengan Google. Silakan coba lagi.");
     window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
+  const googleLink = document.getElementById("googleLoginLink");
+  if (googleLink) {
+    googleLink.href = `${BACKEND_URL}/oauth2/authorization/google`;
   }
 });
 
