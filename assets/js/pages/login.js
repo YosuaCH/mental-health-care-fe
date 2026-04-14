@@ -68,7 +68,7 @@ loginForm.addEventListener("submit", async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-      localStorage.setItem("user", JSON.stringify(data.data));
+      sessionStorage.setItem("user", JSON.stringify(data.data));
       window.location.href = "dashboard.html";
     } else {
       const message = data.message;

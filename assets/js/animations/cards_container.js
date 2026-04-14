@@ -235,6 +235,6 @@ function calculateMBTI() {
 function finishTest(event) {
   if (event) event.preventDefault();
   const finalResult = calculateMBTI();
-  localStorage.setItem("mbti_result", finalResult);
+  sessionStorage.setItem("mbti_result", finalResult);
   window.location.href = "result_mbti.html";
 }

@@ -1,4 +1,6 @@
 import { BACKEND_URL } from "../const/base_url.js";
+import { getCsrfToken } from "../utils/csrf.js";
+
 const BASE_URL = `${BACKEND_URL}/payment`;
 
 export const getAllDoctors = async () => {
@@ -32,6 +34,7 @@ export const processPaymentSimulation = async (patientId, noStr) => {
     {
       method: "POST",
       credentials: "include",
+      headers: { "X-XSRF-TOKEN": getCsrfToken() },
     },
   );
   if (!response.ok) {

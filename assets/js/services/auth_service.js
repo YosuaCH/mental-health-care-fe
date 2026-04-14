@@ -1,10 +1,15 @@
 import { BACKEND_URL } from "../const/base_url.js";
+import { getCsrfToken } from "../utils/csrf.js";
+
 const API_URL = `${BACKEND_URL}/auth`;
 
 export const login = async (email, password) => {
   return fetch(`${API_URL}/login`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": getCsrfToken(),
+    },
     body: JSON.stringify({ email, password }),
     credentials: "include",
   });
@@ -13,7 +18,10 @@ export const login = async (email, password) => {
 export const registerClient = async (data) => {
   return fetch(`${API_URL}/register/client`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": getCsrfToken(),
+    },
     body: JSON.stringify(data),
     credentials: "include",
   });
@@ -22,7 +30,10 @@ export const registerClient = async (data) => {
 export const registerPsikiater = async (data) => {
   return fetch(`${API_URL}/register/psikiater`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": getCsrfToken(),
+    },
     body: JSON.stringify(data),
   });
 };
@@ -39,7 +50,7 @@ export const logout = async () => {
   try {
     // buat auto end session chat jika logout
     const paidDoctors = JSON.parse(sessionStorage.getItem("paidDoctors")) || {};
-    const userJson = JSON.parse(localStorage.getItem("user"));
+    const userJson = JSON.parse(sessionStorage.getItem("user"));
     if (userJson && userJson.id && Object.keys(paidDoctors).length > 0) {
       for (const doctorId of Object.keys(paidDoctors)) {
         const roomId = `room_${userJson.id}_${doctorId}`;
@@ -47,6 +58,7 @@ export const logout = async () => {
           await fetch(`${BACKEND_URL}/api/v1/chat/session/${roomId}`, {
             method: "DELETE",
             credentials: "include",
+            headers: { "X-XSRF-TOKEN": getCsrfToken() },
           });
         } catch (e) {
           console.warn("Failed to end session on logout", e);
@@ -57,14 +69,12 @@ export const logout = async () => {
     await fetch(`${BACKEND_URL}/logout`, {
       method: "POST",
       credentials: "include",
+      headers: { "X-XSRF-TOKEN": getCsrfToken() },
     });
   } catch (error) {
     console.error("Logout backend failed:", error);
   } finally {
-    sessionStorage.removeItem("chatHistories");
     sessionStorage.clear();
-    localStorage.removeItem("user");
-    localStorage.removeItem("mbti_result");
     localStorage.clear();
     window.location.href = "login.html";
   }
@@ -73,7 +83,10 @@ export const logout = async () => {
 export const forgotPassword = async (email) => {
   return fetch(`${API_URL}/forgot-password`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": getCsrfToken(),
+    },
     body: JSON.stringify({ email }),
   });
 };
@@ -81,7 +94,10 @@ export const forgotPassword = async (email) => {
 export const resetPassword = async (data) => {
   return fetch(`${API_URL}/reset-password`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": getCsrfToken(),
+    },
     body: JSON.stringify(data),
   });
 };

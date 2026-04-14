@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "../const/base_url.js";
+import { getCsrfToken } from "../utils/csrf.js";
 
 export async function fetchUnreadCount(roomId, viewerName) {
   const url = `${BACKEND_URL}/api/v1/chat/unread/${roomId}?viewerName=${encodeURIComponent(viewerName)}`;
@@ -9,7 +10,11 @@ export async function fetchUnreadCount(roomId, viewerName) {
 
 export async function markRoomAsRead(roomId, readerName) {
   const url = `${BACKEND_URL}/api/v1/chat/history/${roomId}/read?readerName=${encodeURIComponent(readerName)}`;
-  const response = await fetch(url, { method: "PUT", credentials: "include" });
+  const response = await fetch(url, {
+    method: "PUT",
+    credentials: "include",
+    headers: { "X-XSRF-TOKEN": getCsrfToken() },
+  });
   if (!response.ok) throw new Error("Gagal menandai pesan sebagai terbaca");
 }
 
@@ -29,6 +34,10 @@ export async function fetchPatientsByDoctor(doctorId) {
 
 export async function endChatSession(roomId) {
   const url = `${BACKEND_URL}/api/v1/chat/session/${roomId}`;
-  const response = await fetch(url, { method: "DELETE", credentials: "include" });
+  const response = await fetch(url, {
+    method: "DELETE",
+    credentials: "include",
+    headers: { "X-XSRF-TOKEN": getCsrfToken() },
+  });
   if (!response.ok) throw new Error("Gagal mengakhiri sesi chat");
 }

@@ -141,7 +141,7 @@ function renderSharedUI() {
 function initComponent() {
   renderSharedUI();
 
-  const userJson = localStorage.getItem("user");
+  const userJson = sessionStorage.getItem("user");
   if (!userJson) return;
 
   const userDataRaw = JSON.parse(userJson);
@@ -177,7 +177,7 @@ function toggleEditProfileModal() {
   const isHidden = modal.classList.toggle("hidden");
 
   if (!isHidden) {
-    const user = JSON.parse(localStorage.getItem("user")) || {};
+    const user = JSON.parse(sessionStorage.getItem("user")) || {};
     const displayName = user.namaLengkap || user.username || "";
     document.getElementById("edit-username").value = displayName;
     document.getElementById("modal-avatar-preview").src =
@@ -226,7 +226,7 @@ function handleSaveProfile(e) {
 
   updateProfile(newName, newAvatar, newPrice)
     .then((updatedUser) => {
-      localStorage.setItem("user", JSON.stringify(updatedUser));
+      sessionStorage.setItem("user", JSON.stringify(updatedUser));
       initComponent();
       toggleEditProfileModal();
     })

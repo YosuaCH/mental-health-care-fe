@@ -1,10 +1,12 @@
 import { BACKEND_URL } from "../const/base_url.js";
+import { getCsrfToken } from "../utils/csrf.js";
 
 export const updateProfile = async (name, picture, hargaKonsultasi) => {
   const response = await fetch(`${BACKEND_URL}/users/profile`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
+      "X-XSRF-TOKEN": getCsrfToken(),
     },
     credentials: "include",
     body: JSON.stringify({
