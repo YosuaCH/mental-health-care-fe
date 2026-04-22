@@ -260,7 +260,7 @@ function loadCurrentChat() {
   if (!isCurrentContactAI && !isPsikiater && !paidDoctors[currentDoctorNoStr]) {
     if (headerArea) headerArea.classList.remove("hidden");
     if (inputArea) inputArea.classList.add("hidden");
-    
+
     const endBtn = document.getElementById("end-session-btn");
     if (endBtn) endBtn.classList.add("hidden");
 
@@ -362,13 +362,28 @@ function loadCurrentChat() {
 
 // Payment UI
 async function showPaymentUI(container, targetNoStr) {
-  container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Menghitung tagihan...</p></div>`;
+  container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-slate-400 text-sm animate-pulse">Memeriksa status sesi...</p></div>`;
 
   try {
-    const data = await getPaymentInfo(targetNoStr);
+    const data = await getPaymentInfo(currentUser.id, targetNoStr);
     console.log("Data pembayaran diterima:", data);
     if (currentDoctorNoStr !== targetNoStr) {
       console.log("User pindah kontak, batalkan render UI pembayaran.");
+      return;
+    }
+
+    // cek sesi ACTIVE di BE
+    if (data.isPaid) {
+      paidDoctors[targetNoStr] = true;
+      sessionStorage.setItem("paidDoctors", JSON.stringify(paidDoctors));
+
+      const endBtn = document.getElementById("end-session-btn");
+      if (endBtn) {
+        endBtn.classList.remove("hidden");
+        endBtn.innerText = "End Session";
+      }
+
+      loadCurrentChat();
       return;
     }
 
@@ -577,8 +592,8 @@ window.simulatePaymentSuccess = async function () {
       setTimeout(() => {
         const endBtn = document.getElementById("end-session-btn");
         if (endBtn) {
-            endBtn.classList.remove("hidden");
-            endBtn.innerText = "End Session";
+          endBtn.classList.remove("hidden");
+          endBtn.innerText = "End Session";
         }
         loadCurrentChat();
         setTimeout(() => {
@@ -598,7 +613,13 @@ window.simulatePaymentSuccess = async function () {
   }
 };
 
-window.selectContact = function (name, img, isAi = false, noStr = "", preventMobileSlide = false) {
+window.selectContact = function (
+  name,
+  img,
+  isAi = false,
+  noStr = "",
+  preventMobileSlide = false,
+) {
   currentDoctorName = name;
   currentDoctorImg = img;
   currentDoctorNoStr = noStr;
@@ -646,7 +667,7 @@ window.selectContact = function (name, img, isAi = false, noStr = "", preventMob
       sidebar.classList.add("hidden");
       chatBox.classList.remove("hidden");
       chatBox.classList.add("flex");
-      history.pushState({ panel: 'chat' }, "");
+      history.pushState({ panel: "chat" }, "");
     }
   }
 };
@@ -659,8 +680,12 @@ window.goBackToContactList = function (fromPopState = false) {
     chatBox.classList.add("hidden");
     sidebar.classList.remove("hidden");
     sidebar.classList.add("flex");
-    // Batalkan history layer jika diakses lewat tombol UI 
-    if (fromPopState !== true && history.state && history.state.panel === 'chat') {
+    // Batalkan history layer jika diakses lewat tombol UI
+    if (
+      fromPopState !== true &&
+      history.state &&
+      history.state.panel === "chat"
+    ) {
       history.back();
     }
   }
@@ -843,10 +868,42 @@ window.loadPatientsFromServer = async function (silent = false) {
 };
 
 const curatedEmojis = [
-  "😊", "😂", "🥰", "😍", "😇", "🤔", "😌", "😎", "🥺", "😭",
-  "👍", "👏", "🙌", "🔥", "✨", "❤️", "💖", "💙", "🌟", "☁️",
-  "🍃", "🧘", "🙏", "💪", "🌈", "☀️", "🌙", "🌻", "🍀", "🎉",
-  "🤝", "🤗", "💌", "👋", "✅", "💡",
+  "😊",
+  "😂",
+  "🥰",
+  "😍",
+  "😇",
+  "🤔",
+  "😌",
+  "😎",
+  "🥺",
+  "😭",
+  "👍",
+  "👏",
+  "🙌",
+  "🔥",
+  "✨",
+  "❤️",
+  "💖",
+  "💙",
+  "🌟",
+  "☁️",
+  "🍃",
+  "🧘",
+  "🙏",
+  "💪",
+  "🌈",
+  "☀️",
+  "🌙",
+  "🌻",
+  "🍀",
+  "🎉",
+  "🤝",
+  "🤗",
+  "💌",
+  "👋",
+  "✅",
+  "💡",
 ];
 
 let isEmojiPickerInitialized = false;
@@ -855,9 +912,10 @@ window.initEmojiPicker = function () {
   const grid = document.getElementById("emoji-grid");
   if (!grid || isEmojiPickerInitialized) return;
 
-  curatedEmojis.forEach(emoji => {
+  curatedEmojis.forEach((emoji) => {
     const btn = document.createElement("button");
-    btn.className = "text-2xl hover:bg-slate-100 p-1 rounded-lg transition-all active:scale-90 flex items-center justify-center";
+    btn.className =
+      "text-2xl hover:bg-slate-100 p-1 rounded-lg transition-all active:scale-90 flex items-center justify-center";
     btn.innerText = emoji;
     btn.onclick = () => window.insertEmoji(emoji);
     grid.appendChild(btn);
@@ -896,7 +954,12 @@ window.insertEmoji = function (emoji) {
 document.addEventListener("click", (e) => {
   const picker = document.getElementById("emoji-picker");
   const btn = document.getElementById("emoji-btn");
-  if (picker && !picker.classList.contains("hidden") && !picker.contains(e.target) && !btn.contains(e.target)) {
+  if (
+    picker &&
+    !picker.classList.contains("hidden") &&
+    !picker.contains(e.target) &&
+    !btn.contains(e.target)
+  ) {
     picker.classList.add("hidden");
   }
 });

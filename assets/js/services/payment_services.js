@@ -14,9 +14,9 @@ export const getAllDoctors = async () => {
   return await response.json();
 };
 
-export const getPaymentInfo = async (noStr) => {
+export const getPaymentInfo = async (patientId, noStr) => {
   const response = await fetch(
-    `${BASE_URL}/info?noStr=${encodeURIComponent(noStr)}`,
+    `${BASE_URL}/info?patientId=${encodeURIComponent(patientId)}&noStr=${encodeURIComponent(noStr)}`,
     {
       method: "GET",
       credentials: "include",

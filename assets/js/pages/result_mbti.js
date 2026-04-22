@@ -1,9 +1,9 @@
 import { mbtiService } from "../services/mbti_service.js";
 async function initResultPage() {
-  const code = localStorage.getItem("mbti_result");
+  const code = sessionStorage.getItem("mbti_result");
 
   if (!code) {
-    console.error("No MBTI result found in localStorage");
+    console.error("No MBTI result found in sessionStorage");
     alert("Kamu belum melakukan tes! Yuk tes dulu.");
     window.location.href = "test_mbti.html";
     return;
